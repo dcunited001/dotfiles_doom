@@ -1,0 +1,28 @@
+* Doom Emacs
+
+* Setup/Config
+
+** Modules & Packages
+
+** Desktop, Projectile, Workspace, Treemacs
+
+What's the ideal way to approach this for various projects?
+
+** Misc Config:
+*** TODO setup word-wrap? and call on file save
+
+* Ideas
+
+** _org-trello_
+*** TODO check out /org-trello/ and at least try importing cards/checklists from existing boards into org items
+
+** Modeline
+*** TODO if using _projectile_, show the current *project*
+*** check out moodline
+
+** Tool to clone/sync repos in a language sub/folder
+*** TODO standardize a format for listing repos to clone for a language like clojure/julia/etc or use something like [[https://github.com/asottile/all-repos][asottile/all-repos]]
+
+* The Important Things In Life:
+
+** TODO treemacs-icons
