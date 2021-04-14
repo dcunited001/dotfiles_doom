@@ -64,31 +64,11 @@ on github.
 
 ** DOOM PACKAGES
 
-*** TODO readd modules
-+ [ ] (ivy +childframe +prescient +icons +fuzzy)
-+ [ ] nav-flash
-+ [ ] (company +childframe)
-+ [ ] (format +onsave)
-+ [ ] multiple-cursors
-+ [ ] rotate-text
-+ [ ] (popup +all +defaults)
-+ [ ] (dired +ranger)
-+ [ ] (undo +tree)
-+ [ ] spell
-+ [ ] (syntax +childframe)
-+ [ ] (lookup +dictionary +offline +docsets)
-+ [ ] (cc +lsp)
-+ [ ] javascript
-+ [ ] (latex +latexmk +cdlatex +fold)
-+ [ ] nix
-+ [ ] (org +jupyter +pomodoro +pretty +present +gnuplot +pandoc)
-+ [ ] (python +poetry)
-+ [ ] literate
-
 *** TODO decide on modules
 + [ ] ibuffer /interactive buffer management/
 + [ ] direnv
 + [ ] editorconfig /let someone else argue about tabs vs spaces/
++ [ ] pdf
 
 ** SUPERFICIAL
 
