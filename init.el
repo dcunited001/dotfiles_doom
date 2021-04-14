@@ -20,17 +20,24 @@
        ;;layout            ; auie,ctsrnm is the superior home row
 
        :completion
-       company           ; the ultimate code completion backend
-       ;;helm              ; the *other* search engine for love and life
-       ;;ido               ; the other *other* search engine...
-       ivy               ; a search engine for love and life
+
+      (company          ; the ultimate code completion backend
+       +childframe)      ; a better UI for company (Emacs 26+)
+
+       ;; helm             ; the *other* search engine for love and life
+       ;; ido              ; the other *other* search engine...
+
+      (ivy              ; a search engine for love and life
+       +childframe      ; a better UI for ivy (Emacs 26+)
+       +prescient       ; better? filtering and sorting?
+       +icons           ; enables file icons
+       +fuzzy)          ; enable fuzzy search backend for ivy
 
        :ui
-       ;;deft              ; notational velocity for Emacs
+       ;; deft          ; notational velocity for Emacs
        doom              ; what makes DOOM look the way it does
        doom-dashboard    ; a nifty splash screen for Emacs
-       doom-quit         ; DOOM quit-message p
-                         ; rompts when you quit Emacs
+       doom-quit         ; DOOM quit-message prompts when you quit Emacs
        ;;(emoji +unicode)  ; 🙂
        ;;fill-column       ; a `fill-column' indicator
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
@@ -39,10 +46,14 @@
        ;;ligatures         ; ligatures and symbols to make your code pretty again
        ;;minimap           ; show a map of the code on the side
        modeline          ; snazzy, Atom-inspired modeline, plus API
-       ;;nav-flash         ; blink cursor line after big motions
+       ;;nav-flash         ; blink the current line after jumping
        ;;neotree           ; a project drawer, like NERDTree for vim
        ophints           ; highlight the region an operation acts on
-       (popup +defaults)   ; tame sudden yet inevitable temporary windows
+
+      (popup            ; tame sudden yet inevitable temporary windows
+       +all            ; catch all popups that start with an asterix
+       +defaults)      ; default popup rules
+
        ;;tabs              ; a tab bar for Emacs
        treemacs          ; a project drawer, like neotree but cooler
        unicode           ; extended unicode support for various languages
@@ -56,21 +67,28 @@
        ;;(evil +everywhere); come to the dark side, we have cookies
        file-templates    ; auto-snippets for empty files
        fold              ; (nigh) universal code folding
-       ;;(format +onsave)  ; automated prettiness
+       (format +onsave)  ; automated prettiness
        ;;god               ; run Emacs commands without modifier keys
        ;;lispy             ; vim for lisp, for people who don't like vim
-       ;;multiple-cursors  ; editing in many places at once
+       multiple-cursors  ; editing in many places at once
        ;;objed             ; text object editing for the innocent
        ;;parinfer          ; turn lisp into python, sort of
-       ;;rotate-text       ; cycle region at point between text candidates
+       rotate-text       ; cycle region at point between text candidates
        snippets          ; my elves. They type so I don't have to
        ;;word-wrap         ; soft wrapping with language-aware indent
 
        :emacs
-       dired             ; making dired pretty [functional]
+
+       (dired            ; making dired pretty [functional]
+        +ranger)           ; bringing the goodness of ranger to dired
+
        electric          ; smarter, keyword-based electric-indent
        ;;ibuffer         ; interactive buffer management
-       undo              ; persistent, smarter undo for your inevitable mistakes
+
+       ;; persistent, smarter undo for your inevitable mistakes
+       (undo +tree)
+       ;;undo
+
        vc                ; version-control and Emacs, sitting in a tree
 
        :term
@@ -80,8 +98,11 @@
        ;;vterm             ; the best terminal emulation in Emacs
 
        :checkers
-       syntax              ; tasing you for every semicolon you forget
-       ;;spell             ; tasing you for misspelling mispelling
+
+       (syntax             ; tasing you for every semicolon you forget
+        +childframe)       ; use childframes for error popups (Emacs 26+ only)
+
+       spell             ; tasing you for misspelling mispelling
        ;;grammar           ; tasing grammar mistake every you make
 
        :tools
@@ -93,12 +114,17 @@
        ;;ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)     ; run code, run (also, repls)
        gist              ; interacting with github gists
-       lookup              ; navigate your code and its documentation
+
+       (lookup           ; helps you navigate your code and documentation
+        +dictionary      ; enable word definitions and thesaurus lookup
+        +offline         ; install and prefer offline dictionary/thesaurus
+        +docsets)        ; ...on in Dash docsets locally
+
        lsp
        magit             ; a git porcelain for Emacs
        make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
-       ;;pdf               ; pdf enhancements
+       ;; pdf               ; pdf enhancements
        ;;prodigy           ; FIXME managing external services & code builders
        rgb               ; creating color strings
        ;;taskrunner        ; taskrunner for all your projects
@@ -112,7 +138,7 @@
 
        :lang
        ;;agda              ; types of types of types of types...
-       cc                ; C/C++/Obj-C madness
+       (cc +lsp)                   ; C/C++/Obj-C madness
        (clojure +lsp)           ; java with a lisp
        ;;common-lisp       ; if you've seen one lisp, you've seen them all
        ;;coq               ; proofs-as-programs
@@ -135,26 +161,34 @@
        ;;idris             ; a language you can depend on
        json              ; At least it ain't XML
        ;;(java +meghanada) ; the poster child for carpal tunnel syndrome
-       ;;javascript        ; all(hope(abandon(ye(who(enter(here))))))
+       javascript        ; all(hope(abandon(ye(who(enter(here))))))
        julia             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
-       latex             ; writing papers in Emacs has never been so fun
+
+       (latex              ; writing papers in Emacs has never been so fun
+        +latexmk           ; no other option TBH
+        +cdlatex           ; for better math
+        +fold)             ; neat folding things
+
        ;;lean
        ;;factor
        ;;ledger            ; an accounting system in Emacs
        ;;lua               ; one-based indices? one-based indices
        markdown          ; writing docs for people to ignore
        ;;nim               ; python + lisp at the speed of c
-       ;;nix               ; I hereby declare "nix geht mehr!"
+       nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
-       ;; (org +jupyter)      ; organize your plain life in plain text
-
        ;;ob-async
-       (org +jupyter +pomodoro +pretty +present +gnuplot)
+
+
+       (org             ;; organize your plain life in plain text
+        +jupyter +pomodoro +pretty +present +gnuplot +pandoc)
+
        ;;php               ; perl's insecure younger brother
        plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
-       python            ; beautiful is better than ugly
+       (python            ; beautiful is better than ugly
+        +poetry)          ; the future of the written word
        qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        ;;raku              ; the artist formerly known as perl6
@@ -184,5 +218,7 @@
        ;;twitter           ; twitter client https://twitter.com/vnought
 
        :config
-       ;;literate
+       ;; For literate config users. This will tangle+compile a config.org
+       ;; literate config in your `doom-private-dir' whenever it changes.
+       literate
        (default +bindings +smartparens))
