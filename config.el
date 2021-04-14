@@ -1,7 +1,11 @@
+;; -*- no-byte-compile: t; -*-
+;;; ~/.doom.d/config.el
+
 (setq user-full-name "David Conner"
       user-mail-address "number8@fantasyfarm.com")
 
 (setq doom-theme 'doom-one)
+;;;fdsafdas
 
 (set-frame-font "Source Code Pro 12" nil t)
 
@@ -23,6 +27,8 @@
         ;;org-agenda-files (concat (file-name-as-directory org-directory) "agenda.org")
    ))
 
+(setq mouse-wheel-progressive-speed nil)
+
 (map! "<mouse-8>" 'projectile-find-file)
 (map! "<mouse-9>" 'projectile-grep)
 (map! "C-M-<mouse-8>" '+workspace/switch-left)
@@ -37,3 +43,19 @@
 (map! "S-<mouse-9>" 'next-buffer)
 
 (put 'dockerfile-image-name 'safe-local-variable #'stringp)
+
+;; from HaoZeke/dotdoom
+(use-package! highlight-doxygen
+  :hook ((c-mode c++-mode) . highlight-doxygen-mode))
+
+;; from HaoZeke/dotdoom
+(setq auto-mode-alist (append '(
+                                ("\\.C$" . c++-mode)
+                                ("\\.cc$" . c++-mode)
+                                ("\\.cpp$" . c++-mode)
+                                ("\\.inl$" . c++-mode)
+                                ("\\.H$" . c++-mode)
+                                ("\\.hh$" . c++-mode)
+                                ("\\.hpp$" . c++-mode)
+                                )
+                              auto-mode-alist))

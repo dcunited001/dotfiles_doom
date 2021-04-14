@@ -1,48 +1,125 @@
 #+TITLE: Doom Emacs Config
 #+AUTHOR: David Conner
-#+DESCRIPTION: Inspired by DT's personal Doom Emacs config.
+#+DESCRIPTION: Inspired by the personal Doom Emacs config of DT, HaoZeke and others
+#+PROPERTY: header-args :tangle yes :results none
 #+STARTUP: showeverything
+#+OPTIONS: toc:nil
+
+* Configuration
+:PROPERTIES:
+:VISIBILITY: children
+:END:
+
+** About this file
+This is an Emacs literate configuration template, based on
+[[https://github.com/gilbertw1/emacs-literate-starter/][gilbertw1/emacs-literate-starter]], [[https://github.com/HaoZeke/dotDoom][HaoZeke/dotDoom]] and others. It contains the
+basic structure of a literate config along with some optimizations to ensure a
+fast load time.
+
+Add the ~doom-emacs~ metadata comments to tangle exports:
+
+#+BEGIN_SRC emacs-lisp
+;; -*- no-byte-compile: t; -*-
+;;; ~/.doom.d/config.el
+#+END_SRC
+
+** Org File Tweaks
+There are a few tweaks included in this org file that make it a little easier to
+work with.
+
+*** Automatically Tangle
+First there is a property defined on the file:
+
+#+BEGIN_SRC :tangle no
+header-args :tangle yes
+#+END_SRC
+
+This tells emacs to automatically tangle (include) all code blocks in this file when
+generating the code for the config, unless the code block explicitly includes
+=:tangle no= as the above code block does.
+
+*** Visibility Settings
+Next we have a property defined on the [[Configuration][Configuration]] heading that defines the
+visibility that tells org to show it's direct children on startup. This way a
+clean outline of all sub headings under Configuration is shown each time this
+file is opened in org-mode.
+
+*** Table of Contents
+Finally, there is a [[Table of Contents][Table of Contents]] heading that includes the tag:
+=:TOC_3_gh:=. This tells an org-mode package =toc-org= to generate a table of
+contents under this heading that has a max depth of 3 and is created using
+Github-style hrefs. This table of contents is updated everytime the file is
+saved and makes for a functional table of contents that works property directly
+on github.
 
 
-* IDENTITY
+** IDENTITY
 
-** Emacs User
+*** Emacs User
 
 #+begin_src emacs-lisp
 (setq user-full-name "David Conner"
       user-mail-address "number8@fantasyfarm.com")
 #+end_src
 
-* SUPERFICIAL
+** DOOM PACKAGES
+
+*** TODO readd modules
++ [ ] (ivy +childframe +prescient +icons +fuzzy)
++ [ ] nav-flash
++ [ ] (company +childframe)
++ [ ] (format +onsave)
++ [ ] multiple-cursors
++ [ ] rotate-text
++ [ ] (popup +all +defaults)
++ [ ] (dired +ranger)
++ [ ] (undo +tree)
++ [ ] spell
++ [ ] (syntax +childframe)
++ [ ] (lookup +dictionary +offline +docsets)
++ [ ] (cc +lsp)
++ [ ] javascript
++ [ ] (latex +latexmk +cdlatex +fold)
++ [ ] nix
++ [ ] (org +jupyter +pomodoro +pretty +present +gnuplot +pandoc)
++ [ ] (python +poetry)
++ [ ] literate
+
+*** TODO decide on modules
++ [ ] ibuffer /interactive buffer management/
++ [ ] direnv
++ [ ] editorconfig /let someone else argue about tabs vs spaces/
+
+** SUPERFICIAL
 
 Emacs UI Configs
 
-** Doom Theme
+*** Doom Theme
 
 #+begin_src emacs-lisp
 (setq doom-theme 'doom-one)
 #+end_src
 
-** Font
+*** Font
 
 #+begin_src emacs-lisp
 (set-frame-font "Source Code Pro 12" nil t)
 #+end_src
 
-** Window UI
+*** Window UI
 
 #+begin_src emacs-lisp
 (setq window-divider-default-right-width 3)
 (setq window-divider-default-bottom-width 3)
 #+end_src
 
-** Keyboard
+*** Keyboard
 
 #+begin_src emacs-lisp
 (require 'iso-transl)
 #+end_src
 
-** Line Numbers
+*** Line Numbers
 
 This determines the style of line numbers. For relative line numbers, set this
 to `relative'.
@@ -51,10 +128,10 @@ to `relative'.
 (setq display-line-numbers-type t)
 #+end_src
 
-** TODO fix UI/UX issues in doom :doom:superficial:
+*** TODO fix UI/UX issues in doom :doom:superficial:
 + [ ] fix `+company/complete` popup ~(setq doom-theme 'doom-acario-dark)~
 
-* DIRED
+** DIRED
 
 Remove `.` and `..` from list of omitted file patterns (so i can always run
 commands on the directory). Also `M-!` will run commands on the dir without
@@ -64,9 +141,9 @@ parameterizing a subdir.
 (setq dired-omit-files "^.DS_Store\\'\\|^.project\\(?:ile\\)?\\'\\|^.\\(svn\\|git\\)\\'\\|^.ccls-cache\\'\\|\\(?:\\.js\\)?\\.meta\\'\\|\\.\\(?:elc\\|o\\|pyo\\|swp\\|class\\)\\'")
 #+end_src
 
-* SHELL
+** SHELL
 
-** Explicit Shell
+*** Explicit Shell
 
 This fixes an issue i'm having where ~/bin/fish~ is the default shell no matter
 how i've configured things with ~chsh~. This was done by Garuda/Arch either
@@ -76,19 +153,19 @@ before or after the doom/emacs install.
 (setq explicit-shell-file-name "/bin/zsh")
 #+end_src
 
-* ELISP
+** ELISP
 
-** TODO configure parenedit
+*** TODO configure parenedit
 
-* ORG MODE
+** ORG MODE
 
-** Org Directory
+*** Org Directory
 
 #+begin_src emacs-lisp
 (setq org-directory "/data/org")
 #+end_src
 
-** Org Agenda
+*** Org Agenda
 
 #+begin_src emacs-lisp
 (after! org
@@ -97,26 +174,33 @@ before or after the doom/emacs install.
    ))
 #+end_src
 
-** Org Babel
+*** Org Babel
 
-** TODO setup org-agenda :doom:orgmode:agenda:
-+ [ ] setup ~org-agenda-files~
+*** TODO setup org-agenda :doom:orgmode:agenda:
++ [X] setup ~org-agenda-files~
+*** TODO setup org-export-async-init-file (see [[https://dotdoom.rgoswami.me/config.html][1.2.3 Async Exports]])
 
-* BABEL
+** BABEL
 
-** DONE setup autocompletion in tangles :doom:orgmode:babel:
+*** DONE setup autocompletion in tangles :doom:orgmode:babel:
 CLOSED: [2021-04-14 Wed 09:08]
 + just use *C-c '* to open an indirect buffer?
 
-* KEYBOARD
+** KEYBOARD
 
 Most of these configs should be in their individual ~*-mode~ sections
 
-* MOUSE
+** MOUSE
 
 see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse Config]] for more info on the how & why
 
-** Mouse 8 and 9
+*** Misc Mouse Configs
+
+#+begin_src emacs-lisp
+(setq mouse-wheel-progressive-speed nil)
+#+end_src
+
+*** Mouse 8 and 9
 
 #+begin_src emacs-lisp
 (map! "<mouse-8>" 'projectile-find-file)
@@ -133,15 +217,15 @@ see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse
 (map! "S-<mouse-9>" 'next-buffer)
 #+end_src
 
-** TODO configure more functionality for the mouse :doom:mouse:keys:
+*** TODO configure more functionality for the mouse :doom:mouse:keys:
 + [ ] navigate to function at point
 + [ ] describe function at point
 + [ ] ~(kbd "<mouse-4>")~ linux mouse wheel scroll up
 + [ ] ~(kbd "<mouse-5>")~ linux mouse wheel scroll down
 
-* DEVOPS
+** DEVOPS
 
-** Dockerfile
+*** Dockerfile
 
 so the ~## -*- docker-image-name: "image-name" -*-~ directive works with
 ~dockerfile-mode~
@@ -150,19 +234,63 @@ so the ~## -*- docker-image-name: "image-name" -*-~ directive works with
 (put 'dockerfile-image-name 'safe-local-variable #'stringp)
 #+end_src
 
-** Kubernetes
+*** Kubernetes
 
-*** TODO setup kubernetes.el :doom:devops:packages:
-*** TODO evaluate ~kubectl~ package :doom:devops:packages:
+**** TODO setup kubernetes.el :doom:devops:packages:
+**** TODO evaluate ~kubectl~ package :doom:devops:packages:
 
-* MISC
+** MISC
 
-** Bug Mode (for KDE Bugzilla)
+*** Bug Mode (for KDE Bugzilla)
 
-*** TODO: fix bug-mode (... or just use email)
+**** TODO: fix bug-mode (... or just use email)
 
 #+begin_src
 ;;(setq bug-instance-plist
 ;;      '(:kde (:url "https://bugs.kde.org" :api-key "......." :type bz-rpc)))
 ;;(setq bug-default-instance :kde)
 #+end_src
+
+*** Xah Lee Command Log Mode
+
+This is good for streaming -- your keystrokes and their commands get logged to a buffer which can be displayed.
+
+**** TODO setup (needs to be imported from melpa or Xah Lee emacs init)
+
+
+** LSP
+
+
+
+** Clojure
+
+
+
+** Julia
+
+
+** C++
+
+*** Doxygen Support
+#+begin_src emacs-lisp
+;; from HaoZeke/dotdoom
+(use-package! highlight-doxygen
+  :hook ((c-mode c++-mode) . highlight-doxygen-mode))
+#+end_src
+
+*** More Files
+#+begin_src emacs-lisp
+;; from HaoZeke/dotdoom
+(setq auto-mode-alist (append '(
+                                ("\\.C$" . c++-mode)
+                                ("\\.cc$" . c++-mode)
+                                ("\\.cpp$" . c++-mode)
+                                ("\\.inl$" . c++-mode)
+                                ("\\.H$" . c++-mode)
+                                ("\\.hh$" . c++-mode)
+                                ("\\.hpp$" . c++-mode)
+                                )
+                              auto-mode-alist))
+#+end_src
+
+** KDE/QT
