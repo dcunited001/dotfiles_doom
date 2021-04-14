@@ -59,7 +59,7 @@ on github.
 
 #+begin_src emacs-lisp
 (setq user-full-name "David Conner"
-      user-mail-address "number8@fantasyfarm.com")
+      user-mail-address "noreply@te.xel.io")
 #+end_src
 
 ** DOOM PACKAGES
