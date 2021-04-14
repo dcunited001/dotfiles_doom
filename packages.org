@@ -1,0 +1,71 @@
+#+TITLE: Doom Emacs Package Additions
+#+AUTHOR: David Conner
+#+DESCRIPTION: Inspired by the personal Doom Emacs config of DT, HaoZeke and others
+#+PROPERTY: header-args :tangle yes :results none
+#+STARTUP: outline
+#+OPTIONS: toc:nil
+
+* Configuration
+:PROPERTIES:
+:VISIBILITY: children
+:END:
+
+** About this file
+This is an Emacs literate configuration template, based on
+[[https://github.com/gilbertw1/emacs-literate-starter/][gilbertw1/emacs-literate-starter]], [[https://github.com/HaoZeke/dotDoom][HaoZeke/dotDoom]] and others. It contains the
+basic structure of a literate config along with some optimizations to ensure a
+fast load time.
+
+Add the ~doom-emacs~ metadata comments to tangle exports:
+
+#+BEGIN_SRC emacs-lisp
+;; -*- no-byte-compile: t; -*-
+;;; ~/.doom.d/packages.el
+#+END_SRC
+
+** Org File Tweaks
+There are a few tweaks included in this org file that make it a little easier to
+work with.
+
+*** Automatically Tangle
+First there is a property defined on the file:
+
+#+BEGIN_SRC :tangle no
+header-args :tangle yes
+#+END_SRC
+
+This tells emacs to automatically tangle (include) all code blocks in this file when
+generating the code for the config, unless the code block explicitly includes
+=:tangle no= as the above code block does.
+
+*** Visibility Settings
+Next we have a property defined on the [[Configuration][Configuration]] heading that defines the
+visibility that tells org to show it's direct children on startup. This way a
+clean outline of all sub headings under Configuration is shown each time this
+file is opened in org-mode.
+
+*** Table of Contents
+Finally, there is a [[Table of Contents][Table of Contents]] heading that includes the tag:
+=:TOC_3_gh:=. This tells an org-mode package =toc-org= to generate a table of
+contents under this heading that has a max depth of 3 and is created using
+Github-style hrefs. This table of contents is updated everytime the file is
+saved and makes for a functional table of contents that works property directly
+on github.
+
+
+** SUPERFICIAL
+
+#+begin_src emacs-lisp
+(package! all-the-icons-dired)
+#+end_src
+
+** SYNTAX HIGHLIGHTING
+
+*** PKGBUILD Mode
+
+#+BEGIN_SRC emacs-lisp
+;; from HaoZeke/dotdoom
+(package! pkgbuild-mode
+  :recipe (:host github
+            :repo "juergenhoetzel/pkgbuild-mode"))
+#+END_SRC
