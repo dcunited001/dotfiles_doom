@@ -23,26 +23,6 @@
         ;;org-agenda-files (concat (file-name-as-directory org-directory) "agenda.org")
    ))
 
-(defun dc/org-babel-tangle-async (file)
-  "Invoke `org-babel-tangle-file' asynchronously."
-  (message "Tangling %s..." (buffer-file-name))
-  (async-start
-   (let ((args (list file)))
-  `(lambda ()
-        (require 'org)
-        ;;(load "~/.emacs.d/init.el")
-        (let ((start-time (current-time)))
-          (apply #'org-babel-tangle-file ',args)
-          (format "%.2f" (float-time (time-since start-time))))))
-   (let ((message-string (format "Tangling %S completed after " file)))
-     `(lambda (tangle-time)
-        (message (concat ,message-string
-                         (format "%s seconds" tangle-time)))))))
-
-(defun dc/org-babel-tangle-current-buffer-async ()
-  "Tangle current buffer asynchronously."
-  (dc/org-babel-tangle-async (buffer-file-name)))
-
 (map! "<mouse-8>" 'projectile-find-file)
 (map! "<mouse-9>" 'projectile-grep)
 (map! "C-M-<mouse-8>" '+workspace/switch-left)

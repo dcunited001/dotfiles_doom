@@ -99,38 +99,6 @@ before or after the doom/emacs install.
 
 ** Org Babel
 
-#+begin_src emacs-lisp
-(defun dc/org-babel-tangle-async (file)
-  "Invoke `org-babel-tangle-file' asynchronously."
-  (message "Tangling %s..." (buffer-file-name))
-  (async-start
-   (let ((args (list file)))
-  `(lambda ()
-        (require 'org)
-        ;;(load "~/.emacs.d/init.el")
-        (let ((start-time (current-time)))
-          (apply #'org-babel-tangle-file ',args)
-          (format "%.2f" (float-time (time-since start-time))))))
-   (let ((message-string (format "Tangling %S completed after " file)))
-     `(lambda (tangle-time)
-        (message (concat ,message-string
-                         (format "%s seconds" tangle-time)))))))
-
-(defun dc/org-babel-tangle-current-buffer-async ()
-  "Tangle current buffer asynchronously."
-  (dc/org-babel-tangle-async (buffer-file-name)))
-
-(map! :map org-mode-map
-      ;; :desc "Tangle an org-file and produce elisp"
-      "C-c C-v F" #'(lambda () (interactive) (dc/org-babel-tangle-async)))
-(map! :map org-mode-map
-      ;; :desc "Tangle current org-mode buffer and produce elisp"
-      "C-c C-v B" #'dc/org-babel-tangle-current-buffer-async)
-
-;;(map! :leader "C-v F" 'dc/org-babel-tangle-async)
-;;(map! :leader "C-v B" 'dc/org-babel-tangle-current-buffer-async)
-#+end_src
-
 ** TODO setup org-agenda :doom:orgmode:agenda:
 + [ ] setup ~org-agenda-files~
 
