@@ -1,5 +1,7 @@
 * Doom Emacs
 
+use ~(org-babel-load-file)~
+
 * Setup/Config
 
 ** Modules & Packages
@@ -26,3 +28,12 @@ What's the ideal way to approach this for various projects?
 * The Important Things In Life:
 
 ** TODO treemacs-icons
+
+* Resources
+
++ [[https://www.emacswiki.org/emacs/][Emacs Wiki]]
+
+** Emacs Lisp
+
++ [[https://www.emacswiki.org/emacs/ElispCookbook][Elisp Cookbook]]
++ [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Files.html][Handling Files]] and [[https://www.gnu.org/software/emacs/manual/html_node/elisp/File-Name-Components.html][Joining Paths]]

@@ -56,17 +56,29 @@ to `relative'.
 
 * DIRED
 
-** TODO fix ~dired-omit-mode~
+Remove `.` and `..` from list of omitted file patterns (so i can always run
+commands on the directory). Also `M-!` will run commands on the dir without
+parameterizing a subdir.
+
+#+begin_src emacs-lisp
+(setq dired-omit-files "^.DS_Store\\'\\|^.project\\(?:ile\\)?\\'\\|^.\\(svn\\|git\\)\\'\\|^.ccls-cache\\'\\|\\(?:\\.js\\)?\\.meta\\'\\|\\.\\(?:elc\\|o\\|pyo\\|swp\\|class\\)\\'")
+#+end_src
 
 * SHELL
 
 ** Explicit Shell
 
-This fixes an issue i'm having where ~/bin/fish~ is the default shell no matter how i've configured things with ~chsh~. This was done by Garuda/Arch either before or after the doom/emacs install.
+This fixes an issue i'm having where ~/bin/fish~ is the default shell no matter
+how i've configured things with ~chsh~. This was done by Garuda/Arch either
+before or after the doom/emacs install.
 
 #+begin_src emacs-lisp
 (setq explicit-shell-file-name "/bin/zsh")
 #+end_src
+
+* ELISP
+
+** TODO configure parenedit
 
 * ORG MODE
 
@@ -79,19 +91,62 @@ This fixes an issue i'm having where ~/bin/fish~ is the default shell no matter 
 ** Org Agenda
 
 #+begin_src emacs-lisp
-;; (after! org...
-;;  (setq org-agenda-files ...)
-;;  )
+(after! org
+  (setq org-log-done 'time
+        ;;org-agenda-files (concat (file-name-as-directory org-directory) "agenda.org")
+   ))
+#+end_src
+
+** Org Babel
+
+#+begin_src emacs-lisp
+(defun dc/org-babel-tangle-async (file)
+  "Invoke `org-babel-tangle-file' asynchronously."
+  (message "Tangling %s..." (buffer-file-name))
+  (async-start
+   (let ((args (list file)))
+  `(lambda ()
+        (require 'org)
+        ;;(load "~/.emacs.d/init.el")
+        (let ((start-time (current-time)))
+          (apply #'org-babel-tangle-file ',args)
+          (format "%.2f" (float-time (time-since start-time))))))
+   (let ((message-string (format "Tangling %S completed after " file)))
+     `(lambda (tangle-time)
+        (message (concat ,message-string
+                         (format "%s seconds" tangle-time)))))))
+
+(defun dc/org-babel-tangle-current-buffer-async ()
+  "Tangle current buffer asynchronously."
+  (dc/org-babel-tangle-async (buffer-file-name)))
+
+(map! :map org-mode-map
+      ;; :desc "Tangle an org-file and produce elisp"
+      "C-c C-v F" #'(lambda () (interactive) (dc/org-babel-tangle-async)))
+(map! :map org-mode-map
+      ;; :desc "Tangle current org-mode buffer and produce elisp"
+      "C-c C-v B" #'dc/org-babel-tangle-current-buffer-async)
+
+;;(map! :leader "C-v F" 'dc/org-babel-tangle-async)
+;;(map! :leader "C-v B" 'dc/org-babel-tangle-current-buffer-async)
 #+end_src
 
 ** TODO setup org-agenda :doom:orgmode:agenda:
 + [ ] setup ~org-agenda-files~
+
+* BABEL
+
+** DONE setup autocompletion in tangles :doom:orgmode:babel:
+CLOSED: [2021-04-14 Wed 09:08]
++ just use *C-c '* to open an indirect buffer?
 
 * KEYBOARD
 
 Most of these configs should be in their individual ~*-mode~ sections
 
 * MOUSE
+
+see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse Config]] for more info on the how & why
 
 ** Mouse 8 and 9
 
@@ -110,6 +165,12 @@ Most of these configs should be in their individual ~*-mode~ sections
 (map! "S-<mouse-9>" 'next-buffer)
 #+end_src
 
+** TODO configure more functionality for the mouse :doom:mouse:keys:
++ [ ] navigate to function at point
++ [ ] describe function at point
++ [ ] ~(kbd "<mouse-4>")~ linux mouse wheel scroll up
++ [ ] ~(kbd "<mouse-5>")~ linux mouse wheel scroll down
+
 * DEVOPS
 
 ** Dockerfile
@@ -120,6 +181,11 @@ so the ~## -*- docker-image-name: "image-name" -*-~ directive works with
 #+begin_src emacs-lisp
 (put 'dockerfile-image-name 'safe-local-variable #'stringp)
 #+end_src
+
+** Kubernetes
+
+*** TODO setup kubernetes.el :doom:devops:packages:
+*** TODO evaluate ~kubectl~ package :doom:devops:packages:
 
 * MISC
 
