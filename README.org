@@ -2,9 +2,46 @@
 
 use ~(org-babel-load-file)~
 
+* Ideas
+
+** _org-trello_
+*** DONE check out /org-trello/ and at least try importing cards/checklists from existing boards into org items
+CLOSED: [2021-04-26 Mon 22:42]
+
+** Modeline
+*** TODO if using _projectile_, show the current *project*
+*** check out moodline
+
+** Tool to clone/sync repos in a language sub/folder
+*** TODO standardize a format for listing repos to clone for a language like clojure/julia/etc or use the following (preferred at top)
++ [[https://github.com/pazdera/gitwalk][pazdera/gitwalk]] (popular, allows groups defined via JSON, best so far)
++ [[https://github.com/mixu/gr][mixu/gr]] (another promising bulk management tool)
+  + similar to my old gitar scripts
+  + auto-discover local git repos, attach tags and manage as lists
++ [[https://github.com/asottile/all-repos][asottile/all-repos]] (interesting)
++ [[https://github.com/naddeoa/git-bulk][naddeoa/git-bulk]] (also probably helpful)
++ [[https://github.com/fabiospampinato/autogit][fabiospampinato/autogit]] (most popular, but aimed towards personal/org repo management)
++ [[https://github.com/scivision/pygit-bulk][scivision/pygit-bulk]] and [[https://pypi.org/project/gitutils/][GitMC]]
++ [[https://gist.github.com/Lukas238/8d9abbeabfcd7225e3a254d40eb0c080][Bulk backup/clone of Git Repos From A List]]
++ [[https://github.com/taylorjayoung/RepoSweeper][RepoSweeper]] (for deleting/managing Github repos)
+*** TODO emacs workflow: automation of structure for projects/org/code
++ outline basic structure for capture/refile
+  + manage org files, repo groups and/or metadata
+  + types of projects (reference groups, work, notes, etc)
++ automation for adding to gitwalk JSON groups (of repos for reference)
+  + when is it helpful to use these groups? when is it definitely overkill (i.e. much of the code i'm interested in should be easy to navigate to from a project... however, for now, i'm in unfamiliar territory with no clear way to expect which dependencies are going to exist in any project. i'm trying to avoid bad habits like googling code samples)
++ outline
+
 * Setup/Config
 
-** Modules & Packages
+** Doom Modules
+
+** Packages
+
+*** TODO evaluate [[https://github.com/dkogan/xcscope.el][xcscope.el]]
+*** TODO org-capture test
+*** DONE treemacs-icons
+CLOSED: [2021-04-26 Mon 22:58]
 
 ** Desktop, Projectile, Workspace, Treemacs
 
@@ -13,21 +50,7 @@ What's the ideal way to approach this for various projects?
 ** Misc Config:
 *** TODO setup word-wrap? and call on file save
 
-* Ideas
-
-** _org-trello_
-*** TODO check out /org-trello/ and at least try importing cards/checklists from existing boards into org items
-
-** Modeline
-*** TODO if using _projectile_, show the current *project*
-*** check out moodline
-
-** Tool to clone/sync repos in a language sub/folder
-*** TODO standardize a format for listing repos to clone for a language like clojure/julia/etc or use something like [[https://github.com/asottile/all-repos][asottile/all-repos]]
-
 * The Important Things In Life:
-
-** TODO treemacs-icons
 
 * Resources
 

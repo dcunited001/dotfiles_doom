@@ -52,12 +52,20 @@ Github-style hrefs. This table of contents is updated everytime the file is
 saved and makes for a functional table of contents that works property directly
 on github.
 
+** SUPERFICIAL :uiux:
 
-** SUPERFICIAL
+*** ALL THE ICONS
 
 #+begin_src emacs-lisp
 (package! all-the-icons-dired)
 #+end_src
+
+**** TODO (configure) All the icons
++ [ ] +all-the-icons+
++ [ ] +all-the-icons-dired+
++ [ ] treemacs-all-the-icons
++ [ ] +all-the-icons-ivy+
++ [ ] [[https://github.com/seagle0128/all-the-icons-ivy-rich][all-the-icons-ivy-rich]]
 
 ** SYNTAX HIGHLIGHTING
 
@@ -67,5 +75,185 @@ on github.
 ;; from HaoZeke/dotdoom
 (package! pkgbuild-mode
   :recipe (:host github
-            :repo "juergenhoetzel/pkgbuild-mode"))
+           :repo "juergenhoetzel/pkgbuild-mode"))
 #+END_SRC
+
+** LSP MODE
+
+*** TODO [[https://github.com/emacs-lsp/lsp-treemacs][lsp-treemacs]]
+
+** MELPA PACKAGES TO EXPLORE :melpa:
+
+The intended process here:
+
+1) run ~list-packages~, nav to the Version column and hit ~S~ to sort by
+   version/date. hitting ~w~ will take you to that package's homepage
+   - the most popular packages should be listed here, unless some package manages
+     to reach its ~linux one-tool perfection~, a trancendent state
+     of bliss and rite of passage every greybeard seeks to experience at least once
+     in their life.
+   - most packages that are popular will not be found far from the more recently
+     updated packages.
+   - this allows you to conduct a sparse survey of usage patterns for emacs.
+     since emacs is hard (and lonely as fuck until you successfully org-roam for
+     the first time, which is like traveling on the astral plane or so i've heard
+     LOL j/k ,,,)
+2) if there's a Doom module for it, try to use that unless it's insufficient
+   - if there's probably a doom module for it or something it it, it should be in
+     a list in ~config.org~ or ~notes.org~
+   - to see if there's a doom module that covers a package, do ~doom/help-packages~ ~C-h p~ to search packages installed by doom
+3) try to enter links as new emacs packages are discovered. at that time, vet
+   them for the below. this is a bit of overhead, but makes it easier to find all relevant info later
+   - recent/sufficient contribution activity
+   - configuration/usage complexity
+4) if i hate it, delete it
+5) if i don't like it, check it
+6) if it want to integrate it, move its list item to a configuration entry and
+   make notes there
+7) everything should either gradually become checked, configured or be cast out
+   to die in the cold
+   - j/k, i am opinionated and hard to satisfy. it is what it is
+
+*** GIT
++ [ ] *[[https://github.com/10sr/git-walktree-el][GIT-WALKTREE]]*
++ [ ] *git-blamed*
++ [ ] *git-messenger* (check performance)
++ [ ] *git-timemachine*
++ [ ] gitolite-clone
++ [ ] borg (assimilate emacs packages as git submodules)
++ [ ] git-gutter+ (2015...)
++ [ ] abridge-diff (basically for enabling use of soft-wrapped text by wrangling
+  your out-of-control 4000+ character per-hung git diffs)
+
+*** GITHUB
++ [ ] github-explorer
++ [ ] *github-pullrequest*
++ [ ] *github-stars*
++ [ ] *github-search*
++ [ ] *magithub*
++ [ ] *org2issue*
++ [ ] *treemacs-magit*
+
+*** MAGIT
++ [ ] magit-delta
++ [ ] *magit-gh-pulls*
++ [ ] magit-gitflow
++ [ ] magit-popup
++ [ ] magit-org-todos
++ [ ] *magit-forge*
++ [ ] forge (also integrates with magit)
++ [ ] orgit (org links to magit buffers)
++ [ ] orgit-forge
+
+*** TREEMACS
++ [ ] treemacs-persp
++ [ ] treemacs-perspective
++ [ ] treemacs-projectile
++ [ ] treemacs-all-the-icons
++ [ ] treemacs-icons-dired
+
+*** DIFF & PATCH TOOLS
++ [ ] something for kernel patches?
++ [ ] vdiff & vdiff-magit
++ [ ] *find-file-in-project*
++ [ ] *gitpatch*
++ [ ] flycheck-checkpatch
++ [ ] ztree (recursive diff tool)
+
+*** ORG MODE
++ akirak
+  - [ ] [[https://github.com/akirak/org-starter][org-starter]] (good orgmode presets & asset creation tools?),
+  - [ ] [[https://github.com/akirak/ivy-omni-org][ivy-omni-org]] (fast org buffer access)
+  - [ ] [[https://github.com/akirak/org-reverse-datetree][org-reverse-datetree]] (do i already have this?)
++ [ ] org-bullets vs org-fancy-priorities
++ [ ] org-appear (easier editing of org markup)
++ [ ] [[https://github.com/kidd/org-gcal.el][org-gcal]] or [[https://github.com/dengste/org-caldav][org-caldav]] (probably the latter)
++ [ ] org-variable-pitch
++ [ ] org-re-reveal (export reveal.js presentations from org)
++ [ ] org-elp (preview latex expressions while editing)
++ [ ] [[https://github.com/Fuco1/org-timeline/][org-timeline]]
++ [ ] [[https://spwhitton.name/tech/code/org-d20/][org-d20]] for dungeonmasters
++ [ ] [[https://github.com/stardiviner/org-tag-beautify][org-tag-beautify]] (requires org-pretty-tags)
++ [ ] org-working-set (manage a working set of nodes)
+
+
+*** DIRED
++ [ ] [[https://github.com/Boruch-Baum/emacs-diredc][diredc]]
+
+*** SHELL
++ [ ] [[https://github.com/waymondo/projector.el][projector]] (projectile-based management of shells & their buffers)
+
+*** LOGGING
++ [ ] logito (emacs logging)
+
+*** TRAMP
++ [ ] [[https://github.com/randymorris/tramp-term.el][tramp-term]]
++ [ ] [[https://github.com/oitofelix/tramp-auto-auth][tramp-auth-auth]]
++ [ ] [[https://github.com/cjohansson/emacs-ssh-deploy][ssh-deploy]] (deployment via tramp)
+
+*** IVY
++ [ ] [[https://github.com/jixiuf/ivy-dired-history][ivy-dired-history]]
++ [ ] [[https://github.com/masasam/emacs-counsel-tramp][counsel-tramp]] (once local/cloud ssh & etc are setup and locally configured)
++ [ ]
+
+*** DOCKER
++ [ ] SLIME Docker
++ [ ] [[https://github.com/emacs-pe/docker-tramp.el][docker-tramp]] (2017)
++ [ ] [[https://github.com/bosko/docker-cli][docker-cqli]]
++ [ ] lsp-docker
++ [ ] docker
+
+*** KUBERNETES
++ [ ] kubernetes.el
++ [ ] [[https://github.com/gruggiero/kubernetes-tramp][kubernetes-tramp]]
++ [ ] [[https://github.com/TxGVNN/emacs-k8s-mode][k8s-mode]] (kubernetes file support + snippets)
+
+*** MISC
++ [ ] desktop-environment
++ [ ] verilog-mode
++ [ ] company-emoji
++ [ ] verb (organize/send HTTP requests)
++ [ ] [[https://github.com/wolray/symbol-overlay/][symbol-overlay]] (highlight symbols in text, replaces highlight-symbol)
++ [ ] ssh-config-mode
++ [ ] [[https://gitlab.com/phillord/org-drill/][org-drill]] (use org mode for spaced repitition)
++ [ ] sequed (major more for FASTA seq alignments)
++ [ ] [[https://github.com/skeeto/x86-lookup][x86-lookup]] (useful when segfaults maybe? e.g krita crash)
++ [ ] [[https://github.com/jobbflykt/x509-mode][x509-mode]]
+
+
+*** WINDOWS
++ [ ] [[https://github.com/bmag/emacs-purpose][window-purpose]] purpose-based window management
++ [ ] exwm-x (derivative of window manager based on EXWM)
+
+*** MINIBUFFER
++ [ ] [[https://github.com/oantolin/embark][embark]] contextual menu's and assist for minibuffer/completion candidtates
+
+*** MODELINE
++ [ ] [[https://github.com/seagle0128/doom-modeline][doom-modeline]]
++ [ ] [[https://github.com/ecraven/celestial-mode-line/blob/master/celestial-mode-line.el][celestial-mode-line]] lunar phase and time until sunset in modeline (no http?)
+
+*** LANGUAGES
++ [ ] [[https://github.com/ericcrosson/pine-script-mode][pine-script-mode]] Trading View
++ [ ] [[https://github.com/shg/julia-vterm.el][julia-vterm]] and [[https://github.com/shg/ob-julia-vterm.el][ob-julia-vterm]] and julia-repl
++ [ ] [[https://github.com/alphapapa/prism.el][prism]] (or maybe rainbow-blocks)
+
+*** DOCUMENTATION
++ [ ] [[https://github.com/jcs-elpa/docstr][docstr]]
+
+*** LATEX & WRITING
++ [ ] [[https://joostkremers.github.io/ebib/][ebib]] bibtex database
++ [ ] xah-math-mode
++ [ ] [[https://github.com/emacs-grammarly/lsp-grammarly][lsp-grammar]]
++ [ ] [[https://github.com/cpitclaudel/biblio.el][biblio]] and biblio-core (browse import bibliographic refs; e.g from arXiv)
++ [ ] writegood-mode & wc-mode
++ [ ] [[https://github.com/ymarco/auto-activating-snippets][aas]] and [[https://github.com/tecosaur/LaTeX-auto-activating-snippets][laas]] (a more-performant approach to auto-expanding snippets)
+
+*** IRC & CHAT
+
+I am perfectly comfortable having /most/ my chat/comms outside of emcas
+
++ [ ] [[https://github.com/jorgenschaefer/circe][circe]] an IRC client, complexity is between rcirc and ERC
+
+*** In Active Development (type /w/ open project url in ~list~packages~)
++ [ ] pyim (chinese input)
++ [ ] with-editor (faster startup for emacs client as $EDITOR)

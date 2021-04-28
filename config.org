@@ -5,7 +5,7 @@
 #+STARTUP: showeverything
 #+OPTIONS: toc:nil
 
-* Configuration
+* Configuration :doom:
 :PROPERTIES:
 :VISIBILITY: children
 :END:
@@ -53,7 +53,7 @@ saved and makes for a functional table of contents that works property directly
 on github.
 
 
-** IDENTITY
+** IDENTITY :identity:
 
 *** Emacs User
 
@@ -62,22 +62,57 @@ on github.
       user-mail-address "noreply@te.xel.io")
 #+end_src
 
-** DOOM PACKAGES
+** DOOM MODULES & PACKAGES :modules:
+
+*** Explore/Config Doom Modules
++ [ ] [[https://github.com/magit/transient][transient]]
++ [ ] lsp-mode
++ [ ] [[https://github.com/joaotavora/eglot][eglot]] (management/automation for LSP servers) + [[https://github.com/non-Jedi/eglot-jl][eglot-jl]]
++ [ ] [[https://github.com/raxod502/prescient.el][ivy-prescient]]
++ [ ] ob-async
++ [ ] [[https://github.com/snosov1/toc-org][toc-org]] (add toc to org files)
++ [ ] [[https://github.com/ema2159/centaur-tabs][tabs]] (or centaur-tabs; + tab-bar-groups)
++ [ ] CLONE: debugger (+ [[https://github.com/realgud/realgud/][realgud]]?)
++ [ ] org-roam?
++ [ ] CLONE: [[https://github.com/countvajhula/symex.el][symex]]
++ [ ] autoformat code (is this setup?)
++ snippets
 
 *** TODO decide on modules
 + [ ] ibuffer /interactive buffer management/
-+ [ ] direnv
++ [ ] [[https://github.com/wbolster/emacs-direnv][direnv]] (requires configuring direnv in shell?)
 + [ ] editorconfig /let someone else argue about tabs vs spaces/
-+ [ ] pdf
++ [ ] pdf (and [[https://github.com/weirdNox/org-noter][org-noter]] for PDF outline-extraction)
+  - see [[https://tech.memoryimprintstudio.com/pdf-annotation-related-tools/][this post]] on [[https://github.com/politza/pdf-tools][PDF Tools]], which can be a pain to configure
+  - automatically ingesting ToC into Org Mode and PDF annotations <=> Org Mode)
+    could be useful if dealing with lots of academic journals
 
-** SUPERFICIAL
+*** TODO check out [[https://cupermind.com/post/Emacs-as-DevOps-editor][modules for devops]]
++ [ ] try [[https://github.com/fourier/ztree][fourier/ztree]] for directory diff
++ [ ] configure tramp
+
+
+*** TODO Find modules/answers for
++ Kubernetes
++ Open API
++ declarative config for bulk git repository cloning into a folder structure
+  (and visiting the sub-repos, which should not be submodules)
+
+*** IDEA Mode or tools for building XKB keyboards
++ Ranging from a custom kbd to layout to variants to options
+  + particularly, to build something like the German Neo keyboard (perhaps see if they have scripts/tooling)
+  + [[https://www.x.org/releases/X11R7.6/doc/xorg-docs/input/XKB-Config.html][XKB config guide]] provides some toplevel info, but not nearly as much as the protocol description. it's impossible to find a name for this DSL (unless it's just too obvious)
+  + unfortunately, the only way to hook in would be to extract metadata (via
+    AST?) from the actual freedsktop xkb source found in [[https://archlinux.org/packages/extra/any/xkeyboard-config/][xkeyboard-config]]
+
+** SUPERFICIAL :uiux:
 
 Emacs UI Configs
 
 *** Doom Theme
 
 #+begin_src emacs-lisp
-(setq doom-theme 'doom-one)
+(setq doom-theme 'doom-acario-dark)
 #+end_src
 
 *** Font
@@ -88,16 +123,30 @@ Emacs UI Configs
 
 *** Window UI
 
+Dividers are too thin to grab if only 1px
+
 #+begin_src emacs-lisp
 (setq window-divider-default-right-width 3)
 (setq window-divider-default-bottom-width 3)
 #+end_src
 
-*** Keyboard
+**** TODO automatically balance window widths?
+
+*** Treemacs
+
+Set a default width for treemacs.
 
 #+begin_src emacs-lisp
-(require 'iso-transl)
+(setq treemacs-width 30)
 #+end_src
+
+It is possible to make the Treemacs window
+draggable by default with ~(setq treemacs--width-is-locked nil)~ on startup,
+which i finally figured out (immediately before finally discovering
+~(balance-windows)~ which maximizes the treemacs width if it's not fixed.....
+
+**** TODO see if neotree integrates better with a ~Projectile/Persp workflow~
+
 
 *** Line Numbers
 
@@ -111,7 +160,7 @@ to `relative'.
 *** TODO fix UI/UX issues in doom :doom:superficial:
 + [ ] fix `+company/complete` popup ~(setq doom-theme 'doom-acario-dark)~
 
-** DIRED
+** DIRED :dired:
 
 Remove `.` and `..` from list of omitted file patterns (so i can always run
 commands on the directory). Also `M-!` will run commands on the dir without
@@ -121,7 +170,13 @@ parameterizing a subdir.
 (setq dired-omit-files "^.DS_Store\\'\\|^.project\\(?:ile\\)?\\'\\|^.\\(svn\\|git\\)\\'\\|^.ccls-cache\\'\\|\\(?:\\.js\\)?\\.meta\\'\\|\\.\\(?:elc\\|o\\|pyo\\|swp\\|class\\)\\'")
 #+end_src
 
-** SHELL
+*** TODO configure [[https://github.com/xahlee/xah-dired][Xah Dired]] package & keys
++ full of helpers for working with images in dired.
++ need to check Xah's init files for hotkeys
+
+
+
+** SHELL :shell:
 
 *** Explicit Shell
 
@@ -133,11 +188,22 @@ before or after the doom/emacs install.
 (setq explicit-shell-file-name "/bin/zsh")
 #+end_src
 
-** ELISP
+** ELISP :elisp:
 
 *** TODO configure parenedit
 
-** ORG MODE
+** IVY :ivy:
+
+*** TODO configure views to use with ~ivy-switch-view~
+
+** ORG MODE :org:
+
+*** TODO watch Sacha Chua interview with [[https://emacslife.com/emacs-chats/chat-carsten-dominik.html][Carsten Dominik (org-mode creator)]]
+
+*** Keys :kbd:
+**** TODO remap ~org-forward-heading-same-level~
++ ~C-c C-b~ maps to ~org-backward-heading-same-level~
++ ~C-c C-f~ conflicts with code folding (which does nothing in org/babel)
 
 *** Org Directory
 
@@ -150,8 +216,10 @@ before or after the doom/emacs install.
 #+begin_src emacs-lisp
 (after! org
   (setq org-log-done 'time
+        org-support-shift-select t
         ;;org-agenda-files (concat (file-name-as-directory org-directory) "agenda.org")
-   ))
+        ;; TODO include content from Adam James
+        ))
 #+end_src
 
 *** Org Babel
@@ -159,18 +227,25 @@ before or after the doom/emacs install.
 *** TODO setup org-agenda :doom:orgmode:agenda:
 + [X] setup ~org-agenda-files~
 *** TODO setup org-export-async-init-file (see [[https://dotdoom.rgoswami.me/config.html][1.2.3 Async Exports]])
+*** TODO look into [[https://github.com/myuhe/org-gcal.el][org-gcal]] and [[https://github.com/dengste/org-caldav][org-caldav]] to manage/edit calendars
++ Also, refer to [[https://tasshin.com/blog/implementing-a-second-brain-in-emacs-and-org-mode/][org mode as 2nd brain]]
 
-** BABEL
+** BABEL :babel:
 
 *** DONE setup autocompletion in tangles :doom:orgmode:babel:
 CLOSED: [2021-04-14 Wed 09:08]
-+ just use *C-c '* to open an indirect buffer?
++ just use ~C-c '~ to open an indirect buffer?
 
-** KEYBOARD
+** KEYBOARD :kbd:
 
-Most of these configs should be in their individual ~*-mode~ sections
+Most of these configs should be in their individual ~*-mode~ sections or under the *:kbd:* tag
 
-** MOUSE
+#+begin_src emacs-lisp
+;; Fixes problems with dead keys
+(require 'iso-transl)
+#+end_src
+
+** MOUSE :mouse:
 
 see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse Config]] for more info on the how & why
 
@@ -187,8 +262,8 @@ see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse
 (map! "<mouse-9>" 'projectile-grep)
 (map! "C-M-<mouse-8>" '+workspace/switch-left)
 (map! "C-M-<mouse-9>" '+workspace/switch-right)
-(map! "C-<mouse-8>" '+ivy/switch-workspace-buffer)
-(map! "C-<mouse-9>" 'counsel-projectile-switch-project)
+(map! "C-<mouse-8>" '+ivy/switch-buffer)
+(map! "C-<mouse-9>" '+ivy/switch-workspace-buffer)
 (map! "M-<mouse-8>" 'doom/save-session)
 (map! "M-<mouse-9>" 'doom/load-session)
 (map! "M-S-<mouse-8>" 'winner-undo)
@@ -203,7 +278,7 @@ see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse
 + [ ] ~(kbd "<mouse-4>")~ linux mouse wheel scroll up
 + [ ] ~(kbd "<mouse-5>")~ linux mouse wheel scroll down
 
-** DEVOPS
+** DEVOPS :devops:
 
 *** Dockerfile
 
@@ -219,7 +294,7 @@ so the ~## -*- docker-image-name: "image-name" -*-~ directive works with
 **** TODO setup kubernetes.el :doom:devops:packages:
 **** TODO evaluate ~kubectl~ package :doom:devops:packages:
 
-** MISC
+** EMACS MISC :emisc:
 
 *** Bug Mode (for KDE Bugzilla)
 
@@ -237,19 +312,26 @@ This is good for streaming -- your keystrokes and their commands get logged to a
 
 **** TODO setup (needs to be imported from melpa or Xah Lee emacs init)
 
+*** Query Replace Regexp using matching groups
 
-** LSP
+[[https://emacs.stackexchange.com/questions/50220/emacs-replace-regexp-reference-the-match-in-the-replace-argument][This Stack Exchange]] says to query with ~XYZ\(...\)~ and replace with ~XYZ\1~.
+See [[https://www.emacswiki.org/emacs/RegularExpression][EmacsWiki: Regex]] for more info
+
+** LATEX :latex:
+
+(From Hsin Haoyu) Apparently, [[https://mirror.aarnet.edu.au/pub/CTAN/systems/knuth/dist/tex/tex.web][the TeX source code]] was written in Pascal/TeX was
+literate programming code written by Knuth in Pascal/TeX.
+
+** Clojure :clojure:
+
+*** LSP :lsp:
+**** TODO follow [[https://emacs-lsp.github.io/lsp-mode/tutorials/clojure-guide/][this guide]]
 
 
-
-** Clojure
-
+** Julia :julia:
 
 
-** Julia
-
-
-** C++
+** C++ :cpp:
 
 *** Doxygen Support
 #+begin_src emacs-lisp
@@ -273,4 +355,6 @@ This is good for streaming -- your keystrokes and their commands get logged to a
                               auto-mode-alist))
 #+end_src
 
-** KDE/QT
+** KDE :kde:
+
+** QT :qt:

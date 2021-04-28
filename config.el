@@ -2,17 +2,16 @@
 ;;; ~/.doom.d/config.el
 
 (setq user-full-name "David Conner"
-      user-mail-address "number8@fantasyfarm.com")
+      user-mail-address "noreply@te.xel.io")
 
-(setq doom-theme 'doom-one)
-;;;fdsafdas
+(setq doom-theme 'doom-acario-dark)
 
 (set-frame-font "Source Code Pro 12" nil t)
 
 (setq window-divider-default-right-width 3)
 (setq window-divider-default-bottom-width 3)
 
-(require 'iso-transl)
+(setq treemacs-width 30)
 
 (setq display-line-numbers-type t)
 
@@ -24,8 +23,13 @@
 
 (after! org
   (setq org-log-done 'time
+        org-support-shift-select t
         ;;org-agenda-files (concat (file-name-as-directory org-directory) "agenda.org")
-   ))
+        ;; TODO include content from Adam James
+        ))
+
+;; Fixes problems with dead keys
+(require 'iso-transl)
 
 (setq mouse-wheel-progressive-speed nil)
 
@@ -33,8 +37,8 @@
 (map! "<mouse-9>" 'projectile-grep)
 (map! "C-M-<mouse-8>" '+workspace/switch-left)
 (map! "C-M-<mouse-9>" '+workspace/switch-right)
-(map! "C-<mouse-8>" '+ivy/switch-workspace-buffer)
-(map! "C-<mouse-9>" 'counsel-projectile-switch-project)
+(map! "C-<mouse-8>" '+ivy/switch-buffer)
+(map! "C-<mouse-9>" '+ivy/switch-workspace-buffer)
 (map! "M-<mouse-8>" 'doom/save-session)
 (map! "M-<mouse-9>" 'doom/load-session)
 (map! "M-S-<mouse-8>" 'winner-undo)
