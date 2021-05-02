@@ -30,7 +30,7 @@ work with.
 *** Automatically Tangle
 First there is a property defined on the file:
 
-#+BEGIN_SRC :tangle no
+#+BEGIN_SRC org :tangle no
 header-args :tangle yes
 #+END_SRC
 
@@ -54,20 +54,29 @@ on github.
 
 ** SUPERFICIAL :uiux:
 
-*** ALL THE ICONS
+*** All The Icons
 
 #+begin_src emacs-lisp
 (package! all-the-icons-dired)
 #+end_src
 
 **** TODO (configure) All the icons
-+ [ ] +all-the-icons+
-+ [ ] +all-the-icons-dired+
 + [ ] treemacs-all-the-icons
-+ [ ] +all-the-icons-ivy+
 + [ ] [[https://github.com/seagle0128/all-the-icons-ivy-rich][all-the-icons-ivy-rich]]
 
 ** SYNTAX HIGHLIGHTING
+
+*** Prism.el
+
+#+begin_src emacs-lisp
+(package! prism.el
+  :after (:any clojure-mode emacs-lisp-mode))
+
+#+end_src
+
+
+**
+** DEVOPS, SYSADMIN & AUTOMATION
 
 *** PKGBUILD Mode
 
@@ -77,6 +86,45 @@ on github.
   :recipe (:host github
            :repo "juergenhoetzel/pkgbuild-mode"))
 #+END_SRC
+
+** GIT
+
+From Doom Modules:
++ magit-gh-pulls
++ magit-gitflow
++ magit-todos
++ magit-popup
++ git-gutter
++ git-gitter-fringe
+
+#+begin_src
+
+#+end_src
+
+*** MAGIT
++ [ ] *magit-forge*
++ [ ] magit-delta
++ [ ] magit-org-todos
++ [ ] forge (also integrates with magit)
++ [ ] orgit (org links to magit buffers)
++ [ ] orgit-forge
+
+*** GIT
++ [ ] *[[https://github.com/10sr/git-walktree-el][git-walktree]]*
++ [ ] *git-blamed*
++ [ ] *git-messenger* (check performance)
++ [ ] *git-timemachine*
++ [ ] gitolite-clone
++ [ ] borg (assimilate emacs packages as git submodules)
+
+*** GITHUB
++ [ ] github-explorer
++ [ ] *github-pullrequest*
++ [ ] *github-stars*
++ [ ] *github-search*
++ [ ] *magithub*
++ [ ] *org2issue*
++ [ ] *treemacs-magit*
 
 ** LSP MODE
 
@@ -114,36 +162,6 @@ The intended process here:
    to die in the cold
    - j/k, i am opinionated and hard to satisfy. it is what it is
 
-*** GIT
-+ [ ] *[[https://github.com/10sr/git-walktree-el][GIT-WALKTREE]]*
-+ [ ] *git-blamed*
-+ [ ] *git-messenger* (check performance)
-+ [ ] *git-timemachine*
-+ [ ] gitolite-clone
-+ [ ] borg (assimilate emacs packages as git submodules)
-+ [ ] git-gutter+ (2015...)
-+ [ ] abridge-diff (basically for enabling use of soft-wrapped text by wrangling
-  your out-of-control 4000+ character per-hung git diffs)
-
-*** GITHUB
-+ [ ] github-explorer
-+ [ ] *github-pullrequest*
-+ [ ] *github-stars*
-+ [ ] *github-search*
-+ [ ] *magithub*
-+ [ ] *org2issue*
-+ [ ] *treemacs-magit*
-
-*** MAGIT
-+ [ ] magit-delta
-+ [ ] *magit-gh-pulls*
-+ [ ] magit-gitflow
-+ [ ] magit-popup
-+ [ ] magit-org-todos
-+ [ ] *magit-forge*
-+ [ ] forge (also integrates with magit)
-+ [ ] orgit (org links to magit buffers)
-+ [ ] orgit-forge
 
 *** TREEMACS
 + [ ] treemacs-persp
@@ -165,23 +183,33 @@ The intended process here:
   - [ ] [[https://github.com/akirak/org-starter][org-starter]] (good orgmode presets & asset creation tools?),
   - [ ] [[https://github.com/akirak/ivy-omni-org][ivy-omni-org]] (fast org buffer access)
   - [ ] [[https://github.com/akirak/org-reverse-datetree][org-reverse-datetree]] (do i already have this?)
-+ [ ] org-bullets vs org-fancy-priorities
++ [X] org-bullets vs org-fancy-priorities =+pretty=
 + [ ] org-appear (easier editing of org markup)
 + [ ] [[https://github.com/kidd/org-gcal.el][org-gcal]] or [[https://github.com/dengste/org-caldav][org-caldav]] (probably the latter)
 + [ ] org-variable-pitch
-+ [ ] org-re-reveal (export reveal.js presentations from org)
++ [X] org-re-reveal (export reveal.js presentations from org) =+present=
 + [ ] org-elp (preview latex expressions while editing)
 + [ ] [[https://github.com/Fuco1/org-timeline/][org-timeline]]
 + [ ] [[https://spwhitton.name/tech/code/org-d20/][org-d20]] for dungeonmasters
-+ [ ] [[https://github.com/stardiviner/org-tag-beautify][org-tag-beautify]] (requires org-pretty-tags)
++ [ ] [[https://github.com/stardiviner/org-tag-beautify][org-tag-beautify]] requires org-pretty-tags (conflicts with =+pretty=?)
 + [ ] org-working-set (manage a working set of nodes)
++ [ ] org-present & org-re-reveal
++ from HaoZeke
+  - [ ] org-drill?
+  - [ ] org-protocol?
+  - [ ] org-ref (highly recommended)
+  - [ ] helm-org-rifle (not worth the helm)
+  - [ ] org-async
 
+*** EMACS LISP
++ [ ] package-lint & flycheck-package (for prepping packages for melpa)
 
 *** DIRED
 + [ ] [[https://github.com/Boruch-Baum/emacs-diredc][diredc]]
 
 *** SHELL
 + [ ] [[https://github.com/waymondo/projector.el][projector]] (projectile-based management of shells & their buffers)
++ [ ] firestarter (for running shell commands on-save)
 
 *** LOGGING
 + [ ] logito (emacs logging)
@@ -208,7 +236,13 @@ The intended process here:
 + [ ] [[https://github.com/gruggiero/kubernetes-tramp][kubernetes-tramp]]
 + [ ] [[https://github.com/TxGVNN/emacs-k8s-mode][k8s-mode]] (kubernetes file support + snippets)
 
+*** DEVOPS
+
++ [ ] salt-mode
++ [ ] systemd
+
 *** MISC
++ [ ] [[https://github.com/alphapapa/bufler.el][bufler]] buffer grouping (interacts with workspaces) =from haozeke=
 + [ ] desktop-environment
 + [ ] verilog-mode
 + [ ] company-emoji
@@ -219,6 +253,8 @@ The intended process here:
 + [ ] sequed (major more for FASTA seq alignments)
 + [ ] [[https://github.com/skeeto/x86-lookup][x86-lookup]] (useful when segfaults maybe? e.g krita crash)
 + [ ] [[https://github.com/jobbflykt/x509-mode][x509-mode]]
++ [ ] [[https://github.com/magoyette/openapi-yaml-mode][open-api-yaml-mode]]
++ [ ] wakatime-mode (time tracking)
 
 
 *** WINDOWS
@@ -257,3 +293,5 @@ I am perfectly comfortable having /most/ my chat/comms outside of emcas
 *** In Active Development (type /w/ open project url in ~list~packages~)
 + [ ] pyim (chinese input)
 + [ ] with-editor (faster startup for emacs client as $EDITOR)
+
+

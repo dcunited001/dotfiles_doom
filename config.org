@@ -30,13 +30,13 @@ work with.
 *** Automatically Tangle
 First there is a property defined on the file:
 
-#+BEGIN_SRC :tangle no
+#+BEGIN_SRC org :tangle no
 header-args :tangle yes
 #+END_SRC
 
-This tells emacs to automatically tangle (include) all code blocks in this file when
-generating the code for the config, unless the code block explicitly includes
-=:tangle no= as the above code block does.
+This tells emacs to automatically tangle (include) all code blocks in this file
+when generating the code for the config, unless the code block explicitly
+includes =:tangle no= as the above code block does.
 
 *** Visibility Settings
 Next we have a property defined on the [[Configuration][Configuration]] heading that defines the
@@ -91,7 +91,6 @@ on github.
 + [ ] try [[https://github.com/fourier/ztree][fourier/ztree]] for directory diff
 + [ ] configure tramp
 
-
 *** TODO Find modules/answers for
 + Kubernetes
 + Open API
@@ -112,7 +111,11 @@ Emacs UI Configs
 *** Doom Theme
 
 #+begin_src emacs-lisp
-(setq doom-theme 'doom-acario-dark)
+(setq doom-theme 'doom-acario-dark
+      doom-acario-dark-brighter-comments nil
+      doom-acario-dark-brighter-modeline t
+      doom-acario-dark-comment-bg nil
+      doom-acario-dark-padded-modeline 4)
 #+end_src
 
 *** Font
@@ -120,6 +123,17 @@ Emacs UI Configs
 #+begin_src emacs-lisp
 (set-frame-font "Source Code Pro 12" nil t)
 #+end_src
+
+*** Ligatures
+
+Disable extra ligatures in a few modes =from luca=
+
+#+BEGIN_SRC emacs-lisp
+(setq +ligatures-extras-in-modes
+      '(not special-mode comint-mode eshell-mode term-mode vterm-mode python-mode))
+#+END_SRC
+
+**** TODO configure [[org:/home/dc/.emacs.d/modules/ui/ligatures/README.org][+ligatures]] module
 
 *** Window UI
 
@@ -131,22 +145,33 @@ Dividers are too thin to grab if only 1px
 #+end_src
 
 **** TODO automatically balance window widths?
+**** TODO setup startup windows (luca)
+
+*** Completion prompts
+
+**** TODO (luca) Prescient + selectrum + consult + marginalia + embark
 
 *** Treemacs
 
-Set a default width for treemacs.
+Set a default width for treemacs & disable filewatch unless needed
 
 #+begin_src emacs-lisp
-(setq treemacs-width 30)
+(after! treemacs
+  (setq treemacs-width 24)
+  (treemacs-filewatch-mode -1))
+#+end_src
+
+Key bindings ([[https://github.com/sei40kr/spacemacs.d/blob/master/treemacs-custom.el][treemacs example in spacemacs]])
+
+#+begin_src emacs-lisp
+(map! :map treemacs-mode-map :after treemacs
+      (:prefix "o" :desc "Tags" "t" 'treemacs-toggle-node-prefer-tag-visit))
 #+end_src
 
 It is possible to make the Treemacs window
 draggable by default with ~(setq treemacs--width-is-locked nil)~ on startup,
 which i finally figured out (immediately before finally discovering
-~(balance-windows)~ which maximizes the treemacs width if it's not fixed.....
-
-**** TODO see if neotree integrates better with a ~Projectile/Persp workflow~
-
+~(balance-windows)~ which maximizes the treemacs width if it's not fixed.....)
 
 *** Line Numbers
 
@@ -154,11 +179,31 @@ This determines the style of line numbers. For relative line numbers, set this
 to `relative'.
 
 #+begin_src emacs-lisp
-(setq display-line-numbers-type t)
+(setq display-line-numbers-type nil)
 #+end_src
+
+*** which-key
+
+shorten the delay (from luca)
+
+#+BEGIN_SRC emacs-lisp
+(after! which-key
+    (setq which-key-idle-delay 0.5))
+#+END_SRC
+
+*** Modeline
+
+**** TODO configure modeline (refer to HaoZeke, luca and others)
+
+*** Misc
+
+**** TODO toggle centered cursor? (luca)
 
 *** TODO fix UI/UX issues in doom :doom:superficial:
 + [ ] fix `+company/complete` popup ~(setq doom-theme 'doom-acario-dark)~
+
+** COMPANY :company:
+*** TODO check luca: delay/prefix, disable tab? and yasnippets in company
 
 ** DIRED :dired:
 
@@ -174,8 +219,6 @@ parameterizing a subdir.
 + full of helpers for working with images in dired.
 + need to check Xah's init files for hotkeys
 
-
-
 ** SHELL :shell:
 
 *** Explicit Shell
@@ -187,6 +230,7 @@ before or after the doom/emacs install.
 #+begin_src emacs-lisp
 (setq explicit-shell-file-name "/bin/zsh")
 #+end_src
+*** TODO check luca shell configs
 
 ** ELISP :elisp:
 
@@ -198,12 +242,31 @@ before or after the doom/emacs install.
 
 ** ORG MODE :org:
 
-*** TODO watch Sacha Chua interview with [[https://emacslife.com/emacs-chats/chat-carsten-dominik.html][Carsten Dominik (org-mode creator)]]
+*** TODO setup org to emphasize with parenedit
 
-*** Keys :kbd:
+*** Keys :kbdmaps:
+
+**** TODO remap =C-c i w */_=+~= to wrap with sp-wrap-parens (need to def function?) =from HaoZeke=
+
+#+begin_src emacs-lisp
+;; (after! org
+;;   (map!
+
+;;    ))
+#+end_src
+
 **** TODO remap ~org-forward-heading-same-level~
 + ~C-c C-b~ maps to ~org-backward-heading-same-level~
 + ~C-c C-f~ conflicts with code folding (which does nothing in org/babel)
+
+*** Org Literate
+
+prevent over-eager dotfiles recompilation =from HaoZeke=
+
+#+BEGIN_SRC emacs-lisp
+(after! org
+  (remove-hook 'after-save-hook #'+literate|recompile-maybe))
+#+END_SRC
 
 *** Org Directory
 
@@ -224,17 +287,16 @@ before or after the doom/emacs install.
 
 *** Org Babel
 
-*** TODO setup org-agenda :doom:orgmode:agenda:
+*** TODO setup org-agenda :doom:agenda:
 + [X] setup ~org-agenda-files~
 *** TODO setup org-export-async-init-file (see [[https://dotdoom.rgoswami.me/config.html][1.2.3 Async Exports]])
 *** TODO look into [[https://github.com/myuhe/org-gcal.el][org-gcal]] and [[https://github.com/dengste/org-caldav][org-caldav]] to manage/edit calendars
 + Also, refer to [[https://tasshin.com/blog/implementing-a-second-brain-in-emacs-and-org-mode/][org mode as 2nd brain]]
 
-** BABEL :babel:
+*** Org Capture
 
-*** DONE setup autocompletion in tangles :doom:orgmode:babel:
-CLOSED: [2021-04-14 Wed 09:08]
-+ just use ~C-c '~ to open an indirect buffer?
+**** TODO luca capture templates (thoughts for day)
+** BABEL :babel:
 
 ** KEYBOARD :kbd:
 
@@ -244,6 +306,8 @@ Most of these configs should be in their individual ~*-mode~ sections or under t
 ;; Fixes problems with dead keys
 (require 'iso-transl)
 #+end_src
+
+*** TODO japanese module
 
 ** MOUSE :mouse:
 
@@ -256,6 +320,9 @@ see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse
 #+end_src
 
 *** Mouse 8 and 9
+:PROPERTIES:
+:ID:       692e65d2-2cd3-4564-bd75-26dcc2b84251
+:END:
 
 #+begin_src emacs-lisp
 (map! "<mouse-8>" 'projectile-find-file)
@@ -264,10 +331,10 @@ see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse
 (map! "C-M-<mouse-9>" '+workspace/switch-right)
 (map! "C-<mouse-8>" '+ivy/switch-buffer)
 (map! "C-<mouse-9>" '+ivy/switch-workspace-buffer)
-(map! "M-<mouse-8>" 'doom/save-session)
-(map! "M-<mouse-9>" 'doom/load-session)
-(map! "M-S-<mouse-8>" 'winner-undo)
-(map! "M-S-<mouse-9>" 'winner-redo)
+(map! "M-<mouse-8>" 'doom/save-session) ;; TODO: remap
+(map! "M-<mouse-9>" 'doom/load-session) ;; TODO: remap
+(map! "M-S-<mouse-8>" 'winner-undo) ;; TODO: remap
+(map! "M-S-<mouse-9>" 'winner-redo) ;; TODO: remap
 (map! "S-<mouse-8>" 'previous-buffer)
 (map! "S-<mouse-9>" 'next-buffer)
 #+end_src
@@ -317,19 +384,32 @@ This is good for streaming -- your keystrokes and their commands get logged to a
 [[https://emacs.stackexchange.com/questions/50220/emacs-replace-regexp-reference-the-match-in-the-replace-argument][This Stack Exchange]] says to query with ~XYZ\(...\)~ and replace with ~XYZ\1~.
 See [[https://www.emacswiki.org/emacs/RegularExpression][EmacsWiki: Regex]] for more info
 
+** BLOG & TEXT :plaintext:
+
+*** TODO check out deft module
+
+** LOOKUP :emacslookup:
+
+*** TODO configure =+dictionary= flag
+*** TODO configure =+docset= flag functionality
+**** [ ] clojure docsets
+**** [ ] julia docsets
+**** [ ] c++ docsets
+
 ** LATEX :latex:
 
 (From Hsin Haoyu) Apparently, [[https://mirror.aarnet.edu.au/pub/CTAN/systems/knuth/dist/tex/tex.web][the TeX source code]] was written in Pascal/TeX was
 literate programming code written by Knuth in Pascal/TeX.
 
-** Clojure :clojure:
+** CLOJURE :clojure:
 
 *** LSP :lsp:
 **** TODO follow [[https://emacs-lsp.github.io/lsp-mode/tutorials/clojure-guide/][this guide]]
+*** TODO aggressive indent (luca)
+*** TODO smartparens/lispyparens (luca)
 
-
-** Julia :julia:
-
+** JULIA :julia:
+*** TODO configure julia (and decide on eglot)
 
 ** C++ :cpp:
 

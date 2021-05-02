@@ -4,34 +4,6 @@ use ~(org-babel-load-file)~
 
 * Ideas
 
-** _org-trello_
-*** DONE check out /org-trello/ and at least try importing cards/checklists from existing boards into org items
-CLOSED: [2021-04-26 Mon 22:42]
-
-** Modeline
-*** TODO if using _projectile_, show the current *project*
-*** check out moodline
-
-** Tool to clone/sync repos in a language sub/folder
-*** TODO standardize a format for listing repos to clone for a language like clojure/julia/etc or use the following (preferred at top)
-+ [[https://github.com/pazdera/gitwalk][pazdera/gitwalk]] (popular, allows groups defined via JSON, best so far)
-+ [[https://github.com/mixu/gr][mixu/gr]] (another promising bulk management tool)
-  + similar to my old gitar scripts
-  + auto-discover local git repos, attach tags and manage as lists
-+ [[https://github.com/asottile/all-repos][asottile/all-repos]] (interesting)
-+ [[https://github.com/naddeoa/git-bulk][naddeoa/git-bulk]] (also probably helpful)
-+ [[https://github.com/fabiospampinato/autogit][fabiospampinato/autogit]] (most popular, but aimed towards personal/org repo management)
-+ [[https://github.com/scivision/pygit-bulk][scivision/pygit-bulk]] and [[https://pypi.org/project/gitutils/][GitMC]]
-+ [[https://gist.github.com/Lukas238/8d9abbeabfcd7225e3a254d40eb0c080][Bulk backup/clone of Git Repos From A List]]
-+ [[https://github.com/taylorjayoung/RepoSweeper][RepoSweeper]] (for deleting/managing Github repos)
-*** TODO emacs workflow: automation of structure for projects/org/code
-+ outline basic structure for capture/refile
-  + manage org files, repo groups and/or metadata
-  + types of projects (reference groups, work, notes, etc)
-+ automation for adding to gitwalk JSON groups (of repos for reference)
-  + when is it helpful to use these groups? when is it definitely overkill (i.e. much of the code i'm interested in should be easy to navigate to from a project... however, for now, i'm in unfamiliar territory with no clear way to expect which dependencies are going to exist in any project. i'm trying to avoid bad habits like googling code samples)
-+ outline
-
 * Setup/Config
 
 ** Doom Modules
@@ -51,6 +23,42 @@ What's the ideal way to approach this for various projects?
 *** TODO setup word-wrap? and call on file save
 
 * The Important Things In Life:
+** Try =toggle-debug-on-error=
++ or =+emacslisp/edebug-instrument-defun-on=
++ or =view-emacs-debugging=
+
+* Workflow
+
+** Metaprojects
+
+** Git Worktree
+
+*** TODO describe using git worktree to experiment with emacs dotfiles
++ would this require copies of both =~/.doom.d= and =~./emacs.d=?
+  - if so, then without some means of addressing it, that may be prohibitively
+    complicated
+  - is there any advice on this
++ use case: explore other users dotfiles with far less disruption
++ use case: explore new modes/modules with less overhead
+
+* Learning about Doom Emacs
+
+** Reflecting on Doom
+
+*** Extracting Information About Loaded Packages
+
+Doom includes ~(+doom/help-packages)~ and, for its call to the [[help:interactive][interactive]]
+special form, it builds via mapcar the value =doom--help-packages-list= from
+other lists including one from ~(hash-table-keys straight--build-cache)~. This
+last value contains
+
+This and other module loading code can be found in
+[[file:~/.emacs.d/core/autoload/help.el::(interactive][.emacs.d/core/autoload/help.el]]. These references can easily be collected from
+around the emacs internals via =org-store-link=.
+
+By using =doom-before-init-modules-hook= and =doom-init-modules-hook= to output
+the =straight--build-cache= keys, then diffing the two resulting hashes should
+yield the set of packages introduced by doom's modules and those added via =use-package!= calls in config.el.
 
 * Resources
 
