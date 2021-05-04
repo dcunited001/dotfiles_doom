@@ -14,10 +14,10 @@
 (map! "C-M-<mouse-9>" '+workspace/switch-right)
 (map! "C-<mouse-8>" '+ivy/switch-buffer)
 (map! "C-<mouse-9>" '+ivy/switch-workspace-buffer)
-(map! "M-<mouse-8>" 'doom/save-session) ;; TODO: remap
-(map! "M-<mouse-9>" 'doom/load-session) ;; TODO: remap
-(map! "M-S-<mouse-8>" 'winner-undo) ;; TODO: remap
-(map! "M-S-<mouse-9>" 'winner-redo) ;; TODO: remap
+;; (map! "M-S-<mouse-8>" 'doom/save-session) ;; TODO: remap
+;; (map! "M-S-<mouse-9>" 'doom/load-session) ;; TODO: remap
+(map! "M-<mouse-8>" 'better-jumper-jump-forward)
+(map! "M-<mouse-9>" 'better-jumper-jump-backward)
 (map! "S-<mouse-8>" 'previous-buffer)
 (map! "S-<mouse-9>" 'next-buffer)
 
@@ -37,13 +37,16 @@
 (setq window-divider-default-right-width 1)
 (setq window-divider-default-bottom-width 1)
 
-(use-package! bufler)
-(use-package burly)
+(use-package! bufler
+  (map! ;(:after ...?)
+   :map ctl-x-map
+   :desc "Bufler List" "C-b" #'bufler-list))
+(use-package! burly)
 
 (add-hook 'doom-init-ui-hook
           (lambda () (global-tab-line-mode +1)
-                (bufler-mode +1)
-                (bufler-tabs-mode +1)))
+            (bufler-mode +1)
+            (bufler-tabs-mode +1)))
 
 (after! treemacs
   (setq treemacs-width 24)

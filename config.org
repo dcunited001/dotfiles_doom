@@ -65,6 +65,7 @@ added by Doom modules).
     - [[#modeline][Modeline]]
     - [[#misc][Misc]]
   - [[#editor][EDITOR]]
+    - [[#centered-cursor-mode][Centered Cursor Mode]]
   - [[#emacs][EMACS]]
     - [[#dired][DIRED]]
   - [[#term][TERM]]
@@ -175,15 +176,14 @@ modifiers, like =C-a= is equivalent to =C-S-a= or =C-A=.
   + [X] C M   90 digit-argument
   + [ ] C M S ()
 
-
 **** TODO write lisp script to autogenerate movement documentation?
 + add metadata to auto-hide generated code blocks
 + or generate code blocks for each char class with whitespace-aligned kbd cmds
 **** TODO figure out how emacs handles selection/marking for C-b and C-S-b
 **** TODO kbd mappings for org-mode point movement :org:
 **** TODO kbd mappings for smartparens point movement :smartparens:
-
-
++ need to decide on smartparens (incompletely [[file:~/.emacs.d/modules/config/default/config.el::when (featurep! +smartparens][mapped by doom]]) paredit
++ or paredit (not mapped; unsure of what is including)
 
 *** Mouse :mouse:
 
@@ -207,19 +207,32 @@ see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse
 (map! "C-M-<mouse-9>" '+workspace/switch-right)
 (map! "C-<mouse-8>" '+ivy/switch-buffer)
 (map! "C-<mouse-9>" '+ivy/switch-workspace-buffer)
-(map! "M-<mouse-8>" 'doom/save-session) ;; TODO: remap
-(map! "M-<mouse-9>" 'doom/load-session) ;; TODO: remap
-(map! "M-S-<mouse-8>" 'winner-undo) ;; TODO: remap
-(map! "M-S-<mouse-9>" 'winner-redo) ;; TODO: remap
+;; (map! "M-S-<mouse-8>" 'doom/save-session) ;; TODO: remap
+;; (map! "M-S-<mouse-9>" 'doom/load-session) ;; TODO: remap
+(map! "M-<mouse-8>" 'better-jumper-jump-forward)
+(map! "M-<mouse-9>" 'better-jumper-jump-backward)
 (map! "S-<mouse-8>" 'previous-buffer)
 (map! "S-<mouse-9>" 'next-buffer)
 #+end_src
 
-**** TODO configure more functionality for the mouse :doom:mouse:keys:
+
+**** TODO other mouse maps
++ and navigating =describe-= and other docs
++ helpful-at-point
++ completion-at-point
++ highlight-symbol-at-point
++ counsel-dash-at-point
+
+**** TODO config better functionality for =mwheelscroll=
++ signature =(mwheel-scroll EVENT &optional ARG)= defined in ~emacs/28/lisp/mwheel.el~
++ =mouse-wheel-scroll-amount-horizontal= parameterizes the event
+
+**** TODO configure more functionality for the mouse :mouse:keys:
 + [ ] navigate to function at point
 + [ ] describe function at point
 + [ ] ~(kbd "<mouse-4>")~ linux mouse wheel scroll up
 + [ ] ~(kbd "<mouse-5>")~ linux mouse wheel scroll down
++ =<fringe>= and =<modeline>=
 
 ** COMPLETION :completion:
 
@@ -233,7 +246,8 @@ see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse
 
 *** IVY :ivy:
 
-**** TODO configure views to use with ~ivy-switch-view~
+**** HOLD configure views to use with ~ivy-switch-view~ (or just use bufler?)
+
 
 
 ** UI :uiux:
@@ -292,16 +306,22 @@ Use [[https://github.com/alphapapa/bufler.el][Bufler]]
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package! bufler)
-(use-package burly)
+(use-package! bufler
+  (map! ;(:after ...?)
+   :map ctl-x-map
+   :desc "Bufler List" "C-b" #'bufler-list))
+(use-package! burly)
 
 (add-hook 'doom-init-ui-hook
           (lambda () (global-tab-line-mode +1)
-                (bufler-mode +1)
-                (bufler-tabs-mode +1)))
+            (bufler-mode +1)
+            (bufler-tabs-mode +1)))
 #+end_src
 
+**** TODO [#B] bufler/tab-bar-mode display disappears (caused by save-desktop/autoloads)
 
+**** TODO map =C-c o t= or something for tab-line-mode
++ remap vterm hotkeys
 **** TODO configure [[https://github.com/alphapapa/bufler.el#group-types][bufler groups]]
 + tabs for additional/multiple projectile projects?
 + also configure =buffler-mode= and =buffler=
@@ -359,6 +379,7 @@ shorten the delay (from luca)
 
 **** TODO configure modeline (refer to HaoZeke, luca and others)
 **** TODO check out [[https://github.com/hlissner/doom-emacs-private/blob/master/lisp/modeline.el][Hlissner's modeline]] for customization ideas
+**** TODO figure out error (if consistent) ~Error during redisplay: (eval (doom-modeline-segment--workspace-name)) signaled (invalid-function ((&plist :name :path) workspace))~
 
 *** Misc
 
@@ -445,6 +466,8 @@ before or after the doom/emacs install.
 
 *** Lookup :lookup:
 
+**** TODO configure docsets for =counsel-dash=
++ [ ] find path to zeal docs
 **** TODO configure =+dictionary= flag
 **** TODO configure =+docset= flag functionality
 ***** [ ] clojure docsets
@@ -664,6 +687,7 @@ literate programming code written by Knuth in Pascal/TeX.
 ***** TODO follow [[https://emacs-lsp.github.io/lsp-mode/tutorials/clojure-guide/][this guide]]
 **** TODO aggressive indent (luca)
 **** TODO smartparens/lispyparens (luca)
+**** TODO cider-eval-sexp-fu
 
 *** JULIA :julia:
 **** TODO configure julia (and decide on eglot)
@@ -674,6 +698,8 @@ literate programming code written by Knuth in Pascal/TeX.
 *** QT :qt:
 
 *** C++ :cpp:
+
+**** TODO cmake-font-lock (type-aware highlighting for cmake scripts)
 
 **** Doxygen Support
 
@@ -687,7 +713,6 @@ Doxygen for c/cpp [fn:haozeke]
 (use-package! highlight-doxygen
   :hook ((c-mode c++-mode) . highlight-doxygen-mode))
 #+end_src
-
 **** More Files
 #+begin_src emacs-lisp
 ;; from HaoZeke/dotdoom
