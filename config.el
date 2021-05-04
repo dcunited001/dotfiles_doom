@@ -38,9 +38,9 @@
 (setq window-divider-default-bottom-width 1)
 
 (use-package! bufler
-  (map! ;(:after ...?)
-   :map ctl-x-map
-   :desc "Bufler List" "C-b" #'bufler-list))
+  :config (map! ;(:after ...?)
+           :map ctl-x-map
+           :desc "Bufler List" "C-b" #'bufler-list))
 (use-package! burly)
 
 (add-hook 'doom-init-ui-hook
@@ -58,9 +58,7 @@
 (after! which-key
     (setq which-key-idle-delay 0.5))
 
-(setq display-line-numbers-type nil)
-
-(use-package! dimmer-mode
+(use-package! dimmer
   :config (setq dimmer-adjustment-mode :background
                 dimmer-fraction 0.4)
 
@@ -70,6 +68,8 @@
   (dimmer-configure-hydra)
   (dimmer-configure-which-key)
   (dimmer-configure-posframe))
+
+(setq display-line-numbers-type nil)
 
 (use-package! centered-cursor-mode ;: defer t
   :config (map! :leader :desc "Toggle Centered Cursor"
@@ -100,6 +100,39 @@
 
 (setq org-edit-src-content-indentation 0)
 
+(add-hook 'clojure-mode-hook 'zprint-mode)
+(add-hook 'clojurescript-mode-hook 'zprint-mode)
+
+(setq org-babel-clojure-backend 'cider)
+
+;; TODO: (after! org & julia-vterm?
+;;;         ...)
+;; (after! org-babel ... )
+;; (org-babel-make-language-alias "julia" "julia-vterm")
+
+(use-package! highlight-doxygen
+  :hook ((c-mode c++-mode) . highlight-doxygen-mode))
+
+;; from HaoZeke/dotdoom
+(setq auto-mode-alist (append '(
+                                ("\\.C$" . c++-mode)
+                                ("\\.cc$" . c++-mode)
+                                ("\\.cpp$" . c++-mode)
+                                ("\\.inl$" . c++-mode)
+                                ("\\.H$" . c++-mode)
+                                ("\\.hh$" . c++-mode)
+                                ("\\.hpp$" . c++-mode)
+                                )
+                              auto-mode-alist))
+
+(after! org
+  (add-to-list 'org-babel-load-languages
+               '((julia-vterm . t)
+                 (clojure . t)))
+  (org-babel-do-load-languages 'org-babel-load-languages org-babel-load-languages))
+
+;;(defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
+
 (use-package! google-translate :demand t
   :init (require 'google-translate)
   :functions (my-google-translate-at-point google-translate--search-tkk)
@@ -117,21 +150,6 @@
   :bind
   ;;("C-T". my-google-translate-at-point)
 )
-
-(use-package! highlight-doxygen
-  :hook ((c-mode c++-mode) . highlight-doxygen-mode))
-
-;; from HaoZeke/dotdoom
-(setq auto-mode-alist (append '(
-                                ("\\.C$" . c++-mode)
-                                ("\\.cc$" . c++-mode)
-                                ("\\.cpp$" . c++-mode)
-                                ("\\.inl$" . c++-mode)
-                                ("\\.H$" . c++-mode)
-                                ("\\.hh$" . c++-mode)
-                                ("\\.hpp$" . c++-mode)
-                                )
-                              auto-mode-alist))
 
 (use-package! prism
   :hook (emacs-lisp-mode . prism-mode)

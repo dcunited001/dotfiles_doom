@@ -57,12 +57,13 @@ added by Doom modules).
     - [[#font][Font]]
     - [[#ligatures][Ligatures]]
     - [[#window-ui][Window UI]]
-    - [[#tabs][Tabs]]
+    - [[#bufler-tabs-and-burly-bookmarks][Bufler Tabs and Burly Bookmarks]]
     - [[#startup][Startup]]
     - [[#all-the-icons][All The Icons]]
     - [[#treemacs][Treemacs]]
     - [[#which-key][which-key]]
     - [[#modeline][Modeline]]
+    - [[#dimmer][Dimmer]]
     - [[#misc][Misc]]
   - [[#editor][EDITOR]]
     - [[#centered-cursor-mode][Centered Cursor Mode]]
@@ -90,7 +91,6 @@ added by Doom modules).
     - [[#org-agenda][Org Agenda]]
     - [[#org-capture][Org Capture]]
     - [[#source-blocks][Source Blocks]]
-    - [[#org-babel][Org Babel]]
     - [[#setup-org-agenda][setup org-agenda]]
     - [[#setup-org-export-async-init-file-see-123-async-exports][setup org-export-async-init-file (see 1.2.3 Async Exports)]]
     - [[#look-into-org-gcal-and-org-caldav-to-manageedit-calendars][look into org-gcal and org-caldav to manage/edit calendars]]
@@ -99,9 +99,14 @@ added by Doom modules).
     - [[#latex][LATEX]]
     - [[#clojure][CLOJURE]]
     - [[#julia][JULIA]]
+    - [[#plantuml][PLANTUML]]
     - [[#kde][KDE]]
     - [[#qt][QT]]
     - [[#c][C++]]
+  - [[#babel][BABEL]]
+    - [[#ensure-this-is-necessary-with-org-init-babel-lazy-loader-h][ensure this is necessary with =+org-init-babel-lazy-loader-h=]]
+    - [[#ob-async][ob-async]]
+    - [[#ob-translate][ob-translate]]
   - [[#email][EMAIL]]
   - [[#app][APP]]
   - [[#config][CONFIG]]
@@ -116,6 +121,8 @@ added by Doom modules).
 :END:
 
 ** INPUT :input:
+
+[[file:~/.emacs.d/core/core-keybinds.el][.emacs.d/core/core-keybinds.el]] makes for a very useful key & map! reference
 
 *** Keyboard :kbd:
 
@@ -296,9 +303,9 @@ Dividers are too thin to grab if only 1px
 **** TODO automatically balance window widths?
 **** TODO setup startup windows (luca)
 
-*** Tabs
+*** Bufler Tabs and Burly Bookmarks
 
-Use [[https://github.com/alphapapa/bufler.el][Bufler]]
+[[https://github.com/alphapapa/bufler.el][Bufler]] uses emacs-27 tabs
 
 #+begin_src emacs-lisp :tangle ./packages.el
 (package! bufler)
@@ -307,9 +314,9 @@ Use [[https://github.com/alphapapa/bufler.el][Bufler]]
 
 #+begin_src emacs-lisp
 (use-package! bufler
-  (map! ;(:after ...?)
-   :map ctl-x-map
-   :desc "Bufler List" "C-b" #'bufler-list))
+  :config (map! ;(:after ...?)
+           :map ctl-x-map
+           :desc "Bufler List" "C-b" #'bufler-list))
 (use-package! burly)
 
 (add-hook 'doom-init-ui-hook
@@ -318,17 +325,24 @@ Use [[https://github.com/alphapapa/bufler.el][Bufler]]
             (bufler-tabs-mode +1)))
 #+end_src
 
-**** TODO [#B] bufler/tab-bar-mode display disappears (caused by save-desktop/autoloads)
+**** TODO Misc bufler config [/]
++ [ ] bufler/tab-bar-mode display disappears (caused by save-desktop/autoloads)
++ [ ] map =C-c o t= or something for tab-line-mode
++ [ ] remap vterm hotkeys
++ [ ] Configure =bufler-face-prefix= & set =prism faces=
 
-**** TODO map =C-c o t= or something for tab-line-mode
-+ remap vterm hotkeys
 **** TODO configure [[https://github.com/alphapapa/bufler.el#group-types][bufler groups]]
 + tabs for additional/multiple projectile projects?
 + also configure =buffler-mode= and =buffler=
-**** TODO Configure =bufler-face-prefix= & set =prism faces=
 
-**** TODO Burly (bookmarks to tab groups and window configs)
-**** TODO add burly to doom startup screen
+**** TODO remove bufler tabs from the wrong places [0/2]
++ [ ] child-frames
++ [ ] popup buffers
+
+**** TODO Misc Burly config
++ Burly (bookmarks to tab groups and window configs)
++ add burly to doom startup screen
+
 
 *** Startup
 
@@ -381,24 +395,14 @@ shorten the delay (from luca)
 **** TODO check out [[https://github.com/hlissner/doom-emacs-private/blob/master/lisp/modeline.el][Hlissner's modeline]] for customization ideas
 **** TODO figure out error (if consistent) ~Error during redisplay: (eval (doom-modeline-segment--workspace-name)) signaled (invalid-function ((&plist :name :path) workspace))~
 
-*** Misc
-
-This determines the style of line numbers. For relative line numbers, set this
-to `relative'.
-
-#+begin_src emacs-lisp
-(setq display-line-numbers-type nil)
-#+end_src
-
-**** TODO configure nav-flash (like in spacemacs)
-**** TODO config dimmer-mode
+*** Dimmer
 
 #+begin_src emacs-lisp :tangle ./packages.el
-(package! dimmer-mode)
+(package! dimmer)
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package! dimmer-mode
+(use-package! dimmer
   :config (setq dimmer-adjustment-mode :background
                 dimmer-fraction 0.4)
 
@@ -410,10 +414,20 @@ to `relative'.
   (dimmer-configure-posframe))
 #+end_src
 
+*** Misc
+
+This determines the style of line numbers. For relative line numbers, set this
+to `relative'.
+
+#+begin_src emacs-lisp
+(setq display-line-numbers-type nil)
+#+end_src
+
+**** TODO configure nav-flash (like in spacemacs)
+
 ** EDITOR :editor:
 
 **** TODO consider auto-save-default
-
 
 *** Centered Cursor Mode
 
@@ -604,9 +618,146 @@ Don't indent content in source blocks
 (setq org-edit-src-content-indentation 0)
 #+end_src
 
-*** Org Babel
+*** TODO setup org-agenda :doom:agenda:
++ [X] setup ~org-agenda-files~
+*** TODO setup org-export-async-init-file (see [[https://dotdoom.rgoswami.me/config.html][1.2.3 Async Exports]])
+*** TODO look into [[https://github.com/myuhe/org-gcal.el][org-gcal]] and [[https://github.com/dengste/org-caldav][org-caldav]] to manage/edit calendars
++ Also, refer to [[https://tasshin.com/blog/implementing-a-second-brain-in-emacs-and-org-mode/][org mode as 2nd brain]]
 
-**** [[https://github.com/krisajenkins/ob-translate][ob-translate]]
+** LANG :lang:
+
+*** ELISP :elisp:
+
+**** TODO configure eldoc
+**** TODO configure parenedit
+
+*** LATEX :latex:
+
+(From Hsin Haoyu) Apparently, [[https://mirror.aarnet.edu.au/pub/CTAN/systems/knuth/dist/tex/tex.web][the TeX source code]] was written in Pascal/TeX was
+literate programming code written by Knuth in Pascal/TeX.
+
+*** CLOJURE :clojure:
+
+#+begin_src emacs-lisp :tangle ./packages.el
+(package! zprint-mode)
+#+end_src
+
+
+#+begin_src emacs-lisp
+(add-hook 'clojure-mode-hook 'zprint-mode)
+(add-hook 'clojurescript-mode-hook 'zprint-mode)
+
+(setq org-babel-clojure-backend 'cider)
+#+end_src
+
+**** LSP :lsp:
+***** TODO follow [[https://emacs-lsp.github.io/lsp-mode/tutorials/clojure-guide/][this guide]]
+**** TODO aggressive indent (luca)
+**** TODO smartparens/lispyparens (luca)
+
+**** TODO explore packages: [0/5]
++ [ ] cider-eval-sexp-fu
++ [ ] [[https://github.com/plexus/walkclj][walkclj]]
++ [ ] 4clojure
++ [ ] [[https://github.com/didibus/anakondo][anakondo]] (or flycheck/make clj-kondo)
++ [ ] ivy-clojuredocs
+  - just pick a key for docs...
+  - =C-c s c= (apropos à +lookup)
+
+*** JULIA :julia:
+
+Requires using a =:session= variable to track the results/evaluations of blocks
+
+#+begin_src emacs-lisp :tangle ./packages.el
+(package! julia-vterm)
+(package! ob-julia-vterm)
+#+end_src
+
+#+begin_src emacs-lisp
+;; TODO: (after! org & julia-vterm?
+;;;         ...)
+;; (after! org-babel ... )
+;; (org-babel-make-language-alias "julia" "julia-vterm")
+#+end_src
+
+#+RESULTS:
+
+**** TODO configure julia (and decide on eglot) [1/2]
++ [X] decide on [[https://github.com/shg/ob-julia-vterm.el][ob-julia-vterm]] or [[https://github.com/frederic-santos/ob-ess-julia][ob-ess-julia]]
++ [ ] [[https://github.com/gcv/julia-snail][julia-snail]]?
+**** TODO configure org-babel for julia
+
+**** TODO change the default environment for LSP julia
++ ~(setq lsp-julia-default-environment ~/.julia/environments/v1.0")~
+
+*** PLANTUML :plantuml:
+
+Plant UML is also supported by org-babel
+
+*** KDE :kde:
+
+*** QT :qt:
+
+*** C++ :cpp:
+
+**** TODO cmake-font-lock (type-aware highlighting for cmake scripts)
+
+**** Doxygen Support
+
+#+begin_src emacs-lisp :tangle ./packages.el
+(package! highlight-doxygen)
+#+end_src
+
+Doxygen for c/cpp [fn:haozeke]
+
+#+begin_src emacs-lisp
+(use-package! highlight-doxygen
+  :hook ((c-mode c++-mode) . highlight-doxygen-mode))
+#+end_src
+
+**** More Files
+#+begin_src emacs-lisp
+;; from HaoZeke/dotdoom
+(setq auto-mode-alist (append '(
+                                ("\\.C$" . c++-mode)
+                                ("\\.cc$" . c++-mode)
+                                ("\\.cpp$" . c++-mode)
+                                ("\\.inl$" . c++-mode)
+                                ("\\.H$" . c++-mode)
+                                ("\\.hh$" . c++-mode)
+                                ("\\.hpp$" . c++-mode)
+                                )
+                              auto-mode-alist))
+#+end_src
+
+
+
+** BABEL :babel:
+
++ doom handles most of this stuff in [[file:~/.emacs.d/modules/lang/org/config.el::defun +org-init-babel-lazy-loader-h (][+org-init-babel-lazy-loader-h]]
+  - =org-src-lang-modes= maps org-babel keys to modes (=-mode= suffix)
+  - =org-babel-load-languages= describes language blocks types permitted to run
+  - is the var =org-confirm-babel-evaluate= still in tact?
+
+Load general org-babel config after defining languages
+
+*** TODO ensure this is necessary with =+org-init-babel-lazy-loader-h=
+
+#+begin_src emacs-lisp
+(after! org
+  (add-to-list 'org-babel-load-languages
+               '((julia-vterm . t)
+                 (clojure . t)))
+  (org-babel-do-load-languages 'org-babel-load-languages org-babel-load-languages))
+
+;;(defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
+#+end_src
+
+*** ob-async
+
+doesn't support session (see tecosaur's notes)
+
+*** [[https://github.com/krisajenkins/ob-translate][ob-translate]]
 
 For someone who owns a ton of original langauge and interlinear/bilingual books,
 getting this into org-mode would be super helpfu. It's way more efficient than
@@ -662,71 +813,6 @@ Extra Sensory Perception
 
 #+RESULTS:
 : 超感覚的知覚
-
-*** TODO setup org-agenda :doom:agenda:
-+ [X] setup ~org-agenda-files~
-*** TODO setup org-export-async-init-file (see [[https://dotdoom.rgoswami.me/config.html][1.2.3 Async Exports]])
-*** TODO look into [[https://github.com/myuhe/org-gcal.el][org-gcal]] and [[https://github.com/dengste/org-caldav][org-caldav]] to manage/edit calendars
-+ Also, refer to [[https://tasshin.com/blog/implementing-a-second-brain-in-emacs-and-org-mode/][org mode as 2nd brain]]
-
-** LANG :lang:
-
-*** ELISP :elisp:
-
-**** TODO configure eldoc
-**** TODO configure parenedit
-
-*** LATEX :latex:
-
-(From Hsin Haoyu) Apparently, [[https://mirror.aarnet.edu.au/pub/CTAN/systems/knuth/dist/tex/tex.web][the TeX source code]] was written in Pascal/TeX was
-literate programming code written by Knuth in Pascal/TeX.
-
-*** CLOJURE :clojure:
-
-**** LSP :lsp:
-***** TODO follow [[https://emacs-lsp.github.io/lsp-mode/tutorials/clojure-guide/][this guide]]
-**** TODO aggressive indent (luca)
-**** TODO smartparens/lispyparens (luca)
-**** TODO cider-eval-sexp-fu
-
-*** JULIA :julia:
-**** TODO configure julia (and decide on eglot)
-**** TODO configure org-babel for julia
-
-*** KDE :kde:
-
-*** QT :qt:
-
-*** C++ :cpp:
-
-**** TODO cmake-font-lock (type-aware highlighting for cmake scripts)
-
-**** Doxygen Support
-
-#+begin_src emacs-lisp :tangle ./packages.el
-(package! highlight-doxygen)
-#+end_src
-
-Doxygen for c/cpp [fn:haozeke]
-
-#+begin_src emacs-lisp
-(use-package! highlight-doxygen
-  :hook ((c-mode c++-mode) . highlight-doxygen-mode))
-#+end_src
-**** More Files
-#+begin_src emacs-lisp
-;; from HaoZeke/dotdoom
-(setq auto-mode-alist (append '(
-                                ("\\.C$" . c++-mode)
-                                ("\\.cc$" . c++-mode)
-                                ("\\.cpp$" . c++-mode)
-                                ("\\.inl$" . c++-mode)
-                                ("\\.H$" . c++-mode)
-                                ("\\.hh$" . c++-mode)
-                                ("\\.hpp$" . c++-mode)
-                                )
-                              auto-mode-alist))
-#+end_src
 
 ** EMAIL :email:
 

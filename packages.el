@@ -6,16 +6,21 @@
 
 (package! all-the-icons-dired)
 
-(package! dimmer-mode)
+(package! dimmer)
 
 (package! centered-cursor-mode)
 
 (package! pkgbuild-mode
   :recipe (:host github :repo "juergenhoetzel/pkgbuild-mode"))
 
-(package! google-translate)
-(package! ob-translate)
+(package! zprint-mode)
+
+(package! julia-vterm)
+(package! ob-julia-vterm)
 
 (package! highlight-doxygen)
+
+(package! google-translate)
+(package! ob-translate)
 
 (package! prism)
