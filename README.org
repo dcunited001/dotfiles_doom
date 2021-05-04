@@ -60,6 +60,8 @@ By using =doom-before-init-modules-hook= and =doom-init-modules-hook= to output
 the =straight--build-cache= keys, then diffing the two resulting hashes should
 yield the set of packages introduced by doom's modules and those added via =use-package!= calls in config.el.
 
+**** TODO examine doom autodefs (concept & source)
+
 * Resources
 
 + [[https://www.emacswiki.org/emacs/][Emacs Wiki]]

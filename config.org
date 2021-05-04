@@ -5,22 +5,18 @@
 #+STARTUP: showeverything
 #+OPTIONS: toc:nil
 
-* Config.el :doom:config:
+* About this file
 
-:PROPERTIES:
-:VISIBILITY: children
-:END:
+This is an Emacs literate config, drawing inspiration from the following:
 
-** About this file
++ [[https://github.com/gilbertw1/emacs-literate-starter/][gilbertw1/emacs-literate-starter]]
++ [[https://github.com/HaoZeke/dotDoom][HaoZeke/dotDoom]]
++ And others
 
-This is an Emacs literate configuration template, based on
-[[https://github.com/gilbertw1/emacs-literate-starter/][gilbertw1/emacs-literate-starter]], [[https://github.com/HaoZeke/dotDoom][HaoZeke/dotDoom]] and others. It contains the
-basic structure of a literate config along with some optimizations to ensure a
-fast load time.
-
-
-The TOC is loosely based on the Doom Emacs categories. The TOC headings are
-generated with =toc-org=.
+The TOC is loosely based on the Doom Emacs categories to make it simpler for
+others to grok the structure and simpler for me to organize. The TOC headings
+are generated with =toc-org= by specifying a heading including the tag:
+=:TOC_3_gh:=.
 
 ** Tangle Output
 
@@ -40,17 +36,83 @@ When specified by =:tangle=, export the =(package! ...)= declarations to =packag
 ;;; ~/.doom.d/packages.el
 #+END_SRC
 
-** Org File Tweaks
+There may be other babel source blocks. Eventually, I would like include some
+elisp code for reflecting on Doom Emacs (e.g. extracting a list of packages
+added by Doom modules).
 
-There are a few tweaks included in this org file that make it a little easier to
-work with.
+* Table of Contents :TOC_3_gh:
+- [[#about-this-file][About this file]]
+  - [[#tangle-output][Tangle Output]]
+- [[#configel][Config.el]]
+  - [[#input][INPUT]]
+    - [[#keyboard][Keyboard]]
+    - [[#point-movement][Point Movement]]
+    - [[#mouse][Mouse]]
+  - [[#completion][COMPLETION]]
+    - [[#completion-prompts][Completion prompts]]
+    - [[#company][Company]]
+    - [[#ivy][IVY]]
+  - [[#ui][UI]]
+    - [[#doom-theme][Doom Theme]]
+    - [[#font][Font]]
+    - [[#ligatures][Ligatures]]
+    - [[#window-ui][Window UI]]
+    - [[#tabs][Tabs]]
+    - [[#startup][Startup]]
+    - [[#all-the-icons][All The Icons]]
+    - [[#treemacs][Treemacs]]
+    - [[#which-key][which-key]]
+    - [[#modeline][Modeline]]
+    - [[#misc][Misc]]
+  - [[#editor][EDITOR]]
+  - [[#emacs][EMACS]]
+    - [[#dired][DIRED]]
+  - [[#term][TERM]]
+    - [[#shell][Shell]]
+  - [[#checkers][CHECKERS]]
+  - [[#tools][TOOLS]]
+    - [[#lookup][Lookup]]
+    - [[#git][Git]]
+    - [[#magit][Magit]]
+    - [[#git-1][Git]]
+    - [[#github][Github]]
+    - [[#dockerfile][Dockerfile]]
+    - [[#kubernetes][Kubernetes]]
+    - [[#archlinux][Archlinux]]
+    - [[#lsp-mode][LSP Mode]]
+  - [[#os][OS]]
+  - [[#org][ORG]]
+    - [[#setup-org-to-emphasize-with-parenedit][setup org to emphasize with parenedit]]
+    - [[#keys][Keys]]
+    - [[#org-literate][Org Literate]]
+    - [[#org-directory][Org Directory]]
+    - [[#org-agenda][Org Agenda]]
+    - [[#org-capture][Org Capture]]
+    - [[#source-blocks][Source Blocks]]
+    - [[#org-babel][Org Babel]]
+    - [[#setup-org-agenda][setup org-agenda]]
+    - [[#setup-org-export-async-init-file-see-123-async-exports][setup org-export-async-init-file (see 1.2.3 Async Exports)]]
+    - [[#look-into-org-gcal-and-org-caldav-to-manageedit-calendars][look into org-gcal and org-caldav to manage/edit calendars]]
+  - [[#lang][LANG]]
+    - [[#elisp][ELISP]]
+    - [[#latex][LATEX]]
+    - [[#clojure][CLOJURE]]
+    - [[#julia][JULIA]]
+    - [[#kde][KDE]]
+    - [[#qt][QT]]
+    - [[#c][C++]]
+  - [[#email][EMAIL]]
+  - [[#app][APP]]
+  - [[#config][CONFIG]]
+    - [[#prismel][Prism.el]]
+    - [[#rainbow-mode][Rainbow Mode]]
+- [[#footnotes][Footnotes]]
 
-*** Table of Contents
-There is a [[Table of Contents][Table of Contents]] heading that includes the tag: =:TOC_3_gh:=. This
-tells an org-mode package =toc-org= to generate a table of contents under this
-heading that has a max depth of 3 and is created using Github-style hrefs. This
-table of contents is updated everytime the file is saved and makes for a
-functional table of contents that works property directly on github.
+* Config.el :doom:config:
+
+:PROPERTIES:
+:VISIBILITY: children
+:END:
 
 ** INPUT :input:
 
@@ -63,17 +125,77 @@ Most of these configs should be in their individual ~*-mode~ sections or under t
 (require 'iso-transl)
 #+end_src
 
-*** MOUSE :mouse:
+*** Point Movement :kbd:point_movement:
+
+The following are unmapped. In terminal emacs, keystrokes with a control
+modifiers, like =C-a= is equivalent to =C-S-a= or =C-A=.
+
++ B,F
+  + [X] C     bf -char
+  + [X]   M   bf -word
+  + [-] C   S bf (C-h C-k shows nothing)
+  + [-]   M S bf
+  + [X] C M   bf sp- -sexp
+  + [-] C M S bf
++ P,N
+  + [X] C     pn -line
+  + [X]   M   pn
+  + [-] C   S pn
+  + [-]   M S pn
+  + [!] C M   pn -list (cant recognize C-M-p !!!!)
+  + [X] C M S pn -list
++ A E
+  + [X] C     ae -of-line
+  + [X]   M   ae -sentence
+  + [-] C   S ae
+  + [-]   M S ae
+  + [X] C M   ae sp- -of-sexp
+  + [-] C M S ae
++ { } [ ]
+  + [X] C     [] abort-recursive-edit (translates C-[ as ESC !!!!)
+  + [ ]   M   []
+  + [ ] C   S {}
+  + [X]   M S {} -paragraph
+  + [ ] C M   [] !!!! translates C-M-[ as M-ESC... (but not C-M-S)
+  + [ ] C M S {}
++ < > , .
+  + [ ] C     ,.
+  + [X]   M   ,  better-jumper-jump-backward
+  + [X]   M    . org-cycle-agenda-files
+  + [ ] C   S <>
+  + [X]   M S <> -of-buffer
+  + [ ] C M   ,
+  + [X] C M    . xref-find-apropos
+  + [ ] C M S <>
++ 0 9 ( )
+  + [X] C     90 digit-argument
+  + [X]   M   90 digit-argument
+  + [ ] C   S ()
+  + [ ]   M S ()
+  + [X] C M   90 digit-argument
+  + [ ] C M S ()
+
+
+**** TODO write lisp script to autogenerate movement documentation?
++ add metadata to auto-hide generated code blocks
++ or generate code blocks for each char class with whitespace-aligned kbd cmds
+**** TODO figure out how emacs handles selection/marking for C-b and C-S-b
+**** TODO kbd mappings for org-mode point movement :org:
+**** TODO kbd mappings for smartparens point movement :smartparens:
+
+
+
+*** Mouse :mouse:
 
 see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse Config]] for more info on the how & why
 
-*** Misc Mouse Configs
+**** Misc Mouse Configs
 
 #+begin_src emacs-lisp
 (setq mouse-wheel-progressive-speed nil)
 #+end_src
 
-*** Mouse 8 and 9
+**** Mouse 8 and 9
 :PROPERTIES:
 :ID:       692e65d2-2cd3-4564-bd75-26dcc2b84251
 :END:
@@ -93,7 +215,7 @@ see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse
 (map! "S-<mouse-9>" 'next-buffer)
 #+end_src
 
-*** TODO configure more functionality for the mouse :doom:mouse:keys:
+**** TODO configure more functionality for the mouse :doom:mouse:keys:
 + [ ] navigate to function at point
 + [ ] describe function at point
 + [ ] ~(kbd "<mouse-4>")~ linux mouse wheel scroll up
@@ -128,7 +250,6 @@ see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse
 ;;   doom-acario-dark-padded-modeline 4)
 #+end_src
 
-
 *** Font
 
 #+begin_src emacs-lisp
@@ -140,7 +261,7 @@ see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse
 
 *** Ligatures
 
-Disable extra ligatures in a few modes =from luca=
+Disable extra ligatures in a few modes [fn:luca_doom]
 
 #+BEGIN_SRC emacs-lisp
 (setq +ligatures-extras-in-modes
@@ -161,6 +282,38 @@ Dividers are too thin to grab if only 1px
 **** TODO automatically balance window widths?
 **** TODO setup startup windows (luca)
 
+*** Tabs
+
+Use [[https://github.com/alphapapa/bufler.el][Bufler]]
+
+#+begin_src emacs-lisp :tangle ./packages.el
+(package! bufler)
+(package! burly)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! bufler)
+(use-package burly)
+
+(add-hook 'doom-init-ui-hook
+          (lambda () (global-tab-line-mode +1)
+                (bufler-mode +1)
+                (bufler-tabs-mode +1)))
+#+end_src
+
+
+**** TODO configure [[https://github.com/alphapapa/bufler.el#group-types][bufler groups]]
++ tabs for additional/multiple projectile projects?
++ also configure =buffler-mode= and =buffler=
+**** TODO Configure =bufler-face-prefix= & set =prism faces=
+
+**** TODO Burly (bookmarks to tab groups and window configs)
+**** TODO add burly to doom startup screen
+
+*** Startup
+
+**** TODO write script to generate all 64 hexagrams in SVG for random Doom startup
+
 *** All The Icons
 
 #+begin_src emacs-lisp :tangle ./packages.el
@@ -169,7 +322,7 @@ Dividers are too thin to grab if only 1px
 
 **** TODO (configure) All the icons
 + [ ] treemacs-all-the-icons
-+ [ ] [[https://github.com/seagle0128/all-the-icons-ivy-rich][all-the-icons-ivy-rich]]
++ [ ] [[https://github.com/seagle0128/all-the-icons-ivy-rich][all-the-icons-ivy-rich]] (doom ivy includes ivy-rich)
 
 *** Treemacs
 
@@ -230,10 +383,12 @@ From Luca
                 "t-" (λ! () (interactive) (centered-cursor-mode 'toggle))))
 #+end_src
 
-**** TODO check out deft module
+**** TODO check out [[https://github.com/glucas/deft][deft]] module
 
 
 ** EDITOR :editor:
+
+**** TODO: consider auto-save-default
 
 ** EMACS :emacs:
 
@@ -402,6 +557,14 @@ prevent over-eager dotfiles recompilation =from HaoZeke=
 
 **** TODO luca capture templates (thoughts for day)
 
+*** Source Blocks
+
+Don't indent content in source blocks
+
+#+begin_src emacs-lisp
+(setq org-edit-src-content-indentation 0)
+#+end_src
+
 *** Org Babel
 
 **** [[https://github.com/krisajenkins/ob-translate][ob-translate]]
@@ -461,7 +624,6 @@ Extra Sensory Perception
 #+RESULTS:
 : 超感覚的知覚
 
-
 *** TODO setup org-agenda :doom:agenda:
 + [X] setup ~org-agenda-files~
 *** TODO setup org-export-async-init-file (see [[https://dotdoom.rgoswami.me/config.html][1.2.3 Async Exports]])
@@ -489,6 +651,7 @@ literate programming code written by Knuth in Pascal/TeX.
 
 *** JULIA :julia:
 **** TODO configure julia (and decide on eglot)
+**** TODO configure org-babel for julia
 
 *** KDE :kde:
 
@@ -502,8 +665,9 @@ literate programming code written by Knuth in Pascal/TeX.
 (package! highlight-doxygen)
 #+end_src
 
+Doxygen for c/cpp [fn:haozeke]
+
 #+begin_src emacs-lisp
-;; from HaoZeke/dotdoom
 (use-package! highlight-doxygen
   :hook ((c-mode c++-mode) . highlight-doxygen-mode))
 #+end_src
@@ -536,3 +700,41 @@ Misc config goes here
 #+begin_src emacs-lisp :tangle ./packages.el
 (package! prism)
 #+end_src
+
+Use doom colors for theme and toggle with =:leader tP=
+
+#+begin_src emacs-lisp
+(use-package! prism
+  :hook (emacs-lisp-mode . prism-mode)
+  :config (map! :leader :desc "Toggle Prism"
+                "tP" (lambda () (interactive) (prism-mode 'toggle)))
+
+  (prism-set-colors :lightens '(0 5 10) :desaturations '(-2.5 0 2.5)
+    :colors (-map #'doom-color
+                  '(red green orange blue yellow violet)))
+  ;; red orange green teal yellow blue dark-blue magenta violet cyan dark cyan
+  )
+#+end_src
+
+*** Rainbow Mode
+
+#+begin_src emacs-lisp
+(map! :leader :desc "Toggle Rainbow Mode"
+      "tR" (lambda () (interactive) (rainbow-mode 'toggle)))
+
+
+;; TODO fix to autoload rainbow-mode in doom theme files
+;; (setq auto-minor-mode-alist (append '(("theme\\.el$" . rainbow-mode))
+                                    ;; auto-minor-mode-alist))
+#+end_src
+
+**** TODO customize doom [[file:~/.emacs.d/modules/tools/rgb/README.org::*Features][rainbow module]]
+
+* Footnotes
+
+**** TODO: change in-text attributions to one of a set of footnotes
+
+[fn:luca_doom] lccambiaghi [[https://github.com/lccambiaghi/.doom.d][doom config]]
+[fn:luca_vanilla] lccambiaghi [[https://github.com/lccambiaghi/vanilla-emacs][emacs config]]
+[fn:haozeke] haozeke [[https://github.com/HaoZeke/doom-emacs][doom config]]
+[fn:zzamboni] zzamboni [[https://gitlab.com/zzamboni/dot-doom][doom config]]

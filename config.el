@@ -37,6 +37,14 @@
 (setq window-divider-default-right-width 1)
 (setq window-divider-default-bottom-width 1)
 
+(use-package! bufler)
+(use-package burly)
+
+(add-hook 'doom-init-ui-hook
+          (lambda () (global-tab-line-mode +1)
+                (bufler-mode +1)
+                (bufler-tabs-mode +1)))
+
 (after! treemacs
   (setq treemacs-width 24)
   (treemacs-filewatch-mode -1))
@@ -76,6 +84,8 @@
         ;; TODO include content from Adam James
         ))
 
+(setq org-edit-src-content-indentation 0)
+
 (use-package! google-translate :demand t
   :init (require 'google-translate)
   :functions (my-google-translate-at-point google-translate--search-tkk)
@@ -94,7 +104,6 @@
   ;;("C-T". my-google-translate-at-point)
 )
 
-;; from HaoZeke/dotdoom
 (use-package! highlight-doxygen
   :hook ((c-mode c++-mode) . highlight-doxygen-mode))
 
@@ -109,3 +118,22 @@
                                 ("\\.hpp$" . c++-mode)
                                 )
                               auto-mode-alist))
+
+(use-package! prism
+  :hook (emacs-lisp-mode . prism-mode)
+  :config (map! :leader :desc "Toggle Prism"
+                "tP" (lambda () (interactive) (prism-mode 'toggle)))
+
+  (prism-set-colors :lightens '(0 5 10) :desaturations '(-2.5 0 2.5)
+    :colors (-map #'doom-color
+                  '(red green orange blue yellow violet)))
+  ;; red orange green teal yellow blue dark-blue magenta violet cyan dark cyan
+  )
+
+(map! :leader :desc "Toggle Rainbow Mode"
+      "tR" (lambda () (interactive) (rainbow-mode 'toggle)))
+
+
+;; TODO fix to autoload rainbow-mode in doom theme files
+;; (setq auto-minor-mode-alist (append '(("theme\\.el$" . rainbow-mode))
+                                    ;; auto-minor-mode-alist))
