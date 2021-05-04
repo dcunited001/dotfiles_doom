@@ -57,6 +57,17 @@
 
 (setq display-line-numbers-type nil)
 
+(use-package! dimmer-mode
+  :config (setq dimmer-adjustment-mode :background
+                dimmer-fraction 0.4)
+
+  (dimmer-configure-company-box)
+  (dimmer-configure-magit)
+  (dimmer-configure-org)
+  (dimmer-configure-hydra)
+  (dimmer-configure-which-key)
+  (dimmer-configure-posframe))
+
 (use-package! centered-cursor-mode ;: defer t
   :config (map! :leader :desc "Toggle Centered Cursor"
                 "t-" (λ! () (interactive) (centered-cursor-mode 'toggle))))

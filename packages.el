@@ -6,6 +6,8 @@
 
 (package! all-the-icons-dired)
 
+(package! dimmer-mode)
+
 (package! centered-cursor-mode)
 
 (package! pkgbuild-mode
