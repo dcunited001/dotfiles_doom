@@ -3,10 +3,14 @@
 
 (package! all-the-icons-dired)
 
-(package! prism.el
-  :after (:any clojure-mode emacs-lisp-mode))
+(package! centered-cursor-mode)
 
-;; from HaoZeke/dotdoom
 (package! pkgbuild-mode
-  :recipe (:host github
-           :repo "juergenhoetzel/pkgbuild-mode"))
+  :recipe (:host github :repo "juergenhoetzel/pkgbuild-mode"))
+
+(package! google-translate)
+(package! ob-translate)
+
+(package! highlight-doxygen)
+
+(package! prism)
