@@ -10,7 +10,7 @@ use ~(org-babel-load-file)~
 
 ** Packages
 
-*** TODO evaluate [[https://github.com/dkogan/xcscope.el][xcscope.el]]
+
 *** TODO org-capture test
 *** DONE treemacs-icons
 CLOSED: [2021-04-26 Mon 22:58]
@@ -61,6 +61,66 @@ the =straight--build-cache= keys, then diffing the two resulting hashes should
 yield the set of packages introduced by doom's modules and those added via =use-package!= calls in config.el.
 
 **** TODO examine doom autodefs (concept & source)
+
+** Debugging Emacs
+
+#+begin_quote
+TLDR: I really, really want the features of bufler/burly or ivy-views,
+particularly if i can save live window arrangements and edit a declarative
+DSL... the =save-desktop= features are just wrapping too much context and
+forcing me to delete them, which makes them basically useless. Without
+bufler/burly, the new emacs-27 tab bar & tab line was interesting, but tediuous
+to use if its state was going to be dropped when =autosave= file expired (i.e.
+when i add almost any new package to my config)
+#+end_quote
+
+Since I'm using native-comp emacs, I'm running into some problems with packages
+(and debugging them). There are pros/cons to using native-comp. I'm a noob here,
+so i have no idea other than *it /sounds/ faster*. So here I am, unable to debug
+some elisp hitting native code.
+
+Also, I would like to get back to working on Krita, which is a massive C++
+project. I was satisfied with Jetbrains CLion, but it's expensive and probably
+overkill. So, I should be well-versed with these debugging tools, tags, c/make
+and their configs. All i know is that I want something to talk to =gdb= for me
+lol. Also, some KDE/Qt apps will crash the entire Linux OS if not debugging from
+=gdb= ... i can remember why but it sucks.
+
+*** Find emacs docs on debugging
+
+If using arch (and installed native-comp emacs), run ~pacman -Fl
+emacs-native-comp-git | grep DEBUG~ to find the [[file:/usr/share/emacs/28.0.50/etc/DEBUG][bundled debugging instructions]].
+you can use =gdb= to debug emacs from within or without, but obviously the
+former is easier. These instructions mention some optional compile flags:
+
+#+begin_src shell :tangle no
+  ./configure --enable-checking='yes,glyphs' --enable-check-lisp-object-type \
+    CFLAGS='-O0 -g3'
+#+end_src
+
+*** Compiling in Arch with makepkg
+
+Get the =PKGBUILD= with ~git clone
+https://aur.archlinux.org/packages/emacs-native-comp-git.git~ and view the build
+flags. Most of these are unset when =abs= builds emacs... and it still takes
+forever. If this package built/installed your native-comp emacs, AFAIK you do
+not need to touch these flags, but you should at least understand what is set,
+how & why.
+
+Then, run ~SRCDEST=/home/yousir/local/src makepkg -cCfiL~ where =SRCDEST= is a
+var recognized by =makepkg= (it's also in =/etc/makepkg.conf=). If you want to
+include the config options above, now is the time to do it. If you try doing
+this with =pamac= it will fail 5 different ways. It may be that =$SRCPKGDEST= is
+also needed. All that was left in the =/local/src/emcas-git= folder was a git
+repo with packed binary objects ... so I just cloned it again and switched to an
+equivalent branch. It's debugging the native code though.
+
+*** Trigger the problem that requires debugging native code
+
+You might have to tell emacs where your sources live. When you click on the
+stack frame, it goes to the C source.
+
+**** TODO describe more features for debugging
 
 * Resources
 
