@@ -99,7 +99,25 @@
 
 (setq explicit-shell-file-name "/bin/zsh")
 
+(use-package! pkgbuild-mode :mode "\\PKGBUILD")
+
+(use-package! docker
+  :config (setq docker-run-as-root t
+                docker-image-run-arguments '("-i" "-t" "--rm")))
+
+;; so the ## -*- docker-image-name: "image-name" -*- directive works with ~dockerfile-mode~
 (put 'dockerfile-image-name 'safe-local-variable #'stringp)
+
+(use-package salt-mode)
+
+(setq lsp-ui-peek-list-width 25
+      ;; lsp-ui-sideline--last-width
+
+      ;; TODO ensure these are necessary/useful
+      lsp-ui-doc-max-width 35 ;; 35 is default
+      ;; lsp-ui-doc--inline-width
+      
+      lsp-ui-imenu-window-width 25)
 
 ;; (after! org
 ;;   (map!

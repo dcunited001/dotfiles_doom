@@ -13,6 +13,8 @@
 (package! pkgbuild-mode
   :recipe (:host github :repo "juergenhoetzel/pkgbuild-mode"))
 
+(package! salt-mode)
+
 (package! zprint-mode)
 
 (package! julia-vterm)

@@ -528,6 +528,10 @@ before or after the doom/emacs install.
 ***** [ ] julia docsets
 ***** [ ] c++ docsets
 
+*** Diff and Ediff
+
+**** TODO configure ediff for patching nvidia driver source/headers
+
 *** Git
 
 From Doom Modules:
@@ -570,20 +574,6 @@ From Doom Modules:
 + [ ] *org2issue*
 + [ ] *treemacs-magit*
 
-*** Dockerfile
-
-so the ~## -*- docker-image-name: "image-name" -*-~ directive works with
-~dockerfile-mode~
-
-#+begin_src emacs-lisp
-(put 'dockerfile-image-name 'safe-local-variable #'stringp)
-#+end_src
-
-*** Kubernetes
-
-**** TODO setup kubernetes.el :doom:devops:packages:
-**** TODO evaluate ~kubectl~ package :doom:devops:packages:
-
 *** Archlinux
 
 **** PKGBUILD Mode
@@ -593,11 +583,126 @@ so the ~## -*- docker-image-name: "image-name" -*-~ directive works with
   :recipe (:host github :repo "juergenhoetzel/pkgbuild-mode"))
 #+END_SRC
 
-***** TODO: use-package! for pkgbuild-mode
+#+begin_src emacs-lisp
+(use-package! pkgbuild-mode :mode "\\PKGBUILD")
+#+end_src
+
+
+*** Docker
+
+To use what the Doom module configures, install =docker=, =docker-compose= and =docker-machine=. for
+
+The [[file:~/.emacs.d/modules/tools/docker/config.el][doom config file]] looks a little sparse, so the config must be partially
+composed in and installed in other module config.el files. Actually, now that I
+checked, most of the =docker*= features are being loaded into emacs with some
+(e.g. docker-compose-*) being loaded as needed.
+
+#+begin_src emacs-lisp
+(use-package! docker
+  :config (setq docker-run-as-root t
+                docker-image-run-arguments '("-i" "-t" "--rm")))
+
+;; so the ## -*- docker-image-name: "image-name" -*- directive works with ~dockerfile-mode~
+(put 'dockerfile-image-name 'safe-local-variable #'stringp)
+#+end_src
+
+**** TODO setup =C-c d= as a "devops" prefix, remap =C-c d d= to =docker=
+
+
+*** Kubernetes
+
+**** TODO setup kubernetes.el :doom:devops:packages:
+**** TODO evaluate ~kubectl~ package :doom:devops:packages:
+
+*** SaltStack
+
+From HaoZeke[fn:haozeke]
+
+#+begin_src emacs-lisp :tangle ./packages.el
+(package! salt-mode)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package salt-mode)
+#+end_src
+
+**** Need to check config
 
 *** LSP Mode
 
 **** TODO work out lsp/eldoc interactions
+
+*** LSP UI
+
+#+begin_src emacs-lisp
+(setq lsp-ui-peek-list-width 25
+      ;; lsp-ui-sideline--last-width
+
+      ;; TODO ensure these are necessary/useful
+      lsp-ui-doc-max-width 35 ;; 35 is default
+      ;; lsp-ui-doc--inline-width
+      
+      lsp-ui-imenu-window-width 25)
+
+#+end_src
+
+*** Packages to Evaluate (Tools)
+
+**** Misc
++ [ ] ssh-config-mode
++ [ ] [[https://github.com/jobbflykt/x509-mode][x509-mode]]
+
+**** DIFF & PATCH TOOLS
++ [ ] something for kernel patches?
++ [ ] vdiff & vdiff-magit
++ [ ] *find-file-in-project*
++ [ ] *gitpatch*
++ [ ] flycheck-checkpatch
++ [ ] ztree (recursive diff tool)
+
+**** Docker
++ [ ] SLIME Docker
++ [ ] [[https://github.com/emacs-pe/docker-tramp.el][docker-tramp]] (2017)
++ [ ] [[https://github.com/bosko/docker-cli][docker-cqli]]
++ [ ] lsp-docker
++ [ ] docker
+
+**** Kubernetes
++ [ ] kubernetes.el
++ [ ] [[https://github.com/gruggiero/kubernetes-tramp][kubernetes-tramp]]
++ [ ] [[https://github.com/TxGVNN/emacs-k8s-mode][k8s-mode]] (kubernetes file support + snippets)
+
+**** Devops
++ projectile shell mgmt
+  - [ ] term-projectile (projectile + tmux, more or less)
+  - [ ] [[https://github.com/waymondo/projector.el][projector]] (projectile-based management of shells & their buffers)
++ [ ] systemd
+
+**** Shell
++ [ ] firestarter (for running shell commands on-save)
+
+**** Logging
++ [ ] logito (emacs logging)
+
+**** Tramp
++ [ ] [[https://github.com/randymorris/tramp-term.el][tramp-term]]
++ [ ] [[https://github.com/oitofelix/tramp-auto-auth][tramp-auth-auth]]
++ [ ] [[https://github.com/cjohansson/emacs-ssh-deploy][ssh-deploy]] (deployment via tramp)
+
+**** AST/Metaprogramming
++ [ ] tree-sitter-mode
++ [ ] [[https://github.com/countvajhula/symex.el][symex]]
+
+**** Debugging
++ [ ] asm-mode, gas-mode
+
+**** LSP
++ [ ] [[https://github.com/joaotavora/eglot][eglot]] (management/automation for LSP servers) + [[https://github.com/non-Jedi/eglot-jl][eglot-jl]]
+  - just going with LSP for now, at least until eglot matures.
+
+**** Docs
++ [ ] [[https://github.com/dkogan/xcscope.el][xcscope.el]] for large java/c/c++ projects
+  - emacs interface to =cscope=, searches codebase for references/etc
 
 ** OS :os:
 
@@ -658,11 +763,38 @@ Don't indent content in source blocks
 (setq org-edit-src-content-indentation 0)
 #+end_src
 
-*** TODO setup org-agenda :doom:agenda:
-+ [X] setup ~org-agenda-files~
-*** TODO setup org-export-async-init-file (see [[https://dotdoom.rgoswami.me/config.html][1.2.3 Async Exports]])
-*** TODO look into [[https://github.com/myuhe/org-gcal.el][org-gcal]] and [[https://github.com/dengste/org-caldav][org-caldav]] to manage/edit calendars
-+ Also, refer to [[https://tasshin.com/blog/implementing-a-second-brain-in-emacs-and-org-mode/][org mode as 2nd brain]]
+*** Packages to Evaluate (Org)
+
+**** Org
++ akirak
+  - [ ] [[https://github.com/akirak/org-starter][org-starter]] (good orgmode presets & asset creation tools?),
+  - [ ] [[https://github.com/akirak/ivy-omni-org][ivy-omni-org]] (fast org buffer access)
+  - [ ] [[https://github.com/akirak/org-reverse-datetree][org-reverse-datetree]] (do i already have this?)
++ [X] org-bullets vs org-fancy-priorities =+pretty=
++ [ ] org-appear (easier editing of org markup)
++ [ ] [[https://github.com/kidd/org-gcal.el][org-gcal]] or [[https://github.com/dengste/org-caldav][org-caldav]] (probably the latter)
++ [ ] org-variable-pitch
++ [X] org-re-reveal (export reveal.js presentations from org) =+present=
++ [ ] org-elp (preview latex expressions while editing)
++ [ ] [[https://github.com/Fuco1/org-timeline/][org-timeline]]
++ [ ] [[https://spwhitton.name/tech/code/org-d20/][org-d20]] for dungeonmasters
++ [ ] [[https://github.com/stardiviner/org-tag-beautify][org-tag-beautify]] requires org-pretty-tags (conflicts with =+pretty=?)
++ [ ] org-working-set (manage a working set of nodes)
++ [X] org-present & org-re-reveal
++ from HaoZeke
+  - [ ] [[https://gitlab.com/phillord/org-drill/][org-drill]] (use org mode for spaced repitition)
+  - [ ] org-protocol?
+  - [ ] org-ref (highly recommended)
+  - [ ] helm-org-rifle (not worth the helm)
+  - [ ] org-async
++ [ ] elegant-agenda-mode
+
+**** org-babel
++ [ ] ob-clojurescript
++ [ ] ob-diagram (generate [[http://projects.haskell.org/diagrams/][diagrams]] using haskell tool)
+
+
+**** TODO setup org-export-async-init-file (see [[https://dotdoom.rgoswami.me/config.html][1.2.3 Async Exports]])
 
 ** LANG :lang:
 
@@ -770,7 +902,19 @@ Doxygen for c/cpp [fn:haozeke]
                               auto-mode-alist))
 #+end_src
 
+*** Packages to Evaluate (Languages)
 
+**** Misc
++ [ ] [[https://github.com/ericcrosson/pine-script-mode][pine-script-mode]] Trading View
+
+**** Latex and Writing
++ [ ] [[https://joostkremers.github.io/ebib/][ebib]] bibtex database
++ [ ] xah-math-mode
++ [ ] [[https://github.com/emacs-grammarly/lsp-grammarly][lsp-grammar]]
++ [ ] [[https://github.com/cpitclaudel/biblio.el][biblio]] and biblio-core (browse import bibliographic refs; e.g from arXiv)
++ [ ] writegood-mode & wc-mode
++ [ ] [[https://github.com/ymarco/auto-activating-snippets][aas]] and [[https://github.com/tecosaur/LaTeX-auto-activating-snippets][laas]] (a more-performant approach to auto-expanding snippets)
++ [ ] ob-latex-as-png
 
 ** BABEL :babel:
 
@@ -789,7 +933,6 @@ Load general org-babel config after defining languages
                '((julia-vterm . t)
                  (clojure . t)))
   (org-babel-do-load-languages 'org-babel-load-languages org-babel-load-languages))
-
 ;;(defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
 #+end_src
 
@@ -857,6 +1000,11 @@ Extra Sensory Perception
 ** EMAIL :email:
 
 ** APP :app:
+
+*** Packages to Evaluate (App)
+
+**** IRC
++ [ ] [[https://github.com/jorgenschaefer/circe][circe]] an IRC client, complexity is "between rcirc and ERC"
 
 ** CONFIG :config:
 
