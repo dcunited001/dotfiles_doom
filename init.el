@@ -28,7 +28,7 @@
        ;; ido              ; the other *other* search engine...
 
       (ivy              ; a search engine for love and life
-       +childframe      ; a better UI for ivy (Emacs 26+)
+       -childframe      ; a better UI for ivy (Emacs 26+)
        +prescient       ; better? filtering and sorting?
        +icons           ; enables file icons
        +fuzzy)          ; enable fuzzy search backend for ivy
@@ -42,12 +42,15 @@
        ;;fill-column       ; a `fill-column' indicator
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        ;;hydra
-       indent-guides     ; highlighted indent columns
+
+       ;; FIXME conflicts with Prism.el
+       ;;indent-guides     ; highlighted indent columns
        ligatures         ; ligatures and symbols to make your code pretty again
        ;;minimap           ; show a map of the code on the side
        modeline          ; snazzy, Atom-inspired modeline, plus API
        nav-flash         ; blink the current line after jumping
        ;;neotree           ; a project drawer, like NERDTree for vim
+
        ophints           ; highlight the region an operation acts on
 
       (popup            ; tame sudden yet inevitable temporary windows

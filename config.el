@@ -21,7 +21,8 @@
 (map! "S-<mouse-8>" 'previous-buffer)
 (map! "S-<mouse-9>" 'next-buffer)
 
-(setq doom-theme 'doom-one)
+(setq doom-theme 'doom-one
+      doom-one-brighter-modeline t)
 
 ;; (setq doom-theme 'doom-acario-dark
 ;;   doom-acario-dark-brighter-comments nil
@@ -29,7 +30,18 @@
 ;;   doom-acario-dark-comment-bg nil
 ;;   doom-acario-dark-padded-modeline 4)
 
-(set-frame-font "Source Code Pro 12" nil t)
+;; (set-frame-font "Source Code Pro 12" nil t)
+(setq doom-font (font-spec :family "JuliaMono" :size 14)
+      doom-unicode-font (font-spec :family "JuliaMono" :size 14)
+      doom-font-increment 1)
+
+(unless (find-font doom-font)
+  (message "couldn't find 'doom-font. using a default.")
+  (setq doom-font (font-spec :family "Source Code Pro" :size 18)))
+
+(unless (find-font doom-unicode-font)
+  (message "couldn't find 'doom-unicode-font. using a default.")
+  (setq doom-font (font-spec :family "Source Code Pro" :size 18)))
 
 (setq +ligatures-extras-in-modes
       '(not special-mode comint-mode eshell-mode term-mode vterm-mode python-mode))
@@ -57,6 +69,14 @@
 
 (after! which-key
     (setq which-key-idle-delay 0.5))
+
+(after! doom-modeline
+  ;; doom-modeline workspace-name has conflicts with bufler tab-bar
+  (setq doom-modeline-workspace-name nil
+
+        doom-modeline-height 24
+        ;; doom-modeline-project-detection 'ffip,'projectile,'projectile
+        doom-modeline-minor-modes t))
 
 (use-package! dimmer
   :config (setq dimmer-adjustment-mode :background
@@ -130,7 +150,6 @@
                '((julia-vterm . t)
                  (clojure . t)))
   (org-babel-do-load-languages 'org-babel-load-languages org-babel-load-languages))
-
 ;;(defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
 
 (use-package! google-translate :demand t
@@ -158,8 +177,8 @@
 
   (prism-set-colors :lightens '(0 5 10) :desaturations '(-2.5 0 2.5)
     :colors (-map #'doom-color
-                  '(red green orange blue yellow violet)))
-  ;; red orange green teal yellow blue dark-blue magenta violet cyan dark cyan
+                  '(red teal green magenta cyan blue orange dark-cyan violet yellow)))
+                  ;; options: red orange green teal yellow blue dark blue magenta violet cyan dark cyan
   )
 
 (map! :leader :desc "Toggle Rainbow Mode"

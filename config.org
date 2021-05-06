@@ -56,6 +56,7 @@ added by Doom modules).
     - [[#doom-theme][Doom Theme]]
     - [[#font][Font]]
     - [[#ligatures][Ligatures]]
+    - [[#indent-guides][Indent Guides]]
     - [[#window-ui][Window UI]]
     - [[#bufler-tabs-and-burly-bookmarks][Bufler Tabs and Burly Bookmarks]]
     - [[#startup][Startup]]
@@ -74,14 +75,18 @@ added by Doom modules).
   - [[#checkers][CHECKERS]]
   - [[#tools][TOOLS]]
     - [[#lookup][Lookup]]
+    - [[#diff-and-ediff][Diff and Ediff]]
     - [[#git][Git]]
     - [[#magit][Magit]]
     - [[#git-1][Git]]
     - [[#github][Github]]
-    - [[#dockerfile][Dockerfile]]
-    - [[#kubernetes][Kubernetes]]
     - [[#archlinux][Archlinux]]
+    - [[#docker][Docker]]
+    - [[#kubernetes][Kubernetes]]
+    - [[#saltstack][SaltStack]]
     - [[#lsp-mode][LSP Mode]]
+    - [[#lsp-ui][LSP UI]]
+    - [[#packages-to-evaluate-tools][Packages to Evaluate (Tools)]]
   - [[#os][OS]]
   - [[#org][ORG]]
     - [[#setup-org-to-emphasize-with-parenedit][setup org to emphasize with parenedit]]
@@ -91,9 +96,7 @@ added by Doom modules).
     - [[#org-agenda][Org Agenda]]
     - [[#org-capture][Org Capture]]
     - [[#source-blocks][Source Blocks]]
-    - [[#setup-org-agenda][setup org-agenda]]
-    - [[#setup-org-export-async-init-file-see-123-async-exports][setup org-export-async-init-file (see 1.2.3 Async Exports)]]
-    - [[#look-into-org-gcal-and-org-caldav-to-manageedit-calendars][look into org-gcal and org-caldav to manage/edit calendars]]
+    - [[#packages-to-evaluate-org][Packages to Evaluate (Org)]]
   - [[#lang][LANG]]
     - [[#elisp][ELISP]]
     - [[#latex][LATEX]]
@@ -103,12 +106,14 @@ added by Doom modules).
     - [[#kde][KDE]]
     - [[#qt][QT]]
     - [[#c][C++]]
+    - [[#packages-to-evaluate-languages][Packages to Evaluate (Languages)]]
   - [[#babel][BABEL]]
     - [[#ensure-this-is-necessary-with-org-init-babel-lazy-loader-h][ensure this is necessary with =+org-init-babel-lazy-loader-h=]]
     - [[#ob-async][ob-async]]
     - [[#ob-translate][ob-translate]]
   - [[#email][EMAIL]]
   - [[#app][APP]]
+    - [[#packages-to-evaluate-app][Packages to Evaluate (App)]]
   - [[#config][CONFIG]]
     - [[#prismel][Prism.el]]
     - [[#rainbow-mode][Rainbow Mode]]
@@ -222,7 +227,6 @@ see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse
 (map! "S-<mouse-9>" 'next-buffer)
 #+end_src
 
-
 **** TODO other mouse maps
 + and navigating =describe-= and other docs
 + helpful-at-point
@@ -253,6 +257,8 @@ see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse
 
 *** IVY :ivy:
 
+Removed =-childframe= for now, as these are actual frames.
+
 **** HOLD configure views to use with ~ivy-switch-view~ (or just use bufler?)
 
 
@@ -262,7 +268,8 @@ see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse
 *** Doom Theme
 
 #+begin_src emacs-lisp
-(setq doom-theme 'doom-one)
+(setq doom-theme 'doom-one
+      doom-one-brighter-modeline t)
 
 ;; (setq doom-theme 'doom-acario-dark
 ;;   doom-acario-dark-brighter-comments nil
@@ -274,10 +281,21 @@ see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse
 *** Font
 
 #+begin_src emacs-lisp
-(set-frame-font "Source Code Pro 12" nil t)
+;; (set-frame-font "Source Code Pro 12" nil t)
+(setq doom-font (font-spec :family "JuliaMono" :size 14)
+      doom-unicode-font (font-spec :family "JuliaMono" :size 14)
+      doom-font-increment 1)
+
+(unless (find-font doom-font)
+  (message "couldn't find 'doom-font. using a default.")
+  (setq doom-font (font-spec :family "Source Code Pro" :size 18)))
+
+(unless (find-font doom-unicode-font)
+  (message "couldn't find 'doom-unicode-font. using a default.")
+  (setq doom-font (font-spec :family "Source Code Pro" :size 18)))
 #+end_src
 
-+ config =doom-font= and =doom-variable-pitch-font=
++ config =doom-variable-pitch-font=?
 + config =ivy-posframe-font=
 
 *** Ligatures
@@ -290,6 +308,16 @@ Disable extra ligatures in a few modes [fn:luca_doom]
 #+END_SRC
 
 **** TODO configure [[org:/home/dc/.emacs.d/modules/ui/ligatures/README.org][+ligatures]] module
+
+*** Indent Guides
+
+The =indent-guides= doom module conflicts with =prism=. These must be applied to
+each buffer in this order:
+
+1. prism
+2. indent-guide
+
+**** TODO fix prism/indent-guide conflict
 
 *** Window UI
 
@@ -375,10 +403,10 @@ Key bindings ([[https://github.com/sei40kr/spacemacs.d/blob/master/treemacs-cust
       (:prefix "o" :desc "Tags" "t" 'treemacs-toggle-node-prefer-tag-visit))
 #+end_src
 
-It is possible to make the Treemacs window
-draggable by default with ~(setq treemacs--width-is-locked nil)~ on startup,
-which i finally figured out (immediately before finally discovering
-~(balance-windows)~ which maximizes the treemacs width if it's not fixed.....)
+It is possible to make the Treemacs window draggable by default with ~(setq
+treemacs--width-is-locked nil)~ on startup, which i finally figured out
+(immediately before finally discovering ~(balance-windows)~ which maximizes the
+treemacs width if it's not fixed.....)
 
 *** which-key
 
@@ -390,6 +418,18 @@ shorten the delay (from luca)
 #+END_SRC
 
 *** Modeline
+
+customize [[https://github.com/seagle0128/doom-modeline][doom-modeline]]
+
+#+BEGIN_SRC emacs-lisp
+(after! doom-modeline
+  ;; doom-modeline workspace-name has conflicts with bufler tab-bar
+  (setq doom-modeline-workspace-name nil
+
+        doom-modeline-height 24
+        ;; doom-modeline-project-detection 'ffip,'projectile,'projectile
+        doom-modeline-minor-modes t))
+#+END_SRC
 
 **** TODO configure modeline (refer to HaoZeke, luca and others)
 **** TODO check out [[https://github.com/hlissner/doom-emacs-private/blob/master/lisp/modeline.el][Hlissner's modeline]] for customization ideas
@@ -838,8 +878,8 @@ Use doom colors for theme and toggle with =:leader tP=
 
   (prism-set-colors :lightens '(0 5 10) :desaturations '(-2.5 0 2.5)
     :colors (-map #'doom-color
-                  '(red green orange blue yellow violet)))
-  ;; red orange green teal yellow blue dark-blue magenta violet cyan dark cyan
+                  '(red teal green magenta cyan blue orange dark-cyan violet yellow)))
+                  ;; options: red orange green teal yellow blue dark blue magenta violet cyan dark cyan
   )
 #+end_src
 
