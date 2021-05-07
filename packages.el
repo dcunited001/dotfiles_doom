@@ -5,6 +5,8 @@
 
 (package! dimmer)
 
+(package burly!)
+
 (package! centered-cursor-mode)
 
 (package! pkgbuild-mode

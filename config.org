@@ -40,6 +40,9 @@ There may be other babel source blocks. Eventually, I would like include some
 elisp code for reflecting on Doom Emacs (e.g. extracting a list of packages
 added by Doom modules).
 
+**** TODO [#B] place light semantic-versioning constraints on packages
++ ~(package asdfoo-bar :pin 1234)~
+
 * Table of Contents :TOC_3_gh:
 - [[#about-this-file][About this file]]
   - [[#tangle-output][Tangle Output]]
@@ -64,6 +67,7 @@ added by Doom modules).
     - [[#which-key][which-key]]
     - [[#modeline][Modeline]]
     - [[#dimmer][Dimmer]]
+    - [[#window--frame-management][Window & Frame Management]]
     - [[#misc][Misc]]
   - [[#editor][EDITOR]]
     - [[#centered-cursor-mode][Centered Cursor Mode]]
@@ -357,6 +361,35 @@ customize [[https://github.com/seagle0128/doom-modeline][doom-modeline]]
   (dimmer-configure-which-key)
   (dimmer-configure-posframe))
 #+end_src
+
+*** Window & Frame Management
+
+Use burly for bookmarking loaded window configurations. This should perhaps be a
+=+burly= feature on the =workspace= module, with perhaps alternate ~(:when (feature! :ui workspace +burly))~
+workspaces
+
+#+begin_src emacs-lisp :tangle ./packages.el
+(package burly!)
+#+end_src
+
+These are simply bookmarks and thus can be reached from the doom startup menu.
+
+#+begin_src emacs-lisp
+(use-package! burly
+  :config (map! :leader
+                (:prefix-map ("w" . "workspaces/windows")
+                  (:prefix-map ("B" . "Burly bookmarks")
+                   :desc "Restore windows/frames" "o" #'burly-open-bookmark
+                   :desc "Open Burly URL" "O" #'burly-open-url
+                   :desc "Bookmark Windows" "w" #'burly-bookmark-windows
+                   :desc "Bookmark Frameset" "f" #'burly-bookmark-frames
+                   :desc "Copy Buffer URL" "B" #'burly-kill-buffer-url
+                   :desc "Copy Window URL" "F" #'burly-kill-frames-url
+                   :desc "Copy Frameset URL" "W" #'burly-kill-windows-url))))
+#+end_src
+
+**** TODO helpers for manageing Burly URL's copied to the kill ring
+**** TODO doom emacs is missing the delete-bookmark binding for non-evil users
 
 *** Misc
 

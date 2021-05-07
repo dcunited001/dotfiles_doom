@@ -78,6 +78,18 @@
   (dimmer-configure-which-key)
   (dimmer-configure-posframe))
 
+(use-package! burly
+  :config (map! :leader
+                (:prefix-map ("w" . "workspaces/windows")
+                  (:prefix-map ("B" . "Burly bookmarks")
+                   :desc "Restore windows/frames" "o" #'burly-open-bookmark
+                   :desc "Open Burly URL" "O" #'burly-open-url
+                   :desc "Bookmark Windows" "w" #'burly-bookmark-windows
+                   :desc "Bookmark Frameset" "f" #'burly-bookmark-frames
+                   :desc "Copy Buffer URL" "B" #'burly-kill-buffer-url
+                   :desc "Copy Window URL" "F" #'burly-kill-frames-url
+                   :desc "Copy Frameset URL" "W" #'burly-kill-windows-url))))
+
 (setq display-line-numbers-type nil)
 
 (use-package! centered-cursor-mode ;: defer t

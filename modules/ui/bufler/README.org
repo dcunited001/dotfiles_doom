@@ -9,7 +9,6 @@
 
 #+begin_src emacs-lisp :tangle ./packages.el
 (package! bufler)
-(package! burly)
 #+end_src
 
 #+begin_src emacs-lisp :tangle ./config.el
@@ -17,8 +16,6 @@
   :config (map! ;(:after ...?)
            :map ctl-x-map
            :desc "Bufler List" "C-b" #'bufler-list))
-(use-package! burly)
-
 (add-hook 'doom-init-ui-hook
           (lambda () ;;(global-tab-line-mode +1)
             (bufler-mode +1)
@@ -38,10 +35,6 @@
 ** TODO remove bufler tabs from the wrong places [0/2]
 + [ ] child-frames
 + [ ] popup buffers
-
-** TODO Misc Burly config
-+ Burly (bookmarks to tab groups and window configs)
-+ add burly to doom startup screen
 
 ** TODO make compatible with the doom =:ui tabs= module
 + both centaur tabs and bufler as feature?
