@@ -5,7 +5,7 @@
 
 (package! dimmer)
 
-(package burly!)
+(package! burly)
 
 (package! centered-cursor-mode)
 

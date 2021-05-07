@@ -120,11 +120,6 @@
       
       lsp-ui-imenu-window-width 25)
 
-;; (after! org
-;;   (map!
-
-;;    ))
-
 (after! org
   (remove-hook 'after-save-hook #'+literate|recompile-maybe))
 
@@ -190,7 +185,9 @@
 )
 
 (use-package! prism
-  :hook (emacs-lisp-mode . prism-mode)
+  :hook ((emacs-lisp-mode . prism-mode)
+         (clojure-mode . prism-mode)
+         (clojurescript-mode . prism-mode))
   :config (map! :leader :desc "Toggle Prism"
                 "tP" (lambda () (interactive) (prism-mode 'toggle)))
 

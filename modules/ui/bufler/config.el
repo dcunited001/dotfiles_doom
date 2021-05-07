@@ -2,7 +2,6 @@
   :config (map! ;(:after ...?)
            :map ctl-x-map
            :desc "Bufler List" "C-b" #'bufler-list))
-(use-package! burly)
 
 (add-hook 'doom-init-ui-hook
           (lambda () ;;(global-tab-line-mode +1)

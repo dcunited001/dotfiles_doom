@@ -50,6 +50,7 @@ added by Doom modules).
   - [[#input][INPUT]]
     - [[#keyboard][Keyboard]]
     - [[#point-movement][Point Movement]]
+    - [[#lispy][Lispy]]
     - [[#mouse][Mouse]]
   - [[#completion][COMPLETION]]
     - [[#completion-prompts][Completion prompts]]
@@ -92,7 +93,6 @@ added by Doom modules).
     - [[#packages-to-evaluate-tools][Packages to Evaluate (Tools)]]
   - [[#os][OS]]
   - [[#org][ORG]]
-    - [[#setup-org-to-emphasize-with-parenedit][setup org to emphasize with parenedit]]
     - [[#keys][Keys]]
     - [[#org-literate][Org Literate]]
     - [[#org-directory][Org Directory]]
@@ -141,11 +141,11 @@ Most of these configs should be in their individual ~*-mode~ sections or under t
 (require 'iso-transl)
 #+end_src
 
-*** Point Movement :kbd:point_movement:
+*** Point Movement
 
-**** TODO kbd mappings for smartparens point movement :smartparens:
-+ need to decide on smartparens (incompletely [[file:~/.emacs.d/modules/config/default/config.el::when (featurep! +smartparens][mapped by doom]]) paredit
-+ or paredit (not mapped; unsure of what is including)
+*** Lispy :lispy:
+
+[[https://oremacs.com/lispy/][Keymap reference]] for [[https://github.com/abo-abo/lispy][Lispy]]. "[[https://mitpress.mit.edu/sites/default/files/sicp/full-text/book/book-Z-H-10.html#%25_sec_1.1.5][Always be evaling]]"
 
 *** Mouse :mouse:
 
@@ -369,7 +369,7 @@ Use burly for bookmarking loaded window configurations. This should perhaps be a
 workspaces
 
 #+begin_src emacs-lisp :tangle ./packages.el
-(package burly!)
+(package! burly)
 #+end_src
 
 These are simply bookmarks and thus can be reached from the doom startup menu.
@@ -644,18 +644,7 @@ From HaoZeke[fn:haozeke]
 
 ** ORG :org:
 
-*** TODO setup org to emphasize with parenedit
-
 *** Keys :kbdmaps:
-
-**** TODO remap =C-c i w */_=+~= to wrap with sp-wrap-parens (need to def function?) =from HaoZeke=
-
-#+begin_src emacs-lisp
-;; (after! org
-;;   (map!
-
-;;    ))
-#+end_src
 
 **** TODO remap ~org-forward-heading-same-level~
 + ~C-c C-b~ maps to ~org-backward-heading-same-level~
@@ -737,7 +726,6 @@ Don't indent content in source blocks
 *** ELISP :elisp:
 
 **** TODO configure eldoc
-**** TODO configure parenedit
 
 *** LATEX :latex:
 
@@ -956,7 +944,9 @@ Use doom colors for theme and toggle with =:leader tP=
 
 #+begin_src emacs-lisp
 (use-package! prism
-  :hook (emacs-lisp-mode . prism-mode)
+  :hook ((emacs-lisp-mode . prism-mode)
+         (clojure-mode . prism-mode)
+         (clojurescript-mode . prism-mode))
   :config (map! :leader :desc "Toggle Prism"
                 "tP" (lambda () (interactive) (prism-mode 'toggle)))
 
