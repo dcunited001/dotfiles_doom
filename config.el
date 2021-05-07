@@ -49,6 +49,8 @@
 (setq window-divider-default-right-width 1)
 (setq window-divider-default-bottom-width 1)
 
+(use-package! treemacs-all-the-icons)
+
 (after! treemacs
   (setq treemacs-width 24)
   (treemacs-filewatch-mode -1))
@@ -100,13 +102,24 @@
 
 (setq explicit-shell-file-name "/bin/zsh")
 
+(use-package! magit-tbdiff)
+
+(use-package! firestarter
+  :ensure t
+  :init (firestarter-mode)
+  :config (firestarter-default-type t))
+
 (use-package! pkgbuild-mode :mode "\\PKGBUILD")
+
+(use-package! ssh-config-mode)
+(use-package! x509-mode)
 
 (use-package! docker
   :config (setq docker-run-as-root t
                 docker-image-run-arguments '("-i" "-t" "--rm")))
 
 ;; so the ## -*- docker-image-name: "image-name" -*- directive works with ~dockerfile-mode~
+;; TODO assess
 (put 'dockerfile-image-name 'safe-local-variable #'stringp)
 
 (use-package salt-mode)
@@ -117,7 +130,7 @@
       ;; TODO ensure these are necessary/useful
       lsp-ui-doc-max-width 35 ;; 35 is default
       ;; lsp-ui-doc--inline-width
-      
+
       lsp-ui-imenu-window-width 25)
 
 (after! org

@@ -84,10 +84,13 @@ added by Doom modules).
     - [[#magit][Magit]]
     - [[#git-1][Git]]
     - [[#github][Github]]
+    - [[#shell-1][Shell]]
     - [[#archlinux][Archlinux]]
+    - [[#ken-kesey][Ken Kesey]]
     - [[#docker][Docker]]
     - [[#kubernetes][Kubernetes]]
     - [[#saltstack][SaltStack]]
+    - [[#ast--metaprogramming][AST & Metaprogramming]]
     - [[#lsp-mode][LSP Mode]]
     - [[#lsp-ui][LSP UI]]
     - [[#packages-to-evaluate-tools][Packages to Evaluate (Tools)]]
@@ -287,11 +290,15 @@ Dividers are too thin to grab if only 1px
 *** All The Icons
 
 #+begin_src emacs-lisp :tangle ./packages.el
-(package! all-the-icons-dired)
+(package! treemacs-all-the-icons)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! treemacs-all-the-icons)
 #+end_src
 
 **** TODO (configure) All the icons
-+ [ ] treemacs-all-the-icons
++ [ ] load treemacs theme (for all the icons?)
 + [ ] [[https://github.com/seagle0128/all-the-icons-ivy-rich][all-the-icons-ivy-rich]] (doom ivy includes ivy-rich)
 
 *** Treemacs
@@ -467,29 +474,42 @@ before or after the doom/emacs install.
 
 *** Diff and Ediff
 
-**** TODO configure ediff for patching nvidia driver source/headers
++ [ ] flycheck-checkpatch
++ [ ] ztree (recursive diff tool)
+
+
+
+**** ediff
+***** TODO configure ediff for patching nvidia driver source/headers
+
 
 *** Git
 
 From Doom Modules:
-+ magit-gh-pulls
-+ magit-gitflow
-+ magit-todos
-+ magit-popup
-+ git-gutter
-+ git-gitter-fringe
-
-#+begin_src
-
-#+end_src
++ [X] git-gutter (doom)
++ [X] git-gitter-fringe
 
 *** Magit
-+ [ ] *magit-forge*
++ [ ] magit-gh-pulls
++ [ ] magit-gitflow
++ [ ] magit-todos
++ [ ] magit-popup
 + [ ] magit-delta
++ [ ] *magit-forge*
 + [ ] magit-org-todos
 + [ ] forge (also integrates with magit)
 + [ ] orgit (org links to magit buffers)
 + [ ] orgit-forge
+
+[[https://github.com/magit/magit-tbdiff][magit-tbdiff]] show diffs over ranges of commits
+
+#+begin_src emacs-lisp :tangle ./packages.el
+(package! magit-tbdiff)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! magit-tbdiff)
+#+end_src
 
 **** TODO: configure =magit-repository-directories=
 + see =hlissner= config & others
@@ -498,18 +518,35 @@ From Doom Modules:
 + [ ] *[[https://github.com/10sr/git-walktree-el][git-walktree]]*
 + [ ] *git-blamed*
 + [ ] *git-messenger* (check performance)
-+ [ ] *git-timemachine*
++ [X] *git-timemachine* (doom)
 + [ ] gitolite-clone
 + [ ] borg (assimilate emacs packages as git submodules)
 
 *** Github
 + [ ] github-explorer
 + [ ] *github-pullrequest*
-+ [ ] *github-stars*
 + [ ] *github-search*
++ [ ] *github-stars*
++ [ ] github-clone
 + [ ] *magithub*
 + [ ] *org2issue*
-+ [ ] *treemacs-magit*
++ [X] *treemacs-magit*
+
+*** Shell
+
+[[https://depp.brause.cc/firestarter][Firestarter]] enables =./.dir-local.el= variables and file-local declarations to
+config/control on-save shell tasks.[fn:haozeke]
+
+#+begin_src emacs-lisp :tangle ./packages.el
+(package! firestarter)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! firestarter
+  :ensure t
+  :init (firestarter-mode)
+  :config (firestarter-default-type t))
+#+end_src
 
 *** Archlinux
 
@@ -524,6 +561,27 @@ From Doom Modules:
 (use-package! pkgbuild-mode :mode "\\PKGBUILD")
 #+end_src
 
+*** Ken Kesey
+
+[[https://github.com/jhgorrell/ssh-config-mode-el][ssh-config-mode]] and [[https://github.com/jobbflykt/x509-mode][x509-mode]]
+
+#+begin_src emacs-lisp :tangle ./packages.el
+(package! ssh-config-mode)
+(package! x509-mode)
+;; TODO ssh-agency
+;; TODO ssh-tunnels
+#+end_src
+
+For =ssh-config-mode= add this file-local variable to configs =# -*- mode:
+ssh-config -*-=
+
+#+begin_src emacs-lisp
+(use-package! ssh-config-mode)
+(use-package! x509-mode)
+#+end_src
+
++ [ ] ssh-agency
++ [ ] ssh-tunnels (hmmmm)
 
 *** Docker
 
@@ -540,11 +598,25 @@ checked, most of the =docker*= features are being loaded into emacs with some
                 docker-image-run-arguments '("-i" "-t" "--rm")))
 
 ;; so the ## -*- docker-image-name: "image-name" -*- directive works with ~dockerfile-mode~
+;; TODO assess
 (put 'dockerfile-image-name 'safe-local-variable #'stringp)
 #+end_src
 
-**** TODO setup =C-c d= as a "devops" prefix, remap =C-c d d= to =docker=
+**** [[https://github.com/emacs-lsp/lsp-docker][LSP Docker]] (requires pulling =emacslsp/lsp-docker-full= image)
 
+This sets up LSP servers running on Docker containrs with more tightly
+controlled configuration. e.g. when you want:
++ faster startup times
++ servers tuned a specific set of large projects
++ repeatable/declarative LSP configuration
++ to share cache or control its persistence for large projects
+
+(not really sure how this works with branching or git worktrees)
+
+***** TODO configure lsp-docker
++ probably when i'm working on Krita
+
+**** TODO setup =C-c d= as a "devops" prefix, remap =C-c d d= to =docker=
 
 *** Kubernetes
 
@@ -563,7 +635,15 @@ From HaoZeke[fn:haozeke]
 (use-package salt-mode)
 #+end_src
 
-**** Need to check config
+**** TODO Need to check config
+
+
+*** AST & Metaprogramming
+
++ [ ] [[https://github.com/ubolonton/emacs-tree-sitter][tree-sitter-mode]]
++ [ ] [[https://github.com/countvajhula/symex.el][symex]]
+
+**** TODO configure bindings & control when these are activated
 
 *** LSP Mode
 
@@ -578,30 +658,23 @@ From HaoZeke[fn:haozeke]
       ;; TODO ensure these are necessary/useful
       lsp-ui-doc-max-width 35 ;; 35 is default
       ;; lsp-ui-doc--inline-width
-      
-      lsp-ui-imenu-window-width 25)
 
+      lsp-ui-imenu-window-width 25)
 #+end_src
 
 *** Packages to Evaluate (Tools)
 
-**** Misc
-+ [ ] ssh-config-mode
-+ [ ] [[https://github.com/jobbflykt/x509-mode][x509-mode]]
+**** Diff & Patch
++ [ ] vdiff & vdiff-magit (does it do patches?)
 
-**** DIFF & PATCH TOOLS
-+ [ ] something for kernel patches?
-+ [ ] vdiff & vdiff-magit
-+ [ ] *find-file-in-project*
-+ [ ] *gitpatch*
-+ [ ] flycheck-checkpatch
-+ [ ] ztree (recursive diff tool)
+**** Fast file find
++ [ ] [[https://github.com/technomancy/find-file-in-project][find-file-in-project]]
++ [ ] [[https://github.com/h/find-file-in-repository][find-file-in-repository]]
 
 **** Docker
 + [ ] SLIME Docker
-+ [ ] [[https://github.com/emacs-pe/docker-tramp.el][docker-tramp]] (2017)
++ [X] [[https://github.com/emacs-pe/docker-tramp.el][docker-tramp]] (2017) included with doom (configured?)
 + [ ] [[https://github.com/bosko/docker-cli][docker-cqli]]
-+ [ ] lsp-docker
 
 **** Kubernetes
 + [ ] kubernetes.el
@@ -609,13 +682,11 @@ From HaoZeke[fn:haozeke]
 + [ ] [[https://github.com/TxGVNN/emacs-k8s-mode][k8s-mode]] (kubernetes file support + snippets)
 
 **** Devops
++ [ ] [[https://github.com/cjohansson/emacs-ssh-deploy][ssh-deploy]] (deployment via tramp)
 + projectile shell mgmt
   - [ ] term-projectile (projectile + tmux, more or less)
   - [ ] [[https://github.com/waymondo/projector.el][projector]] (projectile-based management of shells & their buffers)
 + [ ] systemd
-
-**** Shell
-+ [ ] firestarter (for running shell commands on-save)
 
 **** Logging
 + [ ] logito (emacs logging)
@@ -623,11 +694,6 @@ From HaoZeke[fn:haozeke]
 **** Tramp
 + [ ] [[https://github.com/randymorris/tramp-term.el][tramp-term]]
 + [ ] [[https://github.com/oitofelix/tramp-auto-auth][tramp-auth-auth]]
-+ [ ] [[https://github.com/cjohansson/emacs-ssh-deploy][ssh-deploy]] (deployment via tramp)
-
-**** AST/Metaprogramming
-+ [ ] tree-sitter-mode
-+ [ ] [[https://github.com/countvajhula/symex.el][symex]]
 
 **** Debugging
 + [ ] asm-mode, gas-mode
@@ -977,5 +1043,20 @@ Use doom colors for theme and toggle with =:leader tP=
 
 [fn:luca_doom] lccambiaghi [[https://github.com/lccambiaghi/.doom.d][doom config]]
 [fn:luca_vanilla] lccambiaghi [[https://github.com/lccambiaghi/vanilla-emacs][emacs config]]
-[fn:haozeke] haozeke [[https://github.com/HaoZeke/doom-emacs][doom config]]
+[fn:tecosaur] tecosaur [[https://github.com/tecosaur/emacs-config][doom config]]
+[fn:haozeke] haozeke [[https://github.com/HaoZeke/dotdoom][doom config]]
 [fn:zzamboni] zzamboni [[https://gitlab.com/zzamboni/dot-doom][doom config]]
+[fn:abo-abo] abo-abo [[https://github.com/abo-abo/oremacs][doom config]]
+[fn:geolessel] geolessel [[https://github.com/geolessel/dotfiles][doom config]]
+[fn:hsinhaoyu] hsinhaoyu [[https://github.com/hsinhaoyu/.emacs.d][doom config]]
+[fn:Brettm12345] Brettm12345 [[https://github.com/Brettm12345/doom-emacs-literate-config][doom config]]
+[fn:mwfogleman] mwfogleman [[https://github.com/mwfogleman/.emacs.d][doom config]]
+[fn:tammymakesthings] tammymakesthings [[https://github.com/tammymakesthings/emacs_d][doom config]]
+[fn:hlissner] hlissner [[https://github.com/magnars/.emacs.d][doom config]]
+[fn:magnars] magnars [[https://github.com/sunnyhasija/Academic-Doom-Emacs-Config][doom config]]
+[fn:sunnyhasija] sunnyhasija [[https://github.com/hlissner/doom-emacs-private][doom config]]
+[fn:daedreth] daedreth [[https://github.com/daedreth/UncleDavesEmacs][doom config]]
+[fn:joseph8th] joseph8th [[https://github.com/joseph8th/literatemacs][doom config]]
+[fn:rasendubi] rasendubi [[https://github.com/rasendubi/dotfiles][doom config]]
+[fn:TimQuelch] TimQuelch [[https://github.com/TimQuelch/emacs.d][doom config]]
+[fn:frap] frap [[https://github.com/frap/emacs-literate][doom config]]

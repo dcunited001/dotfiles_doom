@@ -1,7 +1,7 @@
 ;; -*- no-byte-compile: t; -*-
 ;;; ~/.doom.d/packages.el
 
-(package! all-the-icons-dired)
+(package! treemacs-all-the-icons)
 
 (package! dimmer)
 
@@ -9,8 +9,17 @@
 
 (package! centered-cursor-mode)
 
+(package! magit-tbdiff)
+
+(package! firestarter)
+
 (package! pkgbuild-mode
   :recipe (:host github :repo "juergenhoetzel/pkgbuild-mode"))
+
+(package! ssh-config-mode)
+(package! x509-mode)
+;; TODO ssh-agency
+;; TODO ssh-tunnels
 
 (package! salt-mode)
 
