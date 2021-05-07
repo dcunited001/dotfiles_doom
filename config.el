@@ -107,7 +107,7 @@
 (use-package! firestarter
   :ensure t
   :init (firestarter-mode)
-  :config (firestarter-default-type t))
+  :config (setq firestarter-default-type t))
 
 (use-package! pkgbuild-mode :mode "\\PKGBUILD")
 
