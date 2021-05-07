@@ -49,17 +49,6 @@
 (setq window-divider-default-right-width 1)
 (setq window-divider-default-bottom-width 1)
 
-(use-package! bufler
-  :config (map! ;(:after ...?)
-           :map ctl-x-map
-           :desc "Bufler List" "C-b" #'bufler-list))
-(use-package! burly)
-
-(add-hook 'doom-init-ui-hook
-          (lambda () (global-tab-line-mode +1)
-            (bufler-mode +1)
-            (bufler-tabs-mode +1)))
-
 (after! treemacs
   (setq treemacs-width 24)
   (treemacs-filewatch-mode -1))

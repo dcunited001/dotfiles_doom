@@ -1,0 +1,48 @@
+#+TITLE: Bufler Tabs Doom Module
+#+AUTHOR: David Conner
+#+DESCRIPTION: Inspired by the personal Doom Emacs config of DT, HaoZeke and others
+#+STARTUP: showeverything
+
+* Bufler Tabs and Burly Bookmarks
+
+[[https://github.com/alphapapa/bufler.el][Bufler]] uses emacs-27 tabs
+
+#+begin_src emacs-lisp :tangle ./packages.el
+(package! bufler)
+(package! burly)
+#+end_src
+
+#+begin_src emacs-lisp :tangle ./config.el
+(use-package! bufler
+  :config (map! ;(:after ...?)
+           :map ctl-x-map
+           :desc "Bufler List" "C-b" #'bufler-list))
+(use-package! burly)
+
+(add-hook 'doom-init-ui-hook
+          (lambda () ;;(global-tab-line-mode +1)
+            (bufler-mode +1)
+            (bufler-tabs-mode +1)))
+#+end_src
+
+** TODO Misc bufler config [/]
++ [ ] bufler/tab-bar-mode display disappears (caused by save-desktop/autoloads)
++ [ ] map =C-c o t= or something for tab-line-mode
++ [ ] remap vterm hotkeys
++ [ ] Configure =bufler-face-prefix= & set =prism faces=
+
+** TODO configure [[https://github.com/alphapapa/bufler.el#group-types][bufler groups]]
++ tabs for additional/multiple projectile projects?
++ also configure =buffler-mode= and =buffler=
+
+** TODO remove bufler tabs from the wrong places [0/2]
++ [ ] child-frames
++ [ ] popup buffers
+
+** TODO Misc Burly config
++ Burly (bookmarks to tab groups and window configs)
++ add burly to doom startup screen
+
+** TODO make compatible with the doom =:ui tabs= module
++ both centaur tabs and bufler as feature?
++ dilineate burly bookmarks?

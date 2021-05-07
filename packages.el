@@ -1,9 +1,6 @@
 ;; -*- no-byte-compile: t; -*-
 ;;; ~/.doom.d/packages.el
 
-(package! bufler)
-(package! burly)
-
 (package! all-the-icons-dired)
 
 (package! dimmer)

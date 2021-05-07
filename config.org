@@ -58,7 +58,6 @@ added by Doom modules).
     - [[#ligatures][Ligatures]]
     - [[#indent-guides][Indent Guides]]
     - [[#window-ui][Window UI]]
-    - [[#bufler-tabs-and-burly-bookmarks][Bufler Tabs and Burly Bookmarks]]
     - [[#startup][Startup]]
     - [[#all-the-icons][All The Icons]]
     - [[#treemacs][Treemacs]]
@@ -140,59 +139,6 @@ Most of these configs should be in their individual ~*-mode~ sections or under t
 
 *** Point Movement :kbd:point_movement:
 
-The following are unmapped. In terminal emacs, keystrokes with a control
-modifiers, like =C-a= is equivalent to =C-S-a= or =C-A=.
-
-+ B,F
-  + [X] C     bf -char
-  + [X]   M   bf -word
-  + [-] C   S bf (C-h C-k shows nothing)
-  + [-]   M S bf
-  + [X] C M   bf sp- -sexp
-  + [-] C M S bf
-+ P,N
-  + [X] C     pn -line
-  + [X]   M   pn
-  + [-] C   S pn
-  + [-]   M S pn
-  + [!] C M   pn -list (cant recognize C-M-p !!!!)
-  + [X] C M S pn -list
-+ A E
-  + [X] C     ae -of-line
-  + [X]   M   ae -sentence
-  + [-] C   S ae
-  + [-]   M S ae
-  + [X] C M   ae sp- -of-sexp
-  + [-] C M S ae
-+ { } [ ]
-  + [X] C     [] abort-recursive-edit (translates C-[ as ESC !!!!)
-  + [ ]   M   []
-  + [ ] C   S {}
-  + [X]   M S {} -paragraph
-  + [ ] C M   [] !!!! translates C-M-[ as M-ESC... (but not C-M-S)
-  + [ ] C M S {}
-+ < > , .
-  + [ ] C     ,.
-  + [X]   M   ,  better-jumper-jump-backward
-  + [X]   M    . org-cycle-agenda-files
-  + [ ] C   S <>
-  + [X]   M S <> -of-buffer
-  + [ ] C M   ,
-  + [X] C M    . xref-find-apropos
-  + [ ] C M S <>
-+ 0 9 ( )
-  + [X] C     90 digit-argument
-  + [X]   M   90 digit-argument
-  + [ ] C   S ()
-  + [ ]   M S ()
-  + [X] C M   90 digit-argument
-  + [ ] C M S ()
-
-**** TODO write lisp script to autogenerate movement documentation?
-+ add metadata to auto-hide generated code blocks
-+ or generate code blocks for each char class with whitespace-aligned kbd cmds
-**** TODO figure out how emacs handles selection/marking for C-b and C-S-b
-**** TODO kbd mappings for org-mode point movement :org:
 **** TODO kbd mappings for smartparens point movement :smartparens:
 + need to decide on smartparens (incompletely [[file:~/.emacs.d/modules/config/default/config.el::when (featurep! +smartparens][mapped by doom]]) paredit
 + or paredit (not mapped; unsure of what is including)
@@ -261,8 +207,6 @@ Removed =-childframe= for now, as these are actual frames.
 
 **** HOLD configure views to use with ~ivy-switch-view~ (or just use bufler?)
 
-
-
 ** UI :uiux:
 
 *** Doom Theme
@@ -330,46 +274,6 @@ Dividers are too thin to grab if only 1px
 
 **** TODO automatically balance window widths?
 **** TODO setup startup windows (luca)
-
-*** Bufler Tabs and Burly Bookmarks
-
-[[https://github.com/alphapapa/bufler.el][Bufler]] uses emacs-27 tabs
-
-#+begin_src emacs-lisp :tangle ./packages.el
-(package! bufler)
-(package! burly)
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package! bufler
-  :config (map! ;(:after ...?)
-           :map ctl-x-map
-           :desc "Bufler List" "C-b" #'bufler-list))
-(use-package! burly)
-
-(add-hook 'doom-init-ui-hook
-          (lambda () (global-tab-line-mode +1)
-            (bufler-mode +1)
-            (bufler-tabs-mode +1)))
-#+end_src
-
-**** TODO Misc bufler config [/]
-+ [ ] bufler/tab-bar-mode display disappears (caused by save-desktop/autoloads)
-+ [ ] map =C-c o t= or something for tab-line-mode
-+ [ ] remap vterm hotkeys
-+ [ ] Configure =bufler-face-prefix= & set =prism faces=
-
-**** TODO configure [[https://github.com/alphapapa/bufler.el#group-types][bufler groups]]
-+ tabs for additional/multiple projectile projects?
-+ also configure =buffler-mode= and =buffler=
-
-**** TODO remove bufler tabs from the wrong places [0/2]
-+ [ ] child-frames
-+ [ ] popup buffers
-
-**** TODO Misc Burly config
-+ Burly (bookmarks to tab groups and window configs)
-+ add burly to doom startup screen
 
 
 *** Startup
@@ -665,7 +569,6 @@ From HaoZeke[fn:haozeke]
 + [ ] [[https://github.com/emacs-pe/docker-tramp.el][docker-tramp]] (2017)
 + [ ] [[https://github.com/bosko/docker-cli][docker-cqli]]
 + [ ] lsp-docker
-+ [ ] docker
 
 **** Kubernetes
 + [ ] kubernetes.el
