@@ -62,6 +62,7 @@ added by Doom modules).
     - [[#ligatures][Ligatures]]
     - [[#indent-guides][Indent Guides]]
     - [[#window-ui][Window UI]]
+    - [[#highlighting][Highlighting]]
     - [[#startup][Startup]]
     - [[#all-the-icons][All The Icons]]
     - [[#treemacs][Treemacs]]
@@ -282,6 +283,18 @@ Dividers are too thin to grab if only 1px
 **** TODO automatically balance window widths?
 **** TODO setup startup windows (luca)
 
+*** Highlighting
+
+#+begin_src emacs-lisp :tangle ./packages.el
+(package! auto-highlight-symbol)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! auto-highlight-symbol
+  ;; should autoload on bind
+  :config (map! (:prefix "M-s h" :desc "auto-highlight-mode"
+                 "A" (lambda () (interactive) (auto-highlight-symbol-mode 'toggle)))))
+#+end_src
 
 *** Startup
 

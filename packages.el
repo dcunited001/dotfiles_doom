@@ -1,6 +1,8 @@
 ;; -*- no-byte-compile: t; -*-
 ;;; ~/.doom.d/packages.el
 
+(package! auto-highlight-symbol)
+
 (package! treemacs-all-the-icons)
 
 (package! dimmer)

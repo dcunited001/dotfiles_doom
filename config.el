@@ -49,6 +49,11 @@
 (setq window-divider-default-right-width 1)
 (setq window-divider-default-bottom-width 1)
 
+(use-package! auto-highlight-symbol
+  ;; should autoload on bind
+  :config (map! (:prefix "M-s h" :desc "auto-highlight-mode"
+                 "A" (lambda () (interactive) (auto-highlight-symbol-mode 'toggle)))))
+
 (use-package! treemacs-all-the-icons)
 
 (after! treemacs
