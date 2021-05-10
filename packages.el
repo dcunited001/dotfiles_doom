@@ -11,6 +11,8 @@
 
 (package! centered-cursor-mode)
 
+(package! info-colors)
+
 (package! magit-tbdiff)
 
 (package! firestarter)

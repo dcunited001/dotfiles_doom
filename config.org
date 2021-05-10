@@ -485,6 +485,20 @@ before or after the doom/emacs install.
 ***** [ ] julia docsets
 ***** [ ] c++ docsets
 
+*** Info
+
+#+begin_src emacs-lisp :tangle ./packages.el
+(package! info-colors)
+#+end_src
+
+test with emacs manual =C-h R=
+
+#+begin_src emacs-lisp
+(use-package! info-colors)
+#+end_src
+
+**** TODO test =info-colors= or modularize
+
 *** Diff and Ediff
 
 + [ ] flycheck-checkpatch

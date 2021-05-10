@@ -107,6 +107,8 @@
 
 (setq explicit-shell-file-name "/bin/zsh")
 
+(use-package! info-colors)
+
 (use-package! magit-tbdiff)
 
 (use-package! firestarter
