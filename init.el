@@ -1,5 +1,8 @@
 ;;; init.el -*- lexical-binding: t; -*-
 
+
+;;* DOOM Modules Initialization
+;;
 ;; This file controls what Doom modules are enabled and what order they load
 ;; in. Remember to run 'doom sync' after modifying it!
 
@@ -14,6 +17,10 @@
 ;;      Alternatively, press 'gd' (or 'C-c c d') on a module to browse its
 ;;      directory (for easy access to its source code).
 
+
+;;;  TODO_fix so that lispy's ;;** outline sytnax works without auto-format
+;;;  fucking it up
+
 (doom! :input
        ;;chinese
        ;;japanese
@@ -21,92 +28,95 @@
 
        :completion
 
-      (company          ; the ultimate code completion backend
-       +childframe)      ; a better UI for company (Emacs 26+)
+       (company                         ; the ultimate code completion backend
+        +childframe)                    ; a better UI for company (Emacs 26+)
 
        ;; helm             ; the *other* search engine for love and life
        ;; ido              ; the other *other* search engine...
 
-      (ivy              ; a search engine for love and life
-       -childframe      ; a better UI for ivy (Emacs 26+)
-       +prescient       ; better? filtering and sorting?
-       +icons           ; enables file icons
-       +fuzzy)          ; enable fuzzy search backend for ivy
+       (ivy                      ; a search engine for love and life
+        -childframe              ; a better UI for ivy (Emacs 26+)
+        +prescient               ; better? filtering and sorting?
+        +icons                   ; enables file icons (doesn't work for centaur)
+        -fuzzy                   ; enable fuzzy search backend for ivy
+        )
 
        :ui
+       bufler
        ;; deft          ; notational velocity for Emacs
-       doom              ; what makes DOOM look the way it does
-       doom-dashboard    ; a nifty splash screen for Emacs
-       doom-quit         ; DOOM quit-message prompts when you quit Emacs
-       (emoji +unicode)  ; 🙂
+       doom                   ; what makes DOOM look the way it does
+       doom-dashboard         ; a nifty splash screen for Emacs
+       doom-quit              ; DOOM quit-message prompts when you quit Emacs
+       (emoji +unicode)       ; 🙂
        ;;fill-column       ; a `fill-column' indicator
-       hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
+       hl-todo                ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        ;;hydra
 
        ;; FIXME conflicts with Prism.el
        ;;indent-guides     ; highlighted indent columns
-       ligatures         ; ligatures and symbols to make your code pretty again
+       ligatures   ; ligatures and symbols to make your code pretty again
        ;;minimap           ; show a map of the code on the side
-       modeline          ; snazzy, Atom-inspired modeline, plus API
-       nav-flash         ; blink the current line after jumping
+       modeline    ; snazzy, Atom-inspired modeline, plus API
+       nav-flash   ; blink the current line after jumping
        ;;neotree           ; a project drawer, like NERDTree for vim
 
-       ophints           ; highlight the region an operation acts on
+       ophints                       ; highlight the region an operation acts on
 
-      (popup            ; tame sudden yet inevitable temporary windows
-       +all            ; catch all popups that start with an asterix
-       +defaults)      ; default popup rules
+       (popup                     ; tame sudden yet inevitable temporary windows
+        +all                      ; catch all popups that start with an asterix
+        +defaults)                ; default popup rules
 
        ;;tabs              ; a tab bar for Emacs
        (treemacs +lsp)          ; a project drawer, like neotree but cooler
-       unicode           ; extended unicode support for various languages
-       vc-gutter         ; vcs diff in the fringe
-       vi-tilde-fringe   ; fringe tildes to mark beyond EOB
-       window-select     ; visually switch windows
-       workspaces        ; tab emulation, persistence & separate workspaces
+       unicode                  ; extended unicode support for various languages
+       vc-gutter                ; vcs diff in the fringe
+       vi-tilde-fringe          ; fringe tildes to mark beyond EOB
+       window-select            ; visually switch windows
+
+       ;;workspaces        ; tab emulation, persistence & separate workspaces
        ;;zen               ; distraction-fre#e coding or writing
 
        :editor
        ;;(evil +everywhere); come to the dark side, we have cookies
-       file-templates    ; auto-snippets for empty files
-       fold              ; (nigh) universal code folding
-       (format +onsave)  ; automated prettiness
+       file-templates                   ; auto-snippets for empty files
+       fold                             ; (nigh) universal code folding
+       (format +onsave)                 ; automated prettiness
        ;;god               ; run Emacs commands without modifier keys
-       lispy             ; vim for lisp, for people who don't like vim
-       multiple-cursors  ; editing in many places at once
+       lispy                       ; vim for lisp, for people who don't like vim
+       multiple-cursors            ; editing in many places at once
        ;;objed             ; text object editing for the innocent
        ;;parinfer          ; turn lisp into python, sort of
-       rotate-text       ; cycle region at point between text candidates
-       snippets          ; my elves. They type so I don't have to
+       rotate-text               ; cycle region at point between text candidates
+       snippets                  ; my elves. They type so I don't have to
        ;;word-wrap         ; soft wrapping with language-aware indent
 
        :emacs
 
-       dired            ; making dired pretty [functional]
-        ;;(dired ++ranger)           ; bringing the goodness of ranger to dired
-        ;;NOTE: ranger is causing problems with org-agenda & elsewhere
+       dired                            ; making dired pretty [functional]
+       ;;(dired ++ranger)           ; bringing the goodness of ranger to dired
+       ;;NOTE: ranger is causing problems with org-agenda & elsewhere
 
-       electric          ; smarter, keyword-based electric-indent
+       electric                ; smarter, keyword-based electric-indent
        ;;ibuffer         ; interactive buffer management
 
        ;; persistent, smarter undo for your inevitable mistakes
        (undo +tree)
        ;;undo
 
-       vc                ; version-control and Emacs, sitting in a tree
+       vc                         ; version-control and Emacs, sitting in a tree
 
        :term
        eshell            ; the elisp shell that works everywhere
        shell             ; simple shell REPL for Emacs
        ;;term              ; basic terminal emulator for Emacs
-       vterm             ; the best terminal emulation in Emacs
+       vterm                            ; the best terminal emulation in Emacs
 
        :checkers
 
-       (syntax             ; tasing you for every semicolon you forget
-        +childframe)       ; use childframes for error popups (Emacs 26+ only)
+       (syntax               ; tasing you for every semicolon you forget
+        +childframe)         ; use childframes for error popups (Emacs 26+ only)
 
-       spell             ; tasing you for misspelling mispelling
+       spell         ; tasing you for misspelling mispelling
        ;;grammar           ; tasing grammar mistake every you make
 
        :tools
@@ -116,99 +126,99 @@
        docker
        ;;editorconfig      ; let someone else argue about tabs vs spaces
        ;;ein               ; tame Jupyter notebooks with emacs
-       (eval +overlay)     ; run code, run (also, repls)
-       gist              ; interacting with github gists
+       (eval +overlay)                  ; run code, run (also, repls)
+       gist                             ; interacting with github gists
 
-       (lookup           ; helps you navigate your code and documentation
+       (lookup ; helps you navigate your code and documentation
         ;;+dictionary      ; enable word definitions and thesaurus lookup
         ;;+offline         ; install and prefer offline dictionary/thesaurus
-        +docsets)        ; ...on in Dash docsets locally
+        +docsets)                       ; ...on in Dash docsets locally
 
        (lsp +peek)
-       magit             ; a git porcelain for Emacs
-       make              ; run make tasks from Emacs
+       magit                    ; a git porcelain for Emacs
+       make                     ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
        ;; pdf               ; pdf enhancements
        ;;prodigy           ; FIXME managing external services & code builders
-       rgb               ; creating color strings
-       taskrunner        ; taskrunner for all your projects
+       rgb        ; creating color strings
+       taskrunner ; taskrunner for all your projects
        ;;terraform         ; infrastructure as code
        ;;tmux              ; an API for interacting with tmux
        ;;upload            ; map local to remote projects via ssh/ftp
 
        :os
-       (:if IS-MAC macos)  ; improve compatibility with macOS
+       (:if IS-MAC macos)               ; improve compatibility with macOS
        ;;tty               ; improve the terminal Emacs experience
 
        :lang
        ;;agda              ; types of types of types of types...
-       (cc +lsp)                   ; C/C++/Obj-C madness
-       (clojure +lsp)           ; java with a lisp
+       (cc +lsp)                        ; C/C++/Obj-C madness
+       (clojure +lsp)                   ; java with a lisp
        ;;common-lisp       ; if you've seen one lisp, you've seen them all
        ;;coq               ; proofs-as-programs
        ;;crystal           ; ruby at the speed of c
        ;;csharp            ; unity, .NET, and mono shenanigans
-       data              ; config/data formats
+       data                     ; config/data formats
        ;;(dart +flutter)   ; paint ui and not much else
        ;;elixir            ; erlang done right
        ;;elm               ; care for a cup TEA of?
-       emacs-lisp        ; drown in parentheses
+       emacs-lisp                       ; drown in parentheses
        ;;erlang            ; an elegant language for a more civilized age
        ;;ess               ; emacs speaks statistics
        ;;faust             ; dsp, but you get to keep your soul
-       ;;fsharp            ; ML stands for Microsoft's Language
+       ;;fsharp            ; ML stands foxr Microsoft's Language
        ;;fstar             ; (dependent) types and (monadic) effects and Z3
        ;;gdscript          ; the language you waited for
        ;;(go +lsp)         ; the hipster dialect
        ;;(haskell +dante)  ; a language that's lazier than I am
        ;;hy                ; readability of scheme w/ speed of python
        ;;idris             ; a language you can depend on
-       json              ; At least it ain't XML
+       json    ; At least it ain't XML
        ;;(java +meghanada) ; the poster child for carpal tunnel syndrome
-       javascript        ; all(hope(abandon(ye(who(enter(here))))))
-       (julia +lsp)             ; a better, faster MATLAB
+       javascript           ; all(hope(abandon(ye(who(enter(here))))))
+       (julia +lsp)         ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
 
-       (latex              ; writing papers in Emacs has never been so fun
-        ;+latexmk           ; no other option TBH
-        +cdlatex           ; for better math
-        +fold)             ; neat folding things
+       (latex                    ; writing papers in Emacs has never been so fun
+                                        ;+latexmk           ; no other option TBH
+        +cdlatex                        ; for better math
+        +fold)                          ; neat folding things
 
        ;;lean
        ;;factor
        ;;ledger            ; an accounting system in Emacs
        ;;lua               ; one-based indices? one-based indices
-       markdown          ; writing docs for people to ignore
+       markdown    ; writing docs for people to ignore
        ;;nim               ; python + lisp at the speed of c
        ;; TODO nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
        ;;ob-async
 
 
-       (org             ;; organize your plain life in plain text
+       (org ;; organize your plain life in plain text
         +jupyter +pomodoro +pretty +present +gnuplot +pandoc)
 
        ;;php               ; perl's insecure younger brother
-       plantuml          ; diagrams for confusing people more
+       plantuml         ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
-       (python            ; beautiful is better than ugly
-        +poetry)          ; the future of the written word
-       qt                ; the 'cutest' gui framework ever
+       (python          ; beautiful is better than ugly
+        +poetry)        ; the future of the written word
+       qt               ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        ;;raku              ; the artist formerly known as perl6
-       rest              ; Emacs as a REST client
-       rst               ; ReST in peace
+       rest                             ; Emacs as a REST client
+       rst                              ; ReST in peace
        ;;(ruby +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
        ;;rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        ;;scala             ; java, but good
        ;;scheme            ; a fully conniving family of lisps
-       sh                ; she sells {ba,z,fi}sh shells on the C xor
+       sh     ; she sells {ba,z,fi}sh shells on the C xor
        ;;sml
        ;;solidity          ; do you need a blockchain? No.
        ;;swift             ; who asked for emoji variables?
        ;;terra             ; Earth and Moon in alignment for performance.
        ;;web               ; the tubes
-       yaml              ; JSON, but readable
+       yaml                             ; JSON, but readable
 
        :email
        ;;(mu4e +gmail)
@@ -225,4 +235,8 @@
        ;; For literate config users. This will tangle+compile a config.org
        ;; literate config in your `doom-private-dir' whenever it changes.
        literate
-       (default +bindings))
+       (default +bindings)
+
+       :ui
+       bufler
+       )

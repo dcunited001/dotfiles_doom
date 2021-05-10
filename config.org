@@ -7,11 +7,29 @@
 
 * About this file
 
-This is an Emacs literate config, drawing inspiration from the following:
+This is an Emacs literate config, drawing inspiration from the following configs
+below. It's definitely a work in progress and the build will probably break for
+every other SHA. There's a list of much better configs in the org footnotes at
+the end of the doc.
 
 + [[https://github.com/gilbertw1/emacs-literate-starter/][gilbertw1/emacs-literate-starter]]
 + [[https://github.com/HaoZeke/dotDoom][HaoZeke/dotDoom]]
 + And others
+
+** Please excuse the mess
+
+I'm spending a lot of time sampling the space of available options & developing
+some familiarity with elisp. I've been through this before, and I don't want to
+regret missing out on all the "unknown unknown" tools & workflow approaches. I'm
+starting with a sparse sample of the entire space to avoid missing global
+minimums or to avoid totally biased exploration in a small subset of dimensions.
+It's like "stochastic gradient descent" or building a sparse understanding of
+the hyperplane for an infinite-dimensional problem (like a kernel method)...
+
+I hope to move on to projects in other languages soon, but for now things are a
+mess. The errant TODO statements will be thinned out soon enough.
+
+** Approach to TOC
 
 The TOC is loosely based on the Doom Emacs categories to make it simpler for
 others to grok the structure and simpler for me to organize. The TOC headings
@@ -45,6 +63,8 @@ added by Doom modules).
 
 * Table of Contents :TOC_3_gh:
 - [[#about-this-file][About this file]]
+  - [[#please-excuse-the-mess][Please excuse the mess]]
+  - [[#approach-to-toc][Approach to TOC]]
   - [[#tangle-output][Tangle Output]]
 - [[#configel][Config.el]]
   - [[#input][INPUT]]
@@ -73,6 +93,7 @@ added by Doom modules).
     - [[#misc][Misc]]
   - [[#editor][EDITOR]]
     - [[#centered-cursor-mode][Centered Cursor Mode]]
+    - [[#snippets][Snippets]]
   - [[#emacs][EMACS]]
     - [[#dired][DIRED]]
   - [[#term][TERM]]
@@ -80,10 +101,11 @@ added by Doom modules).
   - [[#checkers][CHECKERS]]
   - [[#tools][TOOLS]]
     - [[#lookup][Lookup]]
+    - [[#info][Info]]
     - [[#diff-and-ediff][Diff and Ediff]]
     - [[#git][Git]]
     - [[#magit][Magit]]
-    - [[#git-1][Git]]
+    - [[#forge][Forge]]
     - [[#github][Github]]
     - [[#shell-1][Shell]]
     - [[#archlinux][Archlinux]]
@@ -151,6 +173,9 @@ Most of these configs should be in their individual ~*-mode~ sections or under t
 
 [[https://oremacs.com/lispy/][Keymap reference]] for [[https://github.com/abo-abo/lispy][Lispy]]. "[[https://mitpress.mit.edu/sites/default/files/sicp/full-text/book/book-Z-H-10.html#%25_sec_1.1.5][Always be evaling]]"
 
+
+**** TODO fix auto-formatting so that lispy's ;;** outline sytnax works without auto-format fucking it up
+
 *** Mouse :mouse:
 
 see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse Config]] for more info on the how & why
@@ -167,19 +192,32 @@ see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse
 :END:
 
 #+begin_src emacs-lisp
-(map! "<mouse-8>" 'projectile-find-file)
-(map! "<mouse-9>" 'projectile-grep)
-(map! "C-M-<mouse-8>" '+workspace/switch-left)
-(map! "C-M-<mouse-9>" '+workspace/switch-right)
-(map! "C-<mouse-8>" '+ivy/switch-buffer)
-(map! "C-<mouse-9>" '+ivy/switch-workspace-buffer)
+;; TODO: misc subdir & project-level shortcuts (dired,project)
+
+;; for now, simply back/forward buffer ;; TODO: change =forward= to bufler or emacs-tab bar?
+(map! "S-<mouse-8>" 'previous-buffer)
+;; TODO something else: (map! "S-<mouse-9>" 'next-buffer)
+
+(map! "<mouse-8>" 'counsel-grep-or-swiper)
+(map! "<mouse-9> " 'swiper-all-buffer-p)
+;; (map! "C-<mouse-8>" '+ivy/switch-buffer)
+;; (map! "C-<mouse-9>" '+ivy/switch-workspace-buffer)
+(map! "C-S-<mouse-8>" 'projectile-find-file)
+(map! "C-S-<mouse-9>" 'projectile-grep)
+
+;; (map! "C-M-<mouse-8>" '+workspace/switch-right)
+;; (map! "C-M-<mouse-9>" '+workspace/switch-right)
 ;; (map! "M-S-<mouse-8>" 'doom/save-session) ;; TODO: remap
 ;; (map! "M-S-<mouse-9>" 'doom/load-session) ;; TODO: remap
-(map! "M-<mouse-8>" 'better-jumper-jump-forward)
-(map! "M-<mouse-9>" 'better-jumper-jump-backward)
-(map! "S-<mouse-8>" 'previous-buffer)
-(map! "S-<mouse-9>" 'next-buffer)
+;; (map! "M-<mouse-8>" 'better-jumper-jump-backward)
+
+;; TODO: something else (map! "M-<mouse-9>" 'better-jumper-jump-backward)
 #+end_src
+
+#+RESULTS:
+
+**** TODO ensure that the =+workspace= references are mostly culled out
++ (so bufler can be tested)
 
 **** TODO other mouse maps
 + and navigating =describe-= and other docs
@@ -397,8 +435,8 @@ These are simply bookmarks and thus can be reached from the doom startup menu.
 #+begin_src emacs-lisp
 (use-package! burly
   :config (map! :leader
-                (:prefix-map ("w" . "workspaces/windows")
-                  (:prefix-map ("B" . "Burly bookmarks")
+                (:prefix ("w" . "workspaces/windows")
+                  (:prefix ("B" . "Burly bookmarks")
                    :desc "Restore windows/frames" "o" #'burly-open-bookmark
                    :desc "Open Burly URL" "O" #'burly-open-url
                    :desc "Bookmark Windows" "w" #'burly-bookmark-windows
@@ -437,6 +475,10 @@ to `relative'.
   :config (map! :leader :desc "Toggle Centered Cursor"
                 "t-" (λ! () (interactive) (centered-cursor-mode 'toggle))))
 #+end_src
+
+*** Snippets
+
+**** TODO org-babel snippet for splitting =./packages.el= and =./config.el=
 
 ** EMACS :emacs:
 
@@ -509,24 +551,25 @@ test with emacs manual =C-h R=
 **** ediff
 ***** TODO configure ediff for patching nvidia driver source/headers
 
-
 *** Git
-
-From Doom Modules:
 + [X] git-gutter (doom)
 + [X] git-gitter-fringe
++ [ ] [[https://github.com/10sr/git-walktree-el][git-walktree]]
++ [ ] git-blamed
++ [ ] git-messenger (check performance)
++ [X] *git-timemachine* (doom)
++ [ ] gitolite-clone
++ [ ] borg (assimilate emacs packages as git submodules)
 
 *** Magit
-+ [ ] magit-gh-pulls
-+ [ ] magit-gitflow
-+ [ ] magit-todos
-+ [ ] magit-popup
-+ [ ] magit-delta
 + [ ] *magit-forge*
-+ [ ] magit-org-todos
-+ [ ] forge (also integrates with magit)
++ [ ] magit-delta
++ [ ] magit-todos or magit-org-todos
 + [ ] orgit (org links to magit buffers)
-+ [ ] orgit-forge
++ [ ] magit-gitflow
++ [ ] magit-gh-pulls
++ [ ] magit-popup
+
 
 [[https://github.com/magit/magit-tbdiff][magit-tbdiff]] show diffs over ranges of commits
 
@@ -541,13 +584,9 @@ From Doom Modules:
 **** TODO: configure =magit-repository-directories=
 + see =hlissner= config & others
 
-*** Git
-+ [ ] *[[https://github.com/10sr/git-walktree-el][git-walktree]]*
-+ [ ] *git-blamed*
-+ [ ] *git-messenger* (check performance)
-+ [X] *git-timemachine* (doom)
-+ [ ] gitolite-clone
-+ [ ] borg (assimilate emacs packages as git submodules)
+*** Forge
++ [ ] forge (also integrates with magit)
++ [ ] orgit-forge
 
 *** Github
 + [ ] github-explorer
@@ -816,9 +855,11 @@ Don't indent content in source blocks
 
 ** LANG :lang:
 
-*** ELISP :elisp:
 
+*** ELISP :elisp:
 **** TODO configure eldoc
+
+
 
 *** LATEX :latex:
 
@@ -827,10 +868,11 @@ literate programming code written by Knuth in Pascal/TeX.
 
 *** CLOJURE :clojure:
 
++ [[https://github.com/pesterhazy/zprint-mode.el][zprint-mode]]
+
 #+begin_src emacs-lisp :tangle ./packages.el
 (package! zprint-mode)
 #+end_src
-
 
 #+begin_src emacs-lisp
 (add-hook 'clojure-mode-hook 'zprint-mode)
@@ -1067,6 +1109,7 @@ Use doom colors for theme and toggle with =:leader tP=
 * Footnotes
 
 **** TODO: change in-text attributions to one of a set of footnotes
++ correct these links where authors do not use doom
 
 [fn:luca_doom] lccambiaghi [[https://github.com/lccambiaghi/.doom.d][doom config]]
 [fn:luca_vanilla] lccambiaghi [[https://github.com/lccambiaghi/vanilla-emacs][emacs config]]
@@ -1087,3 +1130,4 @@ Use doom colors for theme and toggle with =:leader tP=
 [fn:rasendubi] rasendubi [[https://github.com/rasendubi/dotfiles][doom config]]
 [fn:TimQuelch] TimQuelch [[https://github.com/TimQuelch/emacs.d][doom config]]
 [fn:frap] frap [[https://github.com/frap/emacs-literate][doom config]]
+[fn:ubolonton] ubolonton [[https://github.com/ubolonton/.emacs.d][emacs config]]

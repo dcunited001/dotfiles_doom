@@ -8,18 +8,26 @@
 
 (setq mouse-wheel-progressive-speed nil)
 
-(map! "<mouse-8>" 'projectile-find-file)
-(map! "<mouse-9>" 'projectile-grep)
-(map! "C-M-<mouse-8>" '+workspace/switch-left)
-(map! "C-M-<mouse-9>" '+workspace/switch-right)
-(map! "C-<mouse-8>" '+ivy/switch-buffer)
-(map! "C-<mouse-9>" '+ivy/switch-workspace-buffer)
+;; TODO: misc subdir & project-level shortcuts (dired,project)
+
+;; for now, simply back/forward buffer ;; TODO: change =forward= to bufler or emacs-tab bar?
+(map! "S-<mouse-8>" 'previous-buffer)
+;; TODO something else: (map! "S-<mouse-9>" 'next-buffer)
+
+(map! "<mouse-8>" 'counsel-grep-or-swiper)
+(map! "<mouse-9> " 'swiper-all-buffer-p)
+;; (map! "C-<mouse-8>" '+ivy/switch-buffer)
+;; (map! "C-<mouse-9>" '+ivy/switch-workspace-buffer)
+(map! "C-S-<mouse-8>" 'projectile-find-file)
+(map! "C-S-<mouse-9>" 'projectile-grep)
+
+;; (map! "C-M-<mouse-8>" '+workspace/switch-right)
+;; (map! "C-M-<mouse-9>" '+workspace/switch-right)
 ;; (map! "M-S-<mouse-8>" 'doom/save-session) ;; TODO: remap
 ;; (map! "M-S-<mouse-9>" 'doom/load-session) ;; TODO: remap
-(map! "M-<mouse-8>" 'better-jumper-jump-forward)
-(map! "M-<mouse-9>" 'better-jumper-jump-backward)
-(map! "S-<mouse-8>" 'previous-buffer)
-(map! "S-<mouse-9>" 'next-buffer)
+;; (map! "M-<mouse-8>" 'better-jumper-jump-backward)
+
+;; TODO: something else (map! "M-<mouse-9>" 'better-jumper-jump-backward)
 
 (setq doom-theme 'doom-one
       doom-one-brighter-modeline t)
@@ -87,8 +95,8 @@
 
 (use-package! burly
   :config (map! :leader
-                (:prefix-map ("w" . "workspaces/windows")
-                  (:prefix-map ("B" . "Burly bookmarks")
+                (:prefix ("w" . "workspaces/windows")
+                  (:prefix ("B" . "Burly bookmarks")
                    :desc "Restore windows/frames" "o" #'burly-open-bookmark
                    :desc "Open Burly URL" "O" #'burly-open-url
                    :desc "Bookmark Windows" "w" #'burly-bookmark-windows
