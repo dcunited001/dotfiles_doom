@@ -8,10 +8,14 @@
 [[https://github.com/alphapapa/bufler.el][Bufler]] uses emacs-27 tabs
 
 #+begin_src emacs-lisp :tangle ./packages.el
+;; -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; modules/ui/bufler/packages.el
 (package! bufler)
 #+end_src
 
 #+begin_src emacs-lisp :tangle ./config.el
+;; -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; modules/ui/bufler/config.el
 (use-package! bufler
   :config (map! ;(:after ...?)
            :map ctl-x-map
@@ -22,11 +26,15 @@
             (bufler-tabs-mode +1)))
 #+end_src
 
-** TODO Misc bufler config [/]
+** TODO Misc bufler config [0/5]
 + [ ] bufler/tab-bar-mode display disappears (caused by save-desktop/autoloads)
 + [ ] map =C-c o t= or something for tab-line-mode
 + [ ] remap vterm hotkeys
 + [ ] Configure =bufler-face-prefix= & set =prism faces=
+
+** TODO popup rules for bufler
++ [ ] reconfigure =with-popup-rules= and/or =set-popup-rules= to change where
+  bufler shows up
 
 ** TODO configure [[https://github.com/alphapapa/bufler.el#group-types][bufler groups]]
 + tabs for additional/multiple projectile projects?

@@ -1,4 +1,4 @@
-;; -*- no-byte-compile: t; -*-
+;; -*- no-byte-compile: t; lexical-binding: t; -*-
 ;;; ~/.doom.d/packages.el
 
 (package! auto-highlight-symbol)
