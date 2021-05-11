@@ -124,11 +124,12 @@
 (use-package! magit-tbdiff)
 
 (use-package! firestarter
-  :ensure t
   :init (firestarter-mode)
   :config (setq firestarter-default-type t))
 
 (use-package! pkgbuild-mode :mode "\\PKGBUILD")
+
+(use-package! crontab-mode)
 
 (use-package! ssh-config-mode)
 (use-package! x509-mode)
@@ -168,9 +169,6 @@
 
 (add-hook 'clojure-mode-hook 'zprint-mode)
 (add-hook 'clojurescript-mode-hook 'zprint-mode)
-(add-hook 'cider-mode-hook #'clj-refactor-mode)
-
-(setq org-babel-clojure-backend 'cider)
 
 ;; TODO: (after! org & julia-vterm?
 ;;;         ...)
@@ -191,6 +189,12 @@
                                 ("\\.hpp$" . c++-mode)
                                 )
                               auto-mode-alist))
+
+(use-package! openapi-yaml-mode)
+
+(use-package! graphql)
+(use-package! graphql-mode)
+(use-package ob-graphql)
 
 (after! org
   (add-to-list 'org-babel-load-languages

@@ -130,11 +130,15 @@ added by Doom modules).
     - [[#elisp][ELISP]]
     - [[#latex][LATEX]]
     - [[#clojure][CLOJURE]]
+    - [[#cider][CIDER]]
     - [[#julia][JULIA]]
     - [[#plantuml][PLANTUML]]
     - [[#kde][KDE]]
     - [[#qt][QT]]
     - [[#c][C++]]
+    - [[#open-api][OPEN API]]
+    - [[#restclient][RESTCLIENT]]
+    - [[#graphql][GRAPHQL]]
     - [[#packages-to-evaluate-languages][Packages to Evaluate (Languages)]]
   - [[#babel][BABEL]]
     - [[#ensure-this-is-necessary-with-org-init-babel-lazy-loader-h][ensure this is necessary with =+org-init-babel-lazy-loader-h=]]
@@ -615,7 +619,6 @@ config/control on-save shell tasks.[fn:haozeke]
 
 #+begin_src emacs-lisp
 (use-package! firestarter
-  :ensure t
   :init (firestarter-mode)
   :config (setq firestarter-default-type t))
 #+end_src
@@ -632,6 +635,20 @@ config/control on-save shell tasks.[fn:haozeke]
 #+begin_src emacs-lisp
 (use-package! pkgbuild-mode :mode "\\PKGBUILD")
 #+end_src
+
+**** Crontab Mode
+
+[[0    Link: https://github.com/emacs-pe/crontab-mode][crontab-mode]]
+
+#+begin_src emacs-lisp :tangle ./packages.el
+(package! crontab-mode)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! crontab-mode)
+#+end_src
+
+***** TODO test crontab-mode :testpackage:
 
 *** Ken Kesey
 
@@ -883,10 +900,6 @@ literate programming code written by Knuth in Pascal/TeX.
 #+begin_src emacs-lisp
 (add-hook 'clojure-mode-hook 'zprint-mode)
 (add-hook 'clojurescript-mode-hook 'zprint-mode)
-(add-hook 'cider-mode-hook #'clj-refactor-mode)
-
-(setq org-babel-clojure-backend 'cider)
-
 
 #+end_src
 
@@ -903,6 +916,45 @@ literate programming code written by Knuth in Pascal/TeX.
 + [ ] ivy-clojuredocs
   - just pick a key for docs...
   - =C-c s c= (apropos à +lookup)
++ [ ] clojure-mode-extra-font-locking (cider)
++ [ ] ivy-clojuredocs
++ [ ] clojure-snippets
++ [ ] clojars
++ [X] clj-refactor
++ [ ] clj-decompile
++ [ ] cljr-ivy
++ [ ] walkclj (manipulate clojure parse trees)
++ [ ] tree-sitter clojure
++ [ ] hiccup-cli (HTML-to-hiccup ... does this not already exist in clojure?)
++ [ ] org-babel-eval-in-repl
++ [ ] eval-in-relp
++ [ ] clojure-essential-ref
++ [ ] clojure-essential-ref-nov
++ [ ] cider-hydra ?
++ [ ] kaocha-runner (running Fulcro's kaocha tests via CIDER)
+
+*** CIDER
+
+#+begin_src emacs-lisp :tangle ./packages.el
+(add-hook 'cider-mode-hook #'clj-refactor-mode)
+
+(setq org-babel-clojure-backend 'cider)
+#+end_src
+
+**** CIDER tips:
++ Discover cider commands with =C-c C-x x= from within CIDER.
++ An idea from SLIME, cider shortcuts can be accessed via =,= (comma)
+
+**** TODO decide on the following CIDER variables :cider:
++ nrepl-hide-special-buffer t
++ cider-repl-clear-help-banner
++ cider-font-lock-dynamically nil
++ cider-popup-stacktraces nil
++ cider-repl-popup-stacktraces t
++ cider-repl-use-pretty-printing t
++ cider-repl-pop-to-buffer-on-connect t
++ cider-repl-display-help-banner nil
++ [[file:~/.emacs.d/modules/lang/clojure/config.el][Doom Defaults]]
 
 *** JULIA :julia:
 
@@ -970,6 +1022,59 @@ Doxygen for c/cpp [fn:haozeke]
                               auto-mode-alist))
 #+end_src
 
+*** OPEN API :swagger:
+
+#+begin_src emacs-lisp :tangle ./packages.el
+(package! openapi-yaml-mode
+  :recipe (:host github :repo "esc-emacs/openapi-yaml-mode"))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! openapi-yaml-mode)
+#+end_src
+
+**** TODO test openapi-yaml-mode (should apply to files starting with =openapi-yaml-*.yaml=) :testpackage:
+
+*** RESTCLIENT :rest:
+
+Doom =restclient= module includes [[https://github.com/pashky/restclient.el][restclient]] and [[https://github.com/iquiw/company-restclient][company-restclient]]. The =org=
+module includes =ob-restclient=. These modes apply to =*.http= files.
+
+**** Test =ob-restclient=:
+
+#+begin_src restclient :tangle no
+GET https://google.com/robots.txt
+#+end_src
+
+*** GRAPHQL :graphql:
+
++ [[https://github.com/vermiculus/graphql.el][graphql]]
++ [[https://github.com/davazp/graphql-mode][graphql-mode]]
++ [[https://github.com/jdormit/ob-graphql][ob-graphql]]
+
+#+begin_src emacs-lisp :tangle ./packages.el
+(package! graphql)
+(package! graphql-mode)
+(package! ob-graphql)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! graphql)
+(use-package! graphql-mode)
+(use-package ob-graphql)
+#+end_src
+
+**** Test =ob-graphql=:
+
+#+begin_src graphql :tangle no :url https://countries.trevorblades.com
+query GetContinents {
+  continent(code: "AF") {
+    name
+    code
+  }
+}
+#+end_src
+
 *** Packages to Evaluate (Languages)
 
 **** Misc
@@ -1022,7 +1127,7 @@ superior when the etymological connections are left in tact.
 (package! ob-translate)
 #+end_src
 
-Config google-translate.el [[https://github.com/atykhonov/google-translate/issues/137][fix for TKK errors]]
+Config google-translate.el ([[https://github.com/atykhonov/google-translate/issues/137][fix for TKK errors]])
 
 #+begin_src emacs-lisp
 (use-package! google-translate :demand t
@@ -1044,6 +1149,8 @@ Config google-translate.el [[https://github.com/atykhonov/google-translate/issue
 )
 #+end_src
 
+**** Test =ob-translate=:
+
 Example:
 
 #+BEGIN_SRC translate :src en :dest de,fr,ar,ja :results output :tangle no
@@ -1056,14 +1163,14 @@ This is a test.
 | ar | هذا اختبار.        |
 | ja | これはテストです。 |
 
-**** TODO emacs support for surfing etymology in wiktionary
-
 #+begin_src translate :src en :dest ja :results output :tangle no
 Extra Sensory Perception
 #+end_src
 
 #+RESULTS:
 : 超感覚的知覚
+
+**** TODO emacs support for surfing etymology in wiktionary
 
 ** EMAIL :email:
 

@@ -20,6 +20,8 @@
 (package! pkgbuild-mode
   :recipe (:host github :repo "juergenhoetzel/pkgbuild-mode"))
 
+(package! crontab-mode)
+
 (package! ssh-config-mode)
 (package! x509-mode)
 ;; TODO ssh-agency
@@ -29,10 +31,21 @@
 
 (package! zprint-mode)
 
+(add-hook 'cider-mode-hook #'clj-refactor-mode)
+
+(setq org-babel-clojure-backend 'cider)
+
 (package! julia-vterm)
 (package! ob-julia-vterm)
 
 (package! highlight-doxygen)
+
+(package! openapi-yaml-mode
+  :recipe (:host github :repo "esc-emacs/openapi-yaml-mode"))
+
+(package! graphql)
+(package! graphql-mode)
+(package! ob-graphql)
 
 (package! google-translate)
 (package! ob-translate)
