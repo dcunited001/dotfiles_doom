@@ -255,11 +255,14 @@ see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse
 
 *** Company :company:
 
+For hotkeys, check the Doom [[file:~/.emacs.d/modules/completion/company/README.org::*Code completion][Company module]] docs (company boxes negate =C-h m=
+and other help commands)
+
 **** TODO check luca: delay/prefix, disable tab? and yasnippets in company
 
 *** IVY :ivy:
 
-Removed =-childframe= for now, as these are actual frames.
+Removed =-childframe= for now, as these are actual frames, kinda.
 
 **** HOLD configure views to use with ~ivy-switch-view~ (or just use bufler?)
 
@@ -712,6 +715,11 @@ controlled configuration. e.g. when you want:
 **** TODO setup kubernetes.el :doom:devops:packages:
 **** TODO evaluate ~kubectl~ package :doom:devops:packages:
 
+**** Kubernetes
++ [ ] kubernetes.el
++ [ ] [[https://github.com/gruggiero/kubernetes-tramp][kubernetes-tramp]]
++ [ ] [[https://github.com/TxGVNN/emacs-k8s-mode][k8s-mode]] (kubernetes file support + snippets)
+
 *** SaltStack
 
 From HaoZeke[fn:haozeke]
@@ -730,6 +738,10 @@ From HaoZeke[fn:haozeke]
 *** AST & Metaprogramming
 
 + [ ] [[https://github.com/ubolonton/emacs-tree-sitter][tree-sitter-mode]]
+  - install packages
+  - add config
+  - document setup
+  - consider setting up as a module
 + [ ] [[https://github.com/countvajhula/symex.el][symex]]
 
 **** TODO configure bindings & control when these are activated
@@ -764,11 +776,6 @@ From HaoZeke[fn:haozeke]
 + [ ] SLIME Docker
 + [X] [[https://github.com/emacs-pe/docker-tramp.el][docker-tramp]] (2017) included with doom (configured?)
 + [ ] [[https://github.com/bosko/docker-cli][docker-cqli]]
-
-**** Kubernetes
-+ [ ] kubernetes.el
-+ [ ] [[https://github.com/gruggiero/kubernetes-tramp][kubernetes-tramp]]
-+ [ ] [[https://github.com/TxGVNN/emacs-k8s-mode][k8s-mode]] (kubernetes file support + snippets)
 
 **** Devops
 + [ ] [[https://github.com/cjohansson/emacs-ssh-deploy][ssh-deploy]] (deployment via tramp)
