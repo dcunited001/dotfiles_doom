@@ -173,8 +173,14 @@ Most of these configs should be in their individual ~*-mode~ sections or under t
 
 [[https://oremacs.com/lispy/][Keymap reference]] for [[https://github.com/abo-abo/lispy][Lispy]]. "[[https://mitpress.mit.edu/sites/default/files/sicp/full-text/book/book-Z-H-10.html#%25_sec_1.1.5][Always be evaling]]"
 
+#+begin_src emacs-lisp
+;; TODO clojurescript hook
+;; TODO this may need to be set before lispy loads....
+(setq lispy-compat '(cider edebug))
+#+end_src
 
 **** TODO fix auto-formatting so that lispy's ;;** outline sytnax works without auto-format fucking it up
+
 
 *** Mouse :mouse:
 
@@ -877,8 +883,11 @@ literate programming code written by Knuth in Pascal/TeX.
 #+begin_src emacs-lisp
 (add-hook 'clojure-mode-hook 'zprint-mode)
 (add-hook 'clojurescript-mode-hook 'zprint-mode)
+(add-hook 'cider-mode-hook #'clj-refactor-mode)
 
 (setq org-babel-clojure-backend 'cider)
+
+
 #+end_src
 
 **** LSP :lsp:

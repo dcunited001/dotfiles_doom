@@ -121,6 +121,8 @@ You might have to tell emacs where your sources live. When you click on the
 stack frame, it goes to the C source.
 
 **** TODO describe more features for debugging
++ [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Debugger-Commands.html][18.1.8 Debugger Commands]]
++ EmacsWiki: Debugging with Emacs
 
 * Resources
 

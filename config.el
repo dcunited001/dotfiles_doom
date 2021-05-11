@@ -6,6 +6,10 @@
 ;; Fixes problems with dead keys
 (require 'iso-transl)
 
+;; TODO clojurescript hook
+;; TODO this may need to be set before lispy loads....
+(setq lispy-compat '(cider edebug))
+
 (setq mouse-wheel-progressive-speed nil)
 
 ;; TODO: misc subdir & project-level shortcuts (dired,project)
@@ -164,6 +168,7 @@
 
 (add-hook 'clojure-mode-hook 'zprint-mode)
 (add-hook 'clojurescript-mode-hook 'zprint-mode)
+(add-hook 'cider-mode-hook #'clj-refactor-mode)
 
 (setq org-babel-clojure-backend 'cider)
 

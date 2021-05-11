@@ -63,7 +63,7 @@
        ophints                       ; highlight the region an operation acts on
 
        (popup                     ; tame sudden yet inevitable temporary windows
-        +all                      ; catch all popups that start with an asterix
+        ;; +all                      ; catch all popups that start with an asterix
         +defaults)                ; default popup rules
 
        ;;tabs              ; a tab bar for Emacs
