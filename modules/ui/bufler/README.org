@@ -1,6 +1,6 @@
-#+TITLE: Bufler Tabs Doom Module
+#+TITLE: Bufler Doom Module
 #+AUTHOR: David Conner
-#+DESCRIPTION: Inspired by the personal Doom Emacs config of DT, HaoZeke and others
+#+DESCRIPTION: A module to configure bufler
 #+STARTUP: showeverything
 
 * Bufler Tabs and Burly Bookmarks

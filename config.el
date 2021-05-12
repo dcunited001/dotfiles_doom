@@ -63,12 +63,17 @@
 (setq window-divider-default-right-width 1)
 (setq window-divider-default-bottom-width 1)
 
+(menu-bar-mode +2)
+
 (use-package! auto-highlight-symbol
   ;; should autoload on bind
   :config (map! (:prefix "M-s h" :desc "auto-highlight-mode"
                  "A" (lambda () (interactive) (auto-highlight-symbol-mode 'toggle)))))
 
 (use-package! treemacs-all-the-icons)
+
+(add-hook 'doom-init-ui-hook
+          (lambda () (treemacs-load-theme "all-the-icons")))
 
 (after! treemacs
   (setq treemacs-width 24)
@@ -116,6 +121,8 @@
 (use-package! centered-cursor-mode ;: defer t
   :config (map! :leader :desc "Toggle Centered Cursor"
                 "t-" (λ! () (interactive) (centered-cursor-mode 'toggle))))
+
+;; (use-package! yasnippet-snippets)
 
 (setq dired-omit-files "^.DS_Store\\'\\|^.project\\(?:ile\\)?\\'\\|^.\\(svn\\|git\\)\\'\\|^.ccls-cache\\'\\|\\(?:\\.js\\)?\\.meta\\'\\|\\.\\(?:elc\\|o\\|pyo\\|swp\\|class\\)\\'")
 

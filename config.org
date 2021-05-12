@@ -82,6 +82,7 @@ added by Doom modules).
     - [[#ligatures][Ligatures]]
     - [[#indent-guides][Indent Guides]]
     - [[#window-ui][Window UI]]
+    - [[#menu-bar][Menu Bar]]
     - [[#highlighting][Highlighting]]
     - [[#startup][Startup]]
     - [[#all-the-icons][All The Icons]]
@@ -260,6 +261,10 @@ and other help commands)
 
 **** TODO check luca: delay/prefix, disable tab? and yasnippets in company
 
+**** [[https://github.com/osv/company-web][company-web]] and [[https://github.com/smihica/emmet-mode][emmet-mode]]
+
+These are included with Doom, but worth linking in.
+
 *** IVY :ivy:
 
 Removed =-childframe= for now, as these are actual frames, kinda.
@@ -337,6 +342,16 @@ Dividers are too thin to grab if only 1px
 **** TODO automatically balance window widths?
 **** TODO setup startup windows (luca)
 
+*** Menu Bar
+
+[[https://www.emacswiki.org/emacs/MenuBar][Menu bar]] is for noobs. I am a noob.
+
+#+begin_src emacs-lisp
+(menu-bar-mode +2)
+#+end_src
+
+i.e. CIDER alone has like 200 functions i need to learn
+
 *** Highlighting
 
 #+begin_src emacs-lisp :tangle ./packages.el
@@ -362,6 +377,9 @@ Dividers are too thin to grab if only 1px
 
 #+begin_src emacs-lisp
 (use-package! treemacs-all-the-icons)
+
+(add-hook 'doom-init-ui-hook
+          (lambda () (treemacs-load-theme "all-the-icons")))
 #+end_src
 
 **** TODO (configure) All the icons
@@ -482,6 +500,8 @@ to `relative'.
 
 *** Centered Cursor Mode
 
+Scroll lock can emulate this.
+
 #+begin_src emacs-lisp :tangle ./packages.el
 (package! centered-cursor-mode)
 #+end_src
@@ -493,6 +513,22 @@ to `relative'.
 #+end_src
 
 *** Snippets
+
+**** TODO Consider [[https://github.com/ymarco/auto-activating-snippets][aas]] and [[https://github.com/tecosaur/LaTeX-auto-activating-snippets][laas]]
+
+More-performant approach to auto-expanding snippets
+
+**** Yasnippet-snippets
+
+#+begin_src emacs-lisp :tangle ./packages.el
+;; (package! yasnippet-snippets) ;;
+#+end_src
+
+#+begin_src emacs-lisp
+;; (use-package! yasnippet-snippets)
+#+end_src
+
+***** TODO do i really want to blindly import all fo these?
 
 **** TODO org-babel snippet for splitting =./packages.el= and =./config.el=
 
@@ -860,6 +896,13 @@ Don't indent content in source blocks
   - [ ] [[https://github.com/akirak/org-starter][org-starter]] (good orgmode presets & asset creation tools?),
   - [ ] [[https://github.com/akirak/ivy-omni-org][ivy-omni-org]] (fast org buffer access)
   - [ ] [[https://github.com/akirak/org-reverse-datetree][org-reverse-datetree]] (do i already have this?)
++ mtekman
+  - [ ] [[https://gitlab.com/mtekman/org-treeusage.el][org-treeusage]]
+  - [ ] [[https://gitlab.com/mtekman/org-tanglesync.el][org-tanglesync]]
+  - [ ] [[https://gitlab.com/mtekman/remind-bindings.el][remind-bindings.el]]
+  - [ ] wiki-summary.el
+  - [ ] [[https://gitlab.com/mtekman/wiki-drill.el][wiki-drill.el]]
+  - [ ] [[https://gitlab.com/mtekman/org-mode-manager][org-mode-manager]] (cmd-line tool)
 + [X] org-bullets vs org-fancy-priorities =+pretty=
 + [ ] org-appear (easier editing of org markup)
 + [ ] [[https://github.com/kidd/org-gcal.el][org-gcal]] or [[https://github.com/dengste/org-caldav][org-caldav]] (probably the latter)
@@ -1096,7 +1139,6 @@ query GetContinents {
 + [ ] [[https://github.com/emacs-grammarly/lsp-grammarly][lsp-grammar]]
 + [ ] [[https://github.com/cpitclaudel/biblio.el][biblio]] and biblio-core (browse import bibliographic refs; e.g from arXiv)
 + [ ] writegood-mode & wc-mode
-+ [ ] [[https://github.com/ymarco/auto-activating-snippets][aas]] and [[https://github.com/tecosaur/LaTeX-auto-activating-snippets][laas]] (a more-performant approach to auto-expanding snippets)
 + [ ] ob-latex-as-png
 
 ** BABEL :babel:
@@ -1234,26 +1276,25 @@ Use doom colors for theme and toggle with =:leader tP=
 
 * Footnotes
 
-**** TODO: change in-text attributions to one of a set of footnotes
-+ correct these links where authors do not use doom
-
 [fn:luca_doom] lccambiaghi [[https://github.com/lccambiaghi/.doom.d][doom config]]
 [fn:luca_vanilla] lccambiaghi [[https://github.com/lccambiaghi/vanilla-emacs][emacs config]]
-[fn:tecosaur] tecosaur [[https://github.com/tecosaur/emacs-config][doom config]]
+[fn:tecosaur] tecosaur [[https://github.com/tecosaur/emacs-config][emacs config]]
 [fn:haozeke] haozeke [[https://github.com/HaoZeke/dotdoom][doom config]]
 [fn:zzamboni] zzamboni [[https://gitlab.com/zzamboni/dot-doom][doom config]]
-[fn:abo-abo] abo-abo [[https://github.com/abo-abo/oremacs][doom config]]
-[fn:geolessel] geolessel [[https://github.com/geolessel/dotfiles][doom config]]
-[fn:hsinhaoyu] hsinhaoyu [[https://github.com/hsinhaoyu/.emacs.d][doom config]]
+[fn:abo-abo] abo-abo [[https://github.com/abo-abo/oremacs][emacs config]]
+[fn:geolessel] geolessel [[https://github.com/geolessel/dotfiles][emacs config]]
+[fn:hsinhaoyu] hsinhaoyu [[https://github.com/hsinhaoyu/.emacs.d][emacs config]]
 [fn:Brettm12345] Brettm12345 [[https://github.com/Brettm12345/doom-emacs-literate-config][doom config]]
-[fn:mwfogleman] mwfogleman [[https://github.com/mwfogleman/.emacs.d][doom config]]
-[fn:tammymakesthings] tammymakesthings [[https://github.com/tammymakesthings/emacs_d][doom config]]
-[fn:hlissner] hlissner [[https://github.com/magnars/.emacs.d][doom config]]
-[fn:magnars] magnars [[https://github.com/sunnyhasija/Academic-Doom-Emacs-Config][doom config]]
-[fn:sunnyhasija] sunnyhasija [[https://github.com/hlissner/doom-emacs-private][doom config]]
-[fn:daedreth] daedreth [[https://github.com/daedreth/UncleDavesEmacs][doom config]]
-[fn:joseph8th] joseph8th [[https://github.com/joseph8th/literatemacs][doom config]]
-[fn:rasendubi] rasendubi [[https://github.com/rasendubi/dotfiles][doom config]]
-[fn:TimQuelch] TimQuelch [[https://github.com/TimQuelch/emacs.d][doom config]]
-[fn:frap] frap [[https://github.com/frap/emacs-literate][doom config]]
+[fn:mwfogleman] mwfogleman [[https://github.com/mwfogleman/.emacs.d][emacs config]]
+[fn:tammymakesthings] tammymakesthings [[https://github.com/tammymakesthings/emacs_d][emacs config]]
+[fn:hlissner] hlissner [[https://github.com/hlissner/doom-emacs-private][doom config]]
+[fn:magnars] magnars [[https://github.com/magnars/.emacs.d][emacs config]]
+[fn:sunnyhasija] sunnyhasija [[https://github.com/sunnyhasija/Academic-Doom-Emacs-Config][doom config]]
+[fn:daedreth] daedreth [[https://github.com/daedreth/UncleDavesEmacs][emacs config]]
+[fn:joseph8th] joseph8th [[https://github.com/joseph8th/literatemacs][emacs config]]
+[fn:rasendubi] rasendubi [[https://github.com/rasendubi/dotfiles][dotfiles]]
+[fn:TimQuelch] TimQuelch [[https://github.com/TimQuelch/emacs.d][emacs config]]
+[fn:frap] frap [[https://github.com/frap/emacs-literate][emacs config]]
 [fn:ubolonton] ubolonton [[https://github.com/ubolonton/.emacs.d][emacs config]]
+[fn:iimacs] iimacs [[https://github.com/iimacs/.emacs.d][emacs config]] for [[https://github.com/kubemacs/kubemacs][kubemacs]]
+[fn:irreal] irreal [[https://irreal.org/blog][blog]]
