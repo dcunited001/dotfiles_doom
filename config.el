@@ -43,8 +43,10 @@
 ;;   doom-acario-dark-padded-modeline 4)
 
 ;; (set-frame-font "Source Code Pro 12" nil t)
-(setq doom-font (font-spec :family "JuliaMono" :size 14)
-      doom-unicode-font (font-spec :family "JuliaMono" :size 14)
+(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 14)
+      doom-unicode-font (font-spec :family "DejaVu Sans Mono" :size 14)
+      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 12)
+
       doom-font-increment 1)
 
 (unless (find-font doom-font)
@@ -53,7 +55,7 @@
 
 (unless (find-font doom-unicode-font)
   (message "couldn't find 'doom-unicode-font. using a default.")
-  (setq doom-font (font-spec :family "Source Code Pro" :size 18)))
+  (setq doom-unicode-font (font-spec :family "Source Code Pro" :size 18)))
 
 (setq +ligatures-extras-in-modes
       '(not special-mode comint-mode eshell-mode term-mode vterm-mode python-mode))
