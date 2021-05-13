@@ -18,8 +18,11 @@
 ;;      directory (for easy access to its source code).
 
 
-;;;  TODO_fix so that lispy's ;;** outline sytnax works without auto-format
-;;;  fucking it up
+;; prevent package.el from loading
+(setq package-enable-at-startup nil     ; don't auto-initialize!
+      ;; don't add that `custom-set-variables' block to my init.el!
+      package--init-file-ensured t)
+
 
 (doom! :input
        ;;chinese
@@ -64,7 +67,7 @@
 
        (popup                     ; tame sudden yet inevitable temporary windows
         ;; +all                      ; catch all popups that start with an asterix
-        +defaults)                ; default popup rules
+        +defaults)                      ; default popup rules
 
        ;;tabs              ; a tab bar for Emacs
        (treemacs +lsp)          ; a project drawer, like neotree but cooler

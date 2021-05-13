@@ -292,8 +292,7 @@ Removed =-childframe= for now, as these are actual frames, kinda.
 ;; (set-frame-font "Source Code Pro 12" nil t)
 (setq doom-font (font-spec :family "DejaVu Sans Mono" :size 14)
       doom-unicode-font (font-spec :family "DejaVu Sans Mono" :size 14)
-      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 12)
-
+      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 14)
       doom-font-increment 1)
 
 (unless (find-font doom-font)
@@ -379,8 +378,8 @@ i.e. CIDER alone has like 200 functions i need to learn
 (use-package! treemacs-all-the-icons)
 
 (add-hook 'doom-init-ui-hook
-          (lambda () (treemacs-load-theme "all-the-icons")))
-#+end_src
+          (lambda () (treemacs-load-theme "Default")))
+#+End_src
 
 **** TODO (configure) All the icons
 + [ ] load treemacs theme (for all the icons?)

@@ -45,8 +45,7 @@
 ;; (set-frame-font "Source Code Pro 12" nil t)
 (setq doom-font (font-spec :family "DejaVu Sans Mono" :size 14)
       doom-unicode-font (font-spec :family "DejaVu Sans Mono" :size 14)
-      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 12)
-
+      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 14)
       doom-font-increment 1)
 
 (unless (find-font doom-font)
@@ -73,7 +72,7 @@
 (use-package! treemacs-all-the-icons)
 
 (add-hook 'doom-init-ui-hook
-          (lambda () (treemacs-load-theme "all-the-icons")))
+          (lambda () (treemacs-load-theme "Default")))
 
 (after! treemacs
   (setq treemacs-width 24)
