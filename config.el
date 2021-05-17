@@ -121,7 +121,14 @@
   :config (map! :leader :desc "Toggle Centered Cursor"
                 "t-" (λ! () (interactive) (centered-cursor-mode 'toggle))))
 
-;; (use-package! yasnippet-snippets)
+(setq dc/snippets (expand-file-name (concat doom-private-dir "snippets")))
+
+(eval-after-load 'yasnippet
+  (lambda ()
+    (add-to-list 'yas-snippet-dirs 'dc/snippets)
+    (message "loading snippets")
+    (message dc/snippets)
+    (yas-load-directory dc/snippets t)))
 
 (setq dired-omit-files "^.DS_Store\\'\\|^.project\\(?:ile\\)?\\'\\|^.\\(svn\\|git\\)\\'\\|^.ccls-cache\\'\\|\\(?:\\.js\\)?\\.meta\\'\\|\\.\\(?:elc\\|o\\|pyo\\|swp\\|class\\)\\'")
 

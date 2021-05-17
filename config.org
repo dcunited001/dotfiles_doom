@@ -2,7 +2,7 @@
 #+AUTHOR: David Conner
 #+DESCRIPTION: Inspired by the personal Doom Emacs config of DT, HaoZeke and others
 #+PROPERTY: header-args :tangle ./config.el
-#+STARTUP: showeverything
+#+STARTUP: content
 #+OPTIONS: toc:nil
 
 * About this file
@@ -519,12 +519,17 @@ More-performant approach to auto-expanding snippets
 
 **** Yasnippet-snippets
 
-#+begin_src emacs-lisp :tangle ./packages.el
-;; (package! yasnippet-snippets) ;;
-#+end_src
+*** TODO COMMENT set yas-snippet-dirs
 
 #+begin_src emacs-lisp
-;; (use-package! yasnippet-snippets)
+(setq dc/snippets (expand-file-name (concat doom-private-dir "snippets")))
+
+(eval-after-load 'yasnippet
+  (lambda ()
+    (add-to-list 'yas-snippet-dirs 'dc/snippets)
+    (message "loading snippets")
+    (message dc/snippets)
+    (yas-load-directory dc/snippets t)))
 #+end_src
 
 ***** TODO do i really want to blindly import all fo these?

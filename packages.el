@@ -11,8 +11,6 @@
 
 (package! centered-cursor-mode)
 
-;; (package! yasnippet-snippets) ;;
-
 (package! info-colors)
 
 (package! magit-tbdiff)
