@@ -94,8 +94,8 @@ you can use =gdb= to debug emacs from within or without, but obviously the
 former is easier. These instructions mention some optional compile flags:
 
 #+begin_src shell :tangle no
-  ./configure --enable-checking='yes,glyphs' --enable-check-lisp-object-type \
-    CFLAGS='-O0 -g3'
+./configure --enable-checking='yes,glyphs' --enable-check-lisp-object-type \
+CFLAGS='-O0 -g3'
 #+end_src
 
 *** Compiling in Arch with makepkg

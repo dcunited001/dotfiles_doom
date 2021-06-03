@@ -21,7 +21,7 @@ the end of the doc.
 I'm spending a lot of time sampling the space of available options & developing
 some familiarity with elisp. I've been through this before, and I don't want to
 regret missing out on all the "unknown unknown" tools & workflow approaches. I'm
-starting with a sparse sample of the entire space to avoid missing global
+starting with a sparse sample of the entire space to avoid sticky global
 minimums or to avoid totally biased exploration in a small subset of dimensions.
 It's like "stochastic gradient descent" or building a sparse understanding of
 the hyperplane for an infinite-dimensional problem (like a kernel method)...
@@ -60,6 +60,10 @@ added by Doom modules).
 
 **** TODO [#B] place light semantic-versioning constraints on packages
 + ~(package asdfoo-bar :pin 1234)~
++
+**** TODO performance adjustments
++ follow advice in [[file:~/.emacs.d/docs/faq.org::*How does Doom start up so quickly?][Doom FAQ]]
++ figureout what's keeping this in custom.el ~'(auth-source-save-behavior nil)~
 
 * Table of Contents :TOC_3_gh:
 - [[#about-this-file][About this file]]
@@ -91,6 +95,7 @@ added by Doom modules).
     - [[#modeline][Modeline]]
     - [[#dimmer][Dimmer]]
     - [[#window--frame-management][Window & Frame Management]]
+    - [[#sticky-windows][Sticky Windows]]
     - [[#misc][Misc]]
   - [[#editor][EDITOR]]
     - [[#centered-cursor-mode][Centered Cursor Mode]]
@@ -101,14 +106,14 @@ added by Doom modules).
     - [[#shell][Shell]]
   - [[#checkers][CHECKERS]]
   - [[#tools][TOOLS]]
-    - [[#lookup][Lookup]]
     - [[#info][Info]]
     - [[#diff-and-ediff][Diff and Ediff]]
     - [[#git][Git]]
     - [[#magit][Magit]]
-    - [[#forge][Forge]]
     - [[#github][Github]]
+    - [[#repo][Repo]]
     - [[#shell-1][Shell]]
+    - [[#systemd][SystemD]]
     - [[#archlinux][Archlinux]]
     - [[#ken-kesey][Ken Kesey]]
     - [[#docker][Docker]]
@@ -117,16 +122,20 @@ added by Doom modules).
     - [[#ast--metaprogramming][AST & Metaprogramming]]
     - [[#lsp-mode][LSP Mode]]
     - [[#lsp-ui][LSP UI]]
-    - [[#packages-to-evaluate-tools][Packages to Evaluate (Tools)]]
+    - [[#emacs-packages][Emacs Packages]]
   - [[#os][OS]]
   - [[#org][ORG]]
+    - [[#workflow][Workflow]]
     - [[#keys][Keys]]
     - [[#org-literate][Org Literate]]
-    - [[#org-directory][Org Directory]]
+    - [[#org-capture-and-refile][Org Capture and Refile]]
     - [[#org-agenda][Org Agenda]]
-    - [[#org-capture][Org Capture]]
+    - [[#org-query-language][Org Query Language]]
+    - [[#org-super-agenda][Org Super Agenda]]
+    - [[#org-sidebar][Org Sidebar]]
     - [[#source-blocks][Source Blocks]]
-    - [[#packages-to-evaluate-org][Packages to Evaluate (Org)]]
+    - [[#org-treeusage][Org Treeusage]]
+    - [[#org-drill][Org Drill]]
   - [[#lang][LANG]]
     - [[#elisp][ELISP]]
     - [[#latex][LATEX]]
@@ -134,17 +143,18 @@ added by Doom modules).
     - [[#cider][CIDER]]
     - [[#julia][JULIA]]
     - [[#plantuml][PLANTUML]]
+    - [[#graphviz][GRAPHVIZ]]
     - [[#kde][KDE]]
     - [[#qt][QT]]
     - [[#c][C++]]
     - [[#open-api][OPEN API]]
     - [[#restclient][RESTCLIENT]]
     - [[#graphql][GRAPHQL]]
-    - [[#packages-to-evaluate-languages][Packages to Evaluate (Languages)]]
   - [[#babel][BABEL]]
-    - [[#ensure-this-is-necessary-with-org-init-babel-lazy-loader-h][ensure this is necessary with =+org-init-babel-lazy-loader-h=]]
+    - [[#org-babel-general-config][org-babel general config]]
     - [[#ob-async][ob-async]]
     - [[#ob-translate][ob-translate]]
+  - [[#firewall][FIREWALL]]
   - [[#email][EMAIL]]
   - [[#app][APP]]
     - [[#packages-to-evaluate-app][Packages to Evaluate (App)]]
@@ -159,7 +169,7 @@ added by Doom modules).
 :VISIBILITY: children
 :END:
 
-** INPUT :input:
+** INPUT
 
 [[file:~/.emacs.d/core/core-keybinds.el][.emacs.d/core/core-keybinds.el]] makes for a very useful key & map! reference
 
@@ -227,9 +237,6 @@ see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse
 
 #+RESULTS:
 
-**** TODO ensure that the =+workspace= references are mostly culled out
-+ (so bufler can be tested)
-
 **** TODO other mouse maps
 + and navigating =describe-= and other docs
 + helpful-at-point
@@ -248,11 +255,9 @@ see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse
 + [ ] ~(kbd "<mouse-5>")~ linux mouse wheel scroll down
 + =<fringe>= and =<modeline>=
 
-** COMPLETION :completion:
+** COMPLETION
 
 *** Completion prompts
-
-**** TODO (luca) Prescient + selectrum + consult + marginalia + embark
 
 *** Company :company:
 
@@ -271,7 +276,7 @@ Removed =-childframe= for now, as these are actual frames, kinda.
 
 **** HOLD configure views to use with ~ivy-switch-view~ (or just use bufler?)
 
-** UI :uiux:
+** UI
 
 *** Doom Theme
 
@@ -317,17 +322,13 @@ Disable extra ligatures in a few modes [fn:luca_doom]
       '(not special-mode comint-mode eshell-mode term-mode vterm-mode python-mode))
 #+END_SRC
 
-**** TODO configure [[org:/home/dc/.emacs.d/modules/ui/ligatures/README.org][+ligatures]] module
-
 *** Indent Guides
 
-The =indent-guides= doom module conflicts with =prism=. These must be applied to
-each buffer in this order:
+The =indent-guides= doom module conflicts with =prism=, so i removed indent
+guides. These must be applied to each buffer in this order:
 
 1. prism
 2. indent-guide
-
-**** TODO fix prism/indent-guide conflict
 
 *** Window UI
 
@@ -337,9 +338,6 @@ Dividers are too thin to grab if only 1px
 (setq window-divider-default-right-width 1)
 (setq window-divider-default-bottom-width 1)
 #+end_src
-
-**** TODO automatically balance window widths?
-**** TODO setup startup windows (luca)
 
 *** Menu Bar
 
@@ -366,8 +364,6 @@ i.e. CIDER alone has like 200 functions i need to learn
 
 *** Startup
 
-**** TODO write script to generate all 64 hexagrams in SVG for random Doom startup
-
 *** All The Icons
 
 #+begin_src emacs-lisp :tangle ./packages.el
@@ -380,10 +376,6 @@ i.e. CIDER alone has like 200 functions i need to learn
 (add-hook 'doom-init-ui-hook
           (lambda () (treemacs-load-theme "Default")))
 #+End_src
-
-**** TODO (configure) All the icons
-+ [ ] load treemacs theme (for all the icons?)
-+ [ ] [[https://github.com/seagle0128/all-the-icons-ivy-rich][all-the-icons-ivy-rich]] (doom ivy includes ivy-rich)
 
 *** Treemacs
 
@@ -430,10 +422,6 @@ customize [[https://github.com/seagle0128/doom-modeline][doom-modeline]]
         doom-modeline-minor-modes t))
 #+END_SRC
 
-**** TODO configure modeline (refer to HaoZeke, luca and others)
-**** TODO check out [[https://github.com/hlissner/doom-emacs-private/blob/master/lisp/modeline.el][Hlissner's modeline]] for customization ideas
-**** TODO figure out error (if consistent) ~Error during redisplay: (eval (doom-modeline-segment--workspace-name)) signaled (invalid-function ((&plist :name :path) workspace))~
-
 *** Dimmer
 
 #+begin_src emacs-lisp :tangle ./packages.el
@@ -479,8 +467,11 @@ These are simply bookmarks and thus can be reached from the doom startup menu.
                    :desc "Copy Frameset URL" "W" #'burly-kill-windows-url))))
 #+end_src
 
-**** TODO helpers for manageing Burly URL's copied to the kill ring
-**** TODO doom emacs is missing the delete-bookmark binding for non-evil users
+*** Sticky Windows
+
+#+begin_src emacs-lisp :tangle ./packages.el
+;;(package! )
+#+end_src
 
 *** Misc
 
@@ -491,11 +482,7 @@ to `relative'.
 (setq display-line-numbers-type nil)
 #+end_src
 
-**** TODO configure nav-flash (like in spacemacs)
-
-** EDITOR :editor:
-
-**** TODO consider auto-save-default
+** EDITOR
 
 *** Centered Cursor Mode
 
@@ -513,13 +500,7 @@ Scroll lock can emulate this.
 
 *** Snippets
 
-**** TODO Consider [[https://github.com/ymarco/auto-activating-snippets][aas]] and [[https://github.com/tecosaur/LaTeX-auto-activating-snippets][laas]]
-
-More-performant approach to auto-expanding snippets
-
 **** Yasnippet-snippets
-
-*** TODO COMMENT set yas-snippet-dirs
 
 #+begin_src emacs-lisp
 (setq dc/snippets (expand-file-name (concat doom-private-dir "snippets")))
@@ -532,13 +513,9 @@ More-performant approach to auto-expanding snippets
     (yas-load-directory dc/snippets t)))
 #+end_src
 
-***** TODO do i really want to blindly import all fo these?
+** EMACS
 
-**** TODO org-babel snippet for splitting =./packages.el= and =./config.el=
-
-** EMACS :emacs:
-
-*** DIRED :dired:
+*** DIRED
 
 Remove `.` and `..` from list of omitted file patterns (so i can always run
 commands on the directory). Also `M-!` will run commands on the dir without
@@ -548,11 +525,7 @@ parameterizing a subdir.
 (setq dired-omit-files "^.DS_Store\\'\\|^.project\\(?:ile\\)?\\'\\|^.\\(svn\\|git\\)\\'\\|^.ccls-cache\\'\\|\\(?:\\.js\\)?\\.meta\\'\\|\\.\\(?:elc\\|o\\|pyo\\|swp\\|class\\)\\'")
 #+end_src
 
-**** TODO configure [[https://github.com/xahlee/xah-dired][Xah Dired]] package & keys
-+ full of helpers for working with images in dired.
-+ need to check Xah's init files for hotkeys
-
-** TERM :term:
+** TERM
 
 *** Shell
 
@@ -569,19 +542,11 @@ before or after the doom/emacs install.
 **** TODO check luca shell configs
 
 
-** CHECKERS :checkers:
+** CHECKERS
 
-** TOOLS :tools:
+Syntax & Spellcheck
 
-*** Lookup :lookup:
-
-**** TODO configure docsets for =counsel-dash=
-+ [ ] find path to zeal docs
-**** TODO configure =+dictionary= flag
-**** TODO configure =+docset= flag functionality
-***** [ ] clojure docsets
-***** [ ] julia docsets
-***** [ ] c++ docsets
+** TOOLS
 
 *** Info
 
@@ -599,34 +564,10 @@ test with emacs manual =C-h R=
 
 *** Diff and Ediff
 
-+ [ ] flycheck-checkpatch
-+ [ ] ztree (recursive diff tool)
-
-
-
-**** ediff
-***** TODO configure ediff for patching nvidia driver source/headers
-
 *** Git
-+ [X] git-gutter (doom)
-+ [X] git-gitter-fringe
-+ [ ] [[https://github.com/10sr/git-walktree-el][git-walktree]]
-+ [ ] git-blamed
-+ [ ] git-messenger (check performance)
-+ [X] *git-timemachine* (doom)
-+ [ ] gitolite-clone
-+ [ ] borg (assimilate emacs packages as git submodules)
+
 
 *** Magit
-+ [ ] *magit-forge*
-+ [ ] magit-delta
-+ [ ] magit-todos or magit-org-todos
-+ [ ] orgit (org links to magit buffers)
-+ [ ] magit-gitflow
-+ [ ] magit-gh-pulls
-+ [ ] magit-popup
-
-
 [[https://github.com/magit/magit-tbdiff][magit-tbdiff]] show diffs over ranges of commits
 
 #+begin_src emacs-lisp :tangle ./packages.el
@@ -640,19 +581,18 @@ test with emacs manual =C-h R=
 **** TODO: configure =magit-repository-directories=
 + see =hlissner= config & others
 
-*** Forge
-+ [ ] forge (also integrates with magit)
-+ [ ] orgit-forge
 
 *** Github
-+ [ ] github-explorer
-+ [ ] *github-pullrequest*
-+ [ ] *github-search*
-+ [ ] *github-stars*
-+ [ ] github-clone
-+ [ ] *magithub*
-+ [ ] *org2issue*
-+ [X] *treemacs-magit*
+
+*** Repo
+
+#+begin_src emacs-lisp :tangle ./packages.el
+(package! repo)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! repo)
+#+end_src
 
 *** Shell
 
@@ -667,6 +607,12 @@ config/control on-save shell tasks.[fn:haozeke]
 (use-package! firestarter
   :init (firestarter-mode)
   :config (setq firestarter-default-type t))
+#+end_src
+
+*** SystemD
+
+#+begin_src emacs-lisp :tangle ./packages.el
+(package! journalctl-mode)
 #+end_src
 
 *** Archlinux
@@ -806,48 +752,39 @@ From HaoZeke[fn:haozeke]
       lsp-ui-imenu-window-width 25)
 #+end_src
 
-*** Packages to Evaluate (Tools)
 
-**** Diff & Patch
-+ [ ] vdiff & vdiff-magit (does it do patches?)
+*** Emacs Packages
 
-**** Fast file find
-+ [ ] [[https://github.com/technomancy/find-file-in-project][find-file-in-project]]
-+ [ ] [[https://github.com/h/find-file-in-repository][find-file-in-repository]]
+#+begin_src emacs-lisp :tangle ./packages.el
 
-**** Docker
-+ [ ] SLIME Docker
-+ [X] [[https://github.com/emacs-pe/docker-tramp.el][docker-tramp]] (2017) included with doom (configured?)
-+ [ ] [[https://github.com/bosko/docker-cli][docker-cqli]]
 
-**** Devops
-+ [ ] [[https://github.com/cjohansson/emacs-ssh-deploy][ssh-deploy]] (deployment via tramp)
-+ projectile shell mgmt
-  - [ ] term-projectile (projectile + tmux, more or less)
-  - [ ] [[https://github.com/waymondo/projector.el][projector]] (projectile-based management of shells & their buffers)
-+ [ ] systemd
+#+end_src
 
-**** Logging
-+ [ ] logito (emacs logging)
 
-**** Tramp
-+ [ ] [[https://github.com/randymorris/tramp-term.el][tramp-term]]
-+ [ ] [[https://github.com/oitofelix/tramp-auto-auth][tramp-auth-auth]]
+** OS
 
-**** Debugging
-+ [ ] asm-mode, gas-mode
+** ORG
 
-**** LSP
-+ [ ] [[https://github.com/joaotavora/eglot][eglot]] (management/automation for LSP servers) + [[https://github.com/non-Jedi/eglot-jl][eglot-jl]]
-  - just going with LSP for now, at least until eglot matures.
+Additonal org-mode packages:
 
-**** Docs
-+ [ ] [[https://github.com/dkogan/xcscope.el][xcscope.el]] for large java/c/c++ projects
-  - emacs interface to =cscope=, searches codebase for references/etc
+#+begin_src emacs-lisp :tangle ./packages.el
+(package! org-treeusage)
+(package! org-drill)
 
-** OS :os:
+;; dependencies org-super-agenda => org-ql => org-sidebar
+(package! org-super-agenda)
+(package! org-ql)
+(package! org-sidebar)
+#+end_src
 
-** ORG :org:
+General Org Mode configs:
+
+#+begin_src emacs-lisp
+(setq org-directory (getenv "ORG_DIRECTORY")
+      +org-capture-journal-file "/data/org/journal.org")
+#+end_src
+
+*** Workflow
 
 *** Keys :kbdmaps:
 
@@ -864,27 +801,47 @@ prevent over-eager dotfiles recompilation =from HaoZeke=
   (remove-hook 'after-save-hook #'+literate|recompile-maybe))
 #+END_SRC
 
-*** Org Directory
+
+*** Org Capture and Refile
 
 #+begin_src emacs-lisp
-(setq org-directory "/data/org")
+(setq org-refile-use-cache t
+      org-refile-use-outline-path t)
+
+(unless org-refile-cache-timer
+  (run-with-idle-timer 300 t (lambda ()
+                               (org-refile-cache-clear)
+                               (org-refile-get-targets)))
+  (setq org-refile-cache-timer t))
+
+;; TODO consider using =org-refile-target-verify-function
+;; to filter subtrees marked "done" from being org-refile-targets
+;; (source: mwfogleman/englehorn)
 #+end_src
 
 *** Org Agenda
 
++ protesilaos & hsinhaoyu have pretty comprehensive configs
+
+*** Org Query Language
+
 #+begin_src emacs-lisp
-(after! org
-  (setq org-log-done 'time
-        org-support-shift-select t
-        ;;org-agenda-files (concat (file-name-as-directory org-directory) "agenda.org")
-        ;; TODO include content from Adam James
-        ))
+
 #+end_src
 
-*** Org Capture
+*** Org Super Agenda
 
-**** TODO luca capture templates (thoughts for day)
++ review mwfogleman's config
 
+#+begin_src emacs-lisp
+
+#+end_src
+
+*** Org Sidebar
+
+#+begin_src emacs-lisp
+
+#+end_src
 *** Source Blocks
 
 Don't indent content in source blocks
@@ -893,53 +850,37 @@ Don't indent content in source blocks
 (setq org-edit-src-content-indentation 0)
 #+end_src
 
-*** Packages to Evaluate (Org)
+*** Org Treeusage
 
-**** Org
-+ akirak
-  - [ ] [[https://github.com/akirak/org-starter][org-starter]] (good orgmode presets & asset creation tools?),
-  - [ ] [[https://github.com/akirak/ivy-omni-org][ivy-omni-org]] (fast org buffer access)
-  - [ ] [[https://github.com/akirak/org-reverse-datetree][org-reverse-datetree]] (do i already have this?)
-+ mtekman
-  - [ ] [[https://gitlab.com/mtekman/org-treeusage.el][org-treeusage]]
-  - [ ] [[https://gitlab.com/mtekman/org-tanglesync.el][org-tanglesync]]
-  - [ ] [[https://gitlab.com/mtekman/remind-bindings.el][remind-bindings.el]]
-  - [ ] wiki-summary.el
-  - [ ] [[https://gitlab.com/mtekman/wiki-drill.el][wiki-drill.el]]
-  - [ ] [[https://gitlab.com/mtekman/org-mode-manager][org-mode-manager]] (cmd-line tool)
-+ [X] org-bullets vs org-fancy-priorities =+pretty=
-+ [ ] org-appear (easier editing of org markup)
-+ [ ] [[https://github.com/kidd/org-gcal.el][org-gcal]] or [[https://github.com/dengste/org-caldav][org-caldav]] (probably the latter)
-+ [ ] org-variable-pitch
-+ [X] org-re-reveal (export reveal.js presentations from org) =+present=
-+ [ ] org-elp (preview latex expressions while editing)
-+ [ ] [[https://github.com/Fuco1/org-timeline/][org-timeline]]
-+ [ ] [[https://spwhitton.name/tech/code/org-d20/][org-d20]] for dungeonmasters
-+ [ ] [[https://github.com/stardiviner/org-tag-beautify][org-tag-beautify]] requires org-pretty-tags (conflicts with =+pretty=?)
-+ [ ] org-working-set (manage a working set of nodes)
-+ [X] org-present & org-re-reveal
-+ from HaoZeke
-  - [ ] [[https://gitlab.com/phillord/org-drill/][org-drill]] (use org mode for spaced repitition)
-  - [ ] org-protocol?
-  - [ ] org-ref (highly recommended)
-  - [ ] helm-org-rifle (not worth the helm)
-  - [ ] org-async
-+ [ ] elegant-agenda-mode
+#+begin_src emacs-lisp
+(use-package! org-treeusage
+  :bind ("C-c d" . org-treeusage-mode)
+  :config (setq org-treescope-overlay-header nil
+                org-treeusage-overlay-usecolorbands nil))
+#+end_src
 
-**** org-babel
-+ [ ] ob-clojurescript
-+ [ ] ob-diagram (generate [[http://projects.haskell.org/diagrams/][diagrams]] using haskell tool)
+Can be customized according to the info at the [[https://github.com/mtekman/org-treeusage.el#customisation][Org Treeusage github]].
+
+*** Org Drill
+
+Config and flashcard info can be found at [[https://gitlab.com//phillord/org-drill    ][phillord/org-drill]]
 
 
-**** TODO setup org-export-async-init-file (see [[https://dotdoom.rgoswami.me/config.html][1.2.3 Async Exports]])
+#+begin_src emacs-lisp
+(use-package! org-drill
+  :after org
+  :config (progn
+            (setq org-drill-add-random-noise-to-intervals-p t)
+            (setq org-drill-hint-separator "||")
+            (setq org-drill-left-cloze-separator "<[")
+            (setq org-drill-left-cloze-separator "]>")
+            (setq org-drill-learn-fraction 0.25))
+  )
+#+end_src
 
-** LANG :lang:
-
+** LANG
 
 *** ELISP :elisp:
-**** TODO configure eldoc
-
-
 
 *** LATEX :latex:
 
@@ -961,34 +902,7 @@ literate programming code written by Knuth in Pascal/TeX.
 #+end_src
 
 **** LSP :lsp:
-***** TODO follow [[https://emacs-lsp.github.io/lsp-mode/tutorials/clojure-guide/][this guide]]
-**** TODO aggressive indent (luca)
-**** TODO smartparens/lispyparens (luca)
 
-**** TODO explore packages: [0/5]
-+ [ ] cider-eval-sexp-fu
-+ [ ] [[https://github.com/plexus/walkclj][walkclj]]
-+ [ ] 4clojure
-+ [ ] [[https://github.com/didibus/anakondo][anakondo]] (or flycheck/make clj-kondo)
-+ [ ] ivy-clojuredocs
-  - just pick a key for docs...
-  - =C-c s c= (apropos à +lookup)
-+ [ ] clojure-mode-extra-font-locking (cider)
-+ [ ] ivy-clojuredocs
-+ [ ] clojure-snippets
-+ [ ] clojars
-+ [X] clj-refactor
-+ [ ] clj-decompile
-+ [ ] cljr-ivy
-+ [ ] walkclj (manipulate clojure parse trees)
-+ [ ] tree-sitter clojure
-+ [ ] hiccup-cli (HTML-to-hiccup ... does this not already exist in clojure?)
-+ [ ] org-babel-eval-in-repl
-+ [ ] eval-in-relp
-+ [ ] clojure-essential-ref
-+ [ ] clojure-essential-ref-nov
-+ [ ] cider-hydra ?
-+ [ ] kaocha-runner (running Fulcro's kaocha tests via CIDER)
 
 *** CIDER
 
@@ -1029,27 +943,38 @@ Requires using a =:session= variable to track the results/evaluations of blocks
 ;; (org-babel-make-language-alias "julia" "julia-vterm")
 #+end_src
 
-#+RESULTS:
-
-**** TODO configure julia (and decide on eglot) [1/2]
-+ [X] decide on [[https://github.com/shg/ob-julia-vterm.el][ob-julia-vterm]] or [[https://github.com/frederic-santos/ob-ess-julia][ob-ess-julia]]
-+ [ ] [[https://github.com/gcv/julia-snail][julia-snail]]?
-**** TODO configure org-babel for julia
-
-**** TODO change the default environment for LSP julia
-+ ~(setq lsp-julia-default-environment ~/.julia/environments/v1.0")~
-
 *** PLANTUML :plantuml:
 
 Plant UML is also supported by org-babel
+
+*** GRAPHVIZ :graphviz:
+
+Graphviz practically works [[https://www.orgmode.org/worg/org-contrib/babel/languages/ob-doc-dot.html][out of the box]]
+
+#+begin_src dot :file img/dot/dot_test.png  :cmdline -Kdot -Tpng
+digraph {
+        rankdir=LR;
+        splines=true;
+        node [shape=box];
+
+        A [label="A"]
+        B [label="B"]
+        C [label="C"]
+
+        A -> B;
+        B -> C;
+        C -> A;
+}
+#+end_src
+
+#+RESULTS:
+[[file:img/dot/dot_test.png]]
 
 *** KDE :kde:
 
 *** QT :qt:
 
 *** C++ :cpp:
-
-**** TODO cmake-font-lock (type-aware highlighting for cmake scripts)
 
 **** Doxygen Support
 
@@ -1132,38 +1057,29 @@ query GetContinents {
 }
 #+end_src
 
-*** Packages to Evaluate (Languages)
-
-**** Misc
-+ [ ] [[https://github.com/ericcrosson/pine-script-mode][pine-script-mode]] Trading View
-
-**** Latex and Writing
-+ [ ] [[https://joostkremers.github.io/ebib/][ebib]] bibtex database
-+ [ ] xah-math-mode
-+ [ ] [[https://github.com/emacs-grammarly/lsp-grammarly][lsp-grammar]]
-+ [ ] [[https://github.com/cpitclaudel/biblio.el][biblio]] and biblio-core (browse import bibliographic refs; e.g from arXiv)
-+ [ ] writegood-mode & wc-mode
-+ [ ] ob-latex-as-png
-
-** BABEL :babel:
+** BABEL
 
 + doom handles most of this stuff in [[file:~/.emacs.d/modules/lang/org/config.el::defun +org-init-babel-lazy-loader-h (][+org-init-babel-lazy-loader-h]]
   - =org-src-lang-modes= maps org-babel keys to modes (=-mode= suffix)
   - =org-babel-load-languages= describes language blocks types permitted to run
   - is the var =org-confirm-babel-evaluate= still in tact?
 
+*** org-babel general config
 Load general org-babel config after defining languages
-
-*** TODO ensure this is necessary with =+org-init-babel-lazy-loader-h=
 
 #+begin_src emacs-lisp
 (after! org
   (add-to-list 'org-babel-load-languages
                '((julia-vterm . t)
-                 (clojure . t)))
-  (org-babel-do-load-languages 'org-babel-load-languages org-babel-load-languages))
+                 (clojure . t)
+                 (dot . t)))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   org-babel-load-languages))
 ;;(defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
 #+end_src
+
+**** TODO ensure the above is necessary with =+org-init-babel-lazy-loader-h=
 
 *** ob-async
 
@@ -1228,16 +1144,27 @@ Extra Sensory Perception
 
 **** TODO emacs support for surfing etymology in wiktionary
 
-** EMAIL :email:
 
-** APP :app:
+** FIREWALL
+
+After finding that a package was fetching unicorns with http requests (and
+failing), i'd like to know a little more about what is going on here.
+
+#+begin_src emacs-lisp :tangle ./packages.el
+
+#+end_src
+
+
+** EMAIL
+
+** APP
 
 *** Packages to Evaluate (App)
 
 **** IRC
 + [ ] [[https://github.com/jorgenschaefer/circe][circe]] an IRC client, complexity is "between rcirc and ERC"
 
-** CONFIG :config:
+** CONFIG
 
 Misc config goes here
 

@@ -76,7 +76,7 @@
        vi-tilde-fringe          ; fringe tildes to mark beyond EOB
        window-select            ; visually switch windows
 
-       ;;workspaces        ; tab emulation, persistence & separate workspaces
+       workspaces        ; tab emulation, persistence & separate workspaces
        ;;zen               ; distraction-fre#e coding or writing
 
        :editor
@@ -119,7 +119,7 @@
        (syntax               ; tasing you for every semicolon you forget
         +childframe)         ; use childframes for error popups (Emacs 26+ only)
 
-       spell         ; tasing you for misspelling mispelling
+       ;;spell         ; tasing you for misspelling mispelling
        ;;grammar           ; tasing grammar mistake every you make
 
        :tools
@@ -199,7 +199,7 @@
 
 
        (org ;; organize your plain life in plain text
-        +jupyter +pomodoro +pretty +present +gnuplot +pandoc)
+        +jupyter +pomodoro +pretty +present +gnuplot +pandoc +journal)
 
        ;;php               ; perl's insecure younger brother
        plantuml         ; diagrams for confusing people more
@@ -220,7 +220,7 @@
        ;;solidity          ; do you need a blockchain? No.
        ;;swift             ; who asked for emoji variables?
        ;;terra             ; Earth and Moon in alignment for performance.
-       ;;web               ; the tubes
+       web               ; the tubes
        yaml                             ; JSON, but readable
 
        :email
@@ -240,6 +240,6 @@
        literate
        (default +bindings)
 
-       :ui
-       bufler
+       ;; :ui
+       ;;bufler
        )

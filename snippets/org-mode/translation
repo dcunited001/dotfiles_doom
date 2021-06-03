@@ -3,6 +3,6 @@
 # key: <t
 # uuid: <t
 # --
-#+begin_src translate :src  :dest
+#+begin_src translate :src $1 :dest $2 :results list
 $0
 #+end_src

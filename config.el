@@ -138,6 +138,8 @@
 
 (use-package! magit-tbdiff)
 
+(use-package! repo)
+
 (use-package! firestarter
   :init (firestarter-mode)
   :config (setq firestarter-default-type t))
@@ -168,19 +170,47 @@
 
       lsp-ui-imenu-window-width 25)
 
+(setq org-directory (getenv "ORG_DIRECTORY")
+      +org-capture-journal-file "/data/org/journal.org")
+
 (after! org
   (remove-hook 'after-save-hook #'+literate|recompile-maybe))
 
-(setq org-directory "/data/org")
+(setq org-refile-use-cache t
+      org-refile-use-outline-path t)
 
-(after! org
-  (setq org-log-done 'time
-        org-support-shift-select t
-        ;;org-agenda-files (concat (file-name-as-directory org-directory) "agenda.org")
-        ;; TODO include content from Adam James
-        ))
+(unless org-refile-cache-timer
+  (run-with-idle-timer 300 t (lambda ()
+                               (org-refile-cache-clear)
+                               (org-refile-get-targets)))
+  (setq org-refile-cache-timer t))
+
+;; TODO consider using =org-refile-target-verify-function
+;; to filter subtrees marked "done" from being org-refile-targets
+;; (source: mwfogleman/englehorn)
+
+
+
+
+
+
 
 (setq org-edit-src-content-indentation 0)
+
+(use-package! org-treeusage
+  :bind ("C-c d" . org-treeusage-mode)
+  :config (setq org-treescope-overlay-header nil
+                org-treeusage-overlay-usecolorbands nil))
+
+(use-package! org-drill
+  :after org
+  :config (progn
+            (setq org-drill-add-random-noise-to-intervals-p t)
+            (setq org-drill-hint-separator "||")
+            (setq org-drill-left-cloze-separator "<[")
+            (setq org-drill-left-cloze-separator "]>")
+            (setq org-drill-learn-fraction 0.25))
+  )
 
 (add-hook 'clojure-mode-hook 'zprint-mode)
 (add-hook 'clojurescript-mode-hook 'zprint-mode)
@@ -214,8 +244,11 @@
 (after! org
   (add-to-list 'org-babel-load-languages
                '((julia-vterm . t)
-                 (clojure . t)))
-  (org-babel-do-load-languages 'org-babel-load-languages org-babel-load-languages))
+                 (clojure . t)
+                 (dot . t)))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   org-babel-load-languages))
 ;;(defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
 
 (use-package! google-translate :demand t
@@ -256,3 +289,17 @@
 ;; TODO fix to autoload rainbow-mode in doom theme files
 ;; (setq auto-minor-mode-alist (append '(("theme\\.el$" . rainbow-mode))
                                     ;; auto-minor-mode-alist))
+
+digraph {
+        rankdir=LR;
+        splines=true;
+        node [shape=box];
+
+        A [label="A"]
+        B [label="B"]
+        C [label="C"]
+
+        A -> B;
+        B -> C;
+        C -> A;
+}

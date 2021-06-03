@@ -9,13 +9,19 @@
 
 (package! burly)
 
+;;(package! )
+
 (package! centered-cursor-mode)
 
 (package! info-colors)
 
 (package! magit-tbdiff)
 
+(package! repo)
+
 (package! firestarter)
+
+(package! journalctl-mode)
 
 (package! pkgbuild-mode
   :recipe (:host github :repo "juergenhoetzel/pkgbuild-mode"))
@@ -28,6 +34,16 @@
 ;; TODO ssh-tunnels
 
 (package! salt-mode)
+
+
+
+(package! org-treeusage)
+(package! org-drill)
+
+;; dependencies org-super-agenda => org-ql => org-sidebar
+(package! org-super-agenda)
+(package! org-ql)
+(package! org-sidebar)
 
 (package! zprint-mode)
 
@@ -49,5 +65,7 @@
 
 (package! google-translate)
 (package! ob-translate)
+
+
 
 (package! prism)
