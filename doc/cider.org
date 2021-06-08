@@ -1,0 +1,298 @@
+* CIDER
+
+#+begin_quote
+transitioning to using hydras for auto-documentation...
+#+end_quote
+
+
++ [[https://gist.github.com/yogthos/be323be0361c589570a6da4ccc85f58f][Clojure for Beginners]] (lots of CIDER links)
+
+|------------+------------------------------------+-------|
+| key        | command                            | notes |
+|------------+------------------------------------+-------|
+| TAB        | cider-repl-tab                     |       |
+| C-j        | cider-repl-newline-and-indent      |       |
+| RET        | cider-repl-return                  |       |
+| ESC        | Prefix Command                     |       |
+|------------+------------------------------------+-------|
+| ,          | cider-repl-handle-shortcut         |       |
+| C-x C-e    | cider-eval-last-sexp               |       |
+| M-,        | cider-pop-back                     |       |
+| M-.        | cider-find-var                     |       |
+|------------+------------------------------------+-------|
+| C-<up>     | cider-repl-backward-input          |       |
+| C-<down>   | cider-repl-forward-input           |       |
+| C-<return> | cider-repl-closing-return          |       |
+|------------+------------------------------------+-------|
+| M-n        | cider-repl-next-input              |       |
+| M-p        | cider-repl-previous-input          |       |
+| M-r        | cider-repl-previous-matching-input |       |
+| M-s        | cider-repl-next-matching-input     |       |
+|------------+------------------------------------+-------|
+| S-<home>   | cider-repl-bol-mark                |       |
+| C-S-a      | cider-repl-bol-mark                |       |
+|------------+------------------------------------+-------|
+
+
+** CIDER Prefix =C-c=
+
++ =doom-leader-alt-key=
+
+|-----+-------------------------------------+-------|
+| key | command                             | notes |
+|-----+-------------------------------------+-------|
+| C-x | *cider-start-map*                   |       |
+| C-q | cider-quit                          |       |
+|-----+-------------------------------------+-------|
+| C-n | cider-repl-next-prompt              |       |
+| C-p | cider-repl-previous-prompt          |       |
+| C-u | cider-repl-kill-input               |       |
+| C-o | cider-repl-clear-output             |       |
+|-----+-------------------------------------+-------|
+| C-. | cider-find-ns                       |       |
+| C-: | cider-find-keyword                  |       |
+| C-z | cider-switch-to-last-clojure-buffer |       |
+| RET | cider-macroexpand-1                 |       |
+|-----+-------------------------------------+-------|
+| C-d | *cider-doc-map*                     |       |
+| C-r | *clojure-refactor-map*              |       |
+| C-v | *cider-eval-commands-map*           |       |
+| ,   | *cider-test-commands-map*           |       |
+| C-t | *cider-test-commands-map*           |       |
+| C-s | *sesman-map*                        |       |
+|-----+-------------------------------------+-------|
+
++ =C-c C-b .. C-c C-c=  cider-interrupt
+
+** CIDER Eval Prefix =C-c C-v= or =C-c C-v C-=
+
++ =C-c C-v=
++ =cider-eval-commands-map=
+
+|-----+-------------------------------------+-------|
+| key | command                             | notes |
+|-----+-------------------------------------+-------|
+| f   | *cider-eval-pprint-commands-map*    |       |
+| n   | cider-eval-ns-form                  |       |
+|-----+-------------------------------------+-------|
+| c   | cider-eval-last-sexp-in-context     |       |
+| e   | cider-eval-last-sexp                |       |
+| w   | cider-eval-last-sexp-and-replace    |       |
+|-----+-------------------------------------+-------|
+| b   | cider-eval-sexp-at-point-in-context |       |
+| v   | cider-eval-sexp-at-point            |       |
+| o   | cider-eval-sexp-up-to-point         |       |
+|-----+-------------------------------------+-------|
+| d   | cider-eval-defun-at-point           |       |
+| z   | cider-eval-defun-up-to-point        |       |
+|-----+-------------------------------------+-------|
+| .   | cider-read-and-eval-defun-at-point  |       |
+| l   | cider-eval-list-at-point            |       |
+| r   | cider-eval-region                   |       |
+|-----+-------------------------------------+-------|
+
+** Clojure Refactors =C-c C-r=
+
++ =clojure-refactor-map=
+
+|-----+-------------------------------------------+----------|
+| key | command                                   | notes    |
+|-----+-------------------------------------------+----------|
+| TAB | clojure-cycle-if                          |          |
+| ESC | clojure-convert-collection-to-vector      |          |
+|-----+-------------------------------------------+----------|
+| a   | clojure-add-arity                         |          |
+| i   | clojure-cycle-if                          | no =C-i= |
+| w   | clojure-cycle-when                        |          |
+| o   | clojure-cycle-not                         |          |
+| p   | clojure-cycle-privacy                     |          |
+|-----+-------------------------------------------+----------|
+| u   | clojure-unwind                            |          |
+| t   | clojure-thread                            |          |
+| f   | clojure-thread-first-all                  |          |
+| l   | clojure-thread-last-all                   |          |
+|-----+-------------------------------------------+----------|
+| #   | clojure-convert-collection-to-set         |          |
+| '   | clojure-convert-collection-to-quoted-list |          |
+| (   | clojure-convert-collection-to-list        |          |
+| {   | clojure-convert-collection-to-map         |          |
+| [   | clojure-convert-collection-to-vector      | no =C-[= |
+|-----+-------------------------------------------+----------|
+| -   | clojure-toggle-ignore                     |          |
+| _   | clojure-toggle-ignore-surrounding-form    |          |
+|-----+-------------------------------------------+----------|
+| s b | clojure-let-backward-slurp-sexp           |          |
+| s f | clojure-let-forward-slurp-sexp            |          |
+|-----+-------------------------------------------+----------|
+| s i | clojure-introduce-let                     |          |
+| s m | clojure-move-to-let                       |          |
+|-----+-------------------------------------------+----------|
+| n h | clojure-insert-ns-form-at-point           |          |
+| n i | clojure-insert-ns-form                    |          |
+| n r | clojure-rename-ns-alias                   |          |
+| n s | clojure-sort-ns                           |          |
+| n u | clojure-update-ns                         |          |
+|-----+-------------------------------------------+----------|
+
+** Sesman =C-c C-s=
+
+=sesman-map=
+
+|-----+---------------------------------+-------|
+| key | command                         | notes |
+|-----+---------------------------------+-------|
+| i   | sesman-info                     |       |
+| TAB | sesman-info                     |       |
+| w   | sesman-browser                  |       |
+|-----+---------------------------------+-------|
+| b   | sesman-link-with-buffer         |       |
+| d   | sesman-link-with-directory      |       |
+| p   | sesman-link-with-project        |       |
+| l   | sesman-link-with-least-specific |       |
+| u   | sesman-unlink                   |       |
+|-----+---------------------------------+-------|
+| s   | sesman-start                    |       |
+| r   | sesman-restart                  |       |
+| q   | sesman-quit                     |       |
+|-----+---------------------------------+-------|
+
+** CIDER Start =C-c ESC=
++ =cider-start-map=
+
+|-----+----------------------------+-------|
+| key | command                    | notes |
+|-----+----------------------------+-------|
+| r   | cider-restart              |       |
+| c   | cider-connect-clj          |       |
+| C   | cider-connect-cljs         |       |
+| j   | cider-jack-in-clj          |       |
+| J   | cider-jack-in-cljs         |       |
+| s   | cider-selector             |       |
+|-----+----------------------------+-------|
+| .   | cider-find-resource        |       |
+| d   | cider-describe-connection  |       |
+| i   | cider-inspect              |       |
+| m   | cider-macroexpand-all      |       |
+|-----+----------------------------+-------|
+| n   | cider-repl-set-ns          |       |
+| o   | cider-repl-switch-to-other |       |
+| p   | cider-repl-history         |       |
+|-----+----------------------------+-------|
+
+** CIDER Trace Toggles =C-c M-t=
+
+|-----+------------------------+-------|
+| key | command                | notes |
+|-----+------------------------+-------|
+| n   | cider-toggle-trace-ns  |       |
+| v   | cider-toggle-trace-var |       |
+|-----+------------------------+-------|
+
+** CIDER Tests =C-c ,=
+
++ or =C-c C-=
++ or =C-c C-t=
++ or =C-c C-t C-=
++ =cider-test-commands-map=
+
+|-----+--------------------------------------+-------|
+| key | command                              | notes |
+|-----+--------------------------------------+-------|
+| t   | cider-test-run-test                  |       |
+| a   | cider-test-rerun-test                |       |
+| l   | cider-test-run-loaded-tests          |       |
+|-----+--------------------------------------+-------|
+| n   | cider-test-run-ns-tests              |       |
+| s   | cider-test-run-ns-tests-with-filters |       |
+|-----+--------------------------------------+-------|
+| p   | cider-test-run-project-tests         |       |
+| r   | cider-test-rerun-failed-tests        |       |
+|-----+--------------------------------------+-------|
+| b   | cider-test-show-report               |       |
+|-----+--------------------------------------+-------|
+
+** CIDER Docs =C-c C-d=
++ or =C-c C-d C-=
++ =cider-doc-map=
+
+|-----+------------------------------------+-------|
+| key | command                            | notes |
+|-----+------------------------------------+-------|
+| c   | cider-clojuredocs                  |       |
+| w   | cider-clojuredocs-web              |       |
+|-----+------------------------------------+-------|
+| j   | cider-javadoc                      |       |
+|-----+------------------------------------+-------|
+| d   | cider-doc                          |       |
+| a   | cider-apropos                      |       |
+| s   | cider-apropos-select               |       |
+| f   | cider-apropos-documentation        |       |
+| e   | cider-apropos-documentation-select |       |
+|-----+------------------------------------+-------|
+
+** CIDER Pretty Print =C-c C-v *=
+*** At Point =C-c C-v f=
++ or =C-c C-v C-f=
+
+|-----+----------------------------------+-------|
+| key | command                          | notes |
+|-----+----------------------------------+-------|
+| d   | cider-pprint-eval-defun-at-point |       |
+| e   | cider-pprint-eval-last-sexp      |       |
+|-----+----------------------------------+-------|
+
+*** To Comment =C-c C-v f c=
++ or =C-c C-v C-f=
++ or =C-c C-v f C-c=
++ or =C-c C-v C-f C-c=
+
+|-----+----------------------------------------+-------|
+| key | command                                | notes |
+|-----+----------------------------------------+-------|
+| d   | cider-pprint-eval-defun-to-comment     |       |
+| e   | cider-pprint-eval-last-sexp-to-comment |       |
+|-----+----------------------------------------+-------|
+
+** =C-c C-x= Cider Connection Prefixes =cider-start-map=
+
+|-------------+---------+-------|
+| key         | command | notes |
+|-------------+---------+-------|
+| C-c C-x C-x | cider   |       |
+| C-c C-x x   | cider   |       |
+|-------------+---------+-------|
+
+*** =C-c C-x c=
++ or =C-c C-x C-c=
++ or =C-c C-x C-c C-
+
+|-------------+------------------------+-------|
+| key         | command                | notes |
+|-------------+------------------------+-------|
+| C-c C-x c j | cider-connect-clj      |       |
+| C-c C-x c m | cider-connect-clj&cljs |       |
+| C-c C-x c s | cider-connect-cljs     |       |
+|-------------+------------------------+-------|
+
+*** =C-c C-x s=
++ or =C-c C-x C-s=
++ or =C-c C-x C-s C-=
+
+|-------------+----------------------------+-------|
+| key         | command                    | notes |
+|-------------+----------------------------+-------|
+| C-c C-x s j | cider-connect-sibling-clj  |       |
+| C-c C-x s s | cider-connect-sibling-cljs |       |
+|-------------+----------------------------+-------|
+
+*** =C-c C-x j=
++ or =C-c C-x C-j=
++ or =C-c C-x C-j C-=
+
+|-------------+------------------------+-------|
+| key         | command                | notes |
+|-------------+------------------------+-------|
+| C-c C-x j j | cider-jack-in-clj      |       |
+| C-c C-x j m | cider-jack-in-clj&cljs |       |
+| C-c C-x j s | cider-jack-in-cljs     |       |
+|-------------+------------------------+-------|

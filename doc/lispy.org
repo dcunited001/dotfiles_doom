@@ -1,0 +1,384 @@
+
+
+
+
+* Lispy
+
+
+
+** =lispy-mode-map-special=
+
+*** Navigation
+
+|-----+-------------------------+-------|
+| key | command                 | notes |
+|-----+-------------------------+-------|
+| l   | lispy-right             |       |
+| h   | lispy-left              |       |
+| f   | lispy-flow              |       |
+| j   | lispy-down              |       |
+| k   | lispy-up                |       |
+| d   | lispy-different         |       |
+| o   | lispy-other-mode        |       |
+| p   | lispy-eval-other-window |       |
+| P   | lispy-paste             |       |
+| y   | lispy-occur             |       |
+| z   | lh-knight/body          |       |
+|-----+-------------------------+-------|
+
+*** Outline
+
+|-----+--------------------------+-------|
+| key | command                  | notes |
+|-----+--------------------------+-------|
+| J   | lispy-outline-next       |       |
+| K   | lispy-outline-prev       |       |
+| L   | lispy-outline-goto-child |       |
+|-----+--------------------------+-------|
+
+*** Paredit Transformations
+
+|-----+----------------------+-------|
+| key | command              | notes |
+|-----+----------------------+-------|
+| >   | lispy-slurp          |       |
+| <   | lispy-barf           |       |
+| /   | lispy-splice         |       |
+| r   | lispy-raise          |       |
+| R   | lispy-raise-some     |       |
+| +   | lispy-join           |       |
+|-----+----------------------+-------|
+
+*** More Transformations
+
+|-----+----------------------+-------|
+| key | command              | notes |
+|-----+----------------------+-------|
+| C   | lispy-convolute      |       |
+| X   | lispy-convolute-left |       |
+| w   | lispy-move-up        |       |
+| s   | lispy-move-down      |       |
+| O   | lispy-oneline        |       |
+| M   | lispy-alt-multiline  |       |
+| S   | lispy-stringify      |       |
+|-----+----------------------+-------|
+
+*** Marking
+
+|-----+---------------------------+-------------------|
+| key | command                   | notes             |
+|-----+---------------------------+-------------------|
+| a   | lispy-ace-symbol          | lispy-meta-return |
+|     |                           | (when in outline) |
+| H   | lispy-ace-symbole-replace |                   |
+| M   | lispy-mark-lisp           |                   |
+|-----+---------------------------+-------------------|
+
+*** Dialect-Specific
+
+|-----+--------------------------+-------|
+| key | command                  | notes |
+|-----+--------------------------+-------|
+| _   | lispy-eval               |       |
+| e   | lispy-eval-and-insert    |       |
+| E   | lispy-goto-local         |       |
+| G   | lispy-goto               |       |
+| g   | lispy-follow t           |       |
+| F   | pop-tag-mark             |       |
+| D   | lispy-beginning-of-defun |       |
+| A   | lispy-underscore         |       |
+|-----+--------------------------+-------|
+
+*** Miscellanea
+
+
+|-----+---------------------+---------------------|
+| key | command             | notes               |
+|-----+---------------------+---------------------|
+| SPC | lispy-space         |                     |
+| i   | lispy-tab           |                     |
+| I   | lispy-shifttab      |                     |
+| N   | lispy-narrow        |                     |
+| W   | lispy-widen         |                     |
+| c   | lispy-clone         |                     |
+| u   | lispy-undo          |                     |
+| q   | lispy-ace-paren     | view-quit           |
+|     |                     | (when in view-mode) |
+| Q   | lispy-ace-char      |                     |
+| v   | lispy-view          |                     |
+| t   | lispy-teleport      | end-of-line         |
+|     |                     | (when in outline)   |
+| n   | lispy-new-copy      |                     |
+| b   | lispy-back          |                     |
+| B   | lispy-ediff-regions |                     |
+| x   | lispy-x             |                     |
+| Z   | lispy-edebug-stop   |                     |
+| V   | lispy-visit         |                     |
+| -   | lispy-ace-subword   |                     |
+| .   | lispy-repeat        |                     |
+| ~   | lispy-tilde         |                     |
+|-----+---------------------+---------------------|
+
+*** Digit Argument
+
+|-----+----------------+-------|
+| key | command        | notes |
+|-----+----------------+-------|
+| 0-9 | digit-argument |       |
+|-----+----------------+-------|
+
+
+** =lispy-mode-map-base=
+
+*** Navigation
+
+*** killing
+
+*** Misc
+
+*** tags
+
+
+|-----+----------------+-------|
+| key | command        | notes |
+|-----+----------------+-------|
+| 0-9 | digit-argument |       |
+|-----+----------------+-------|
+
+#+begin_src emacs-lisp
+ ;; navigation
+    (define-key map (kbd "C-a") 'lispy-move-beginning-of-line)
+    (define-key map (kbd "C-e") 'lispy-move-end-of-line)
+    (define-key map (kbd "M-o") 'lispy-left-maybe)
+    ;; killing
+    (define-key map (kbd "C-k") 'lispy-kill)
+    (define-key map (kbd "M-d") 'lispy-kill-word)
+    (define-key map (kbd "M-DEL") 'lispy-backward-kill-word)
+    ;; misc
+    (define-key map (kbd "(") 'lispy-parens)
+    (define-key map (kbd ";") 'lispy-comment)
+    (define-key map (kbd "M-q") 'lispy-fill)
+    (define-key map (kbd "C-j") 'lispy-newline-and-indent)
+    (define-key map (kbd "RET") 'lispy-newline-and-indent-plain)
+    ;; tags
+    (define-key map (kbd "M-.") 'lispy-goto-symbol)
+    (define-key map (kbd "M-,") 'pop-tag-mark)
+#+end_src
+
+
+** =lispy-mode-map-paredit=
+
+
+|-----+----------------+-------|
+| key | command        | notes |
+|-----+----------------+-------|
+| 0-9 | digit-argument |       |
+|-----+----------------+-------|
+
+#+begin_src emacs-lisp
+    (define-key map (kbd "M-)") 'lispy-close-round-and-newline)
+    (define-key map (kbd "C-M-n") 'lispy-forward)
+    (define-key map (kbd "C-M-p") 'lispy-backward)
+    (define-key map (kbd "[") 'lispy-open-square)
+    (define-key map (kbd "]") 'lispy-close-square)
+    (define-key map (kbd "{") 'lispy-open-curly)
+    (define-key map (kbd "}") 'lispy-close-curly)
+    (define-key map (kbd ")") 'lispy-right-nostring)
+    (define-key map (kbd "\"") 'lispy-doublequote)
+    (define-key map (kbd "M-\"") 'lispy-meta-doublequote)
+    (define-key map (kbd "C-d") 'lispy-forward-delete)
+    (define-key map (kbd "DEL") 'lispy-backward-delete)
+    (define-key map (kbd "C-M-f") 'lispy-forward)
+    (define-key map (kbd "C-M-b") 'lispy-backward)
+    (define-key map (kbd "M-(") 'lispy-wrap-round)
+    (define-key map (kbd "M-s") 'lispy-splice)
+    (define-key map (kbd "M-<up>") 'lispy-splice-sexp-killing-backward)
+    (define-key map (kbd "M-<down>") 'lispy-splice-sexp-killing-forward)
+    (define-key map (kbd "M-r") 'lispy-raise-sexp)
+    (define-key map (kbd "M-?") 'lispy-convolute-sexp)
+    (define-key map (kbd "C-)") 'lispy-forward-slurp-sexp)
+    (define-key map (kbd "C-<right>") 'lispy-forward-slurp-sexp)
+    (define-key map (kbd "C-}") 'lispy-forward-barf-sexp)
+    (define-key map (kbd "C-<left>") 'lispy-forward-barf-sexp)
+    (define-key map (kbd "C-(") 'lispy-backward-slurp-sexp)
+    (define-key map (kbd "C-M-<left>") 'lispy-backward-slurp-sexp)
+    (define-key map (kbd "C-M-<right>") 'lispy-backward-barf-sexp)
+    (define-key map (kbd "C-{") 'lispy-backward-barf-sexp)
+    (define-key map (kbd "M-S") 'lispy-split)
+    (define-key map (kbd "M-J") 'lispy-join)
+    (define-key map (kbd "C-M-u") 'lispy-left)
+    (define-key map (kbd "C-M-n") 'lispy-right)
+#+end_src
+
+
+** =lispy-mode-map-parinfer=
+
+|-----+----------------+-------|
+| key | command        | notes |
+|-----+----------------+-------|
+| 0-9 | digit-argument |       |
+|-----+----------------+-------|
+
+#+begin_src emacs-lisp
+    (define-key map (kbd "(") 'lispy-parens-auto-wrap)
+    (define-key map (kbd "[") 'lispy-brackets-auto-wrap)
+    (define-key map (kbd "{") 'lispy-braces-auto-wrap)
+    (define-key map (kbd "\"") 'lispy-quotes)
+    (define-key map (kbd ")") 'lispy-barf-to-point-nostring)
+    (define-key map (kbd "]") 'lispy-barf-to-point-nostring)
+    (define-key map (kbd "}") 'lispy-barf-to-point-nostring)
+    (define-key map (kbd "TAB") 'lispy-indent-adjust-parens)
+    (define-key map (kbd "<backtab>") 'lispy-dedent-adjust-parens)
+    (define-key map (kbd "DEL") 'lispy-delete-backward-or-splice-or-slurp)
+    (define-key map (kbd "C-d") 'lispy-delete-or-splice-or-slurp)
+    (define-key map (kbd ":") 'lispy-colon)
+    (define-key map (kbd "^") 'lispy-hat)
+    (define-key map (kbd "'") 'lispy-tick)
+    (define-key map (kbd "`") 'lispy-backtick)
+    (define-key map (kbd "#") 'lispy-hash)
+#+end_src
+
+
+
+** =lispy-mode-map-evilcp=
+
+|-----+----------------+-------|
+| key | command        | notes |
+|-----+----------------+-------|
+| 0-9 | digit-argument |       |
+|-----+----------------+-------|
+
+#+begin_src emacs-lisp
+    (define-key map (kbd "M-)") 'lispy-close-round-and-newline)
+    (define-key map (kbd "[") 'lispy-open-square)
+    (define-key map (kbd "]") 'lispy-close-square)
+    (define-key map (kbd "{") 'lispy-open-curly)
+    (define-key map (kbd "}") 'lispy-close-curly)
+    (define-key map (kbd ")") 'lispy-right-nostring)
+    (define-key map (kbd "\"") 'lispy-doublequote)
+    (define-key map (kbd "M-\"") 'lispy-meta-doublequote)
+    (define-key map (kbd "DEL") 'lispy-backward-delete)
+    (define-key map (kbd "M-s") 'lispy-splice)
+    (define-key map (kbd "M-<up>") 'lispy-splice-sexp-killing-backward)
+    (define-key map (kbd "M-<down>") 'lispy-splice-sexp-killing-backward)
+    (define-key map (kbd "M-r") 'lispy-raise-sexp)
+    (define-key map (kbd "M-?") 'lispy-convolute-sexp)
+    (define-key map (kbd "M-S") 'lispy-split)
+    (define-key map (kbd "M-J") 'lispy-join)
+    (define-key map (kbd "{") 'lispy-braces)
+    (define-key map (kbd "}") 'lispy-brackets)
+    (define-key map (kbd "]") 'lispy-forward)
+    (define-key map (kbd "[") 'lispy-backward)
+    (define-key map (kbd "M-(") 'evil-cp-wrap-next-round)
+    (define-key map (kbd "M-{") 'evil-cp-wrap-next-curly)
+    (define-key map (kbd "M-}") 'evil-cp-wrap-next-square)
+    (define-key map (kbd "<") 'evil-cp-<)
+    (define-key map (kbd ">") 'evil-cp->)
+    (define-key map (kbd "y") 'lispy-new-copy)
+    (define-key map (kbd "<C-return>") 'lispy-open-line)
+    (define-key map (kbd "<M-return>") 'lispy-meta-return)
+    (define-key map (kbd "M-k") 'lispy-move-up)
+    (define-key map (kbd "M-j") 'lispy-move-down)
+    (define-key map (kbd "M-p") 'lispy-clone)
+    (define-key map (kbd "M-\"") 'paredit-meta-doublequote)
+#+end_src
+
+
+
+** =lispy-mode-map-cdigits=
+
+|-----+----------------+-------|
+| key | command        | notes |
+|-----+----------------+-------|
+| 0-9 | digit-argument |       |
+|-----+----------------+-------|
+
+#+begin_src emacs-lisp
+    (define-key map (kbd "C-1") 'lispy-describe-inline)
+    (define-key map (kbd "C-2") 'lispy-arglist-inline)
+    (define-key map (kbd "C-3") 'lispy-right)
+    (define-key map (kbd "C-4") 'lispy-x)
+    (define-key map (kbd "C-7") 'lispy-cursor-down)
+    (define-key map (kbd "C-8") 'lispy-parens-down)
+    (define-key map (kbd "C-9") 'lispy-out-forward-newline)
+#+end_src
+
+
+
+** =lispy-mode-map-lispy=
+
+*** Navigation
+
+*** Kill Related
+
+*** Pairs
+
+*** Insert
+
+*** Misc
+
+*** Outline
+
+|-----+----------------+-------|
+| key | command        | notes |
+|-----+----------------+-------|
+| 0-9 | digit-argument |       |
+|-----+----------------+-------|
+
+#+begin_src emacs-lisp
+    ;; navigation
+    (define-key map (kbd "]") 'lispy-forward)
+    (define-key map (kbd "[") 'lispy-backward)
+    (define-key map (kbd ")") 'lispy-right-nostring)
+    ;; kill-related
+    (define-key map (kbd "C-y") 'lispy-yank)
+    (define-key map (kbd "C-d") 'lispy-delete)
+    (define-key map (kbd "DEL") 'lispy-delete-backward)
+    (define-key map (kbd "M-k") 'lispy-kill-sentence)
+    (define-key map (kbd "M-m") 'lispy-mark-symbol)
+    (define-key map (kbd "C-,") 'lispy-kill-at-point)
+    (define-key map (kbd "C-M-,") 'lispy-mark)
+    ;; pairs
+    (define-key map (kbd "{") 'lispy-braces)
+    (define-key map (kbd "}") 'lispy-brackets)
+    (define-key map (kbd "\"") 'lispy-quotes)
+    ;; insert
+    (define-key map (kbd ":") 'lispy-colon)
+    (define-key map (kbd "^") 'lispy-hat)
+    (define-key map (kbd "@") 'lispy-at)
+    (define-key map (kbd "'") 'lispy-tick)
+    (define-key map (kbd "`") 'lispy-backtick)
+    (define-key map (kbd "#") 'lispy-hash)
+    (define-key map (kbd "M-j") 'lispy-split)
+    (define-key map (kbd "M-J") 'lispy-join)
+    (define-key map (kbd "<C-return>") 'lispy-open-line)
+    (define-key map (kbd "<M-return>") 'lispy-meta-return)
+    (define-key map (kbd "M-RET") 'lispy-meta-return)
+    ;; misc
+    (define-key map (kbd "M-i") 'lispy-iedit)
+    (define-key map (kbd "<backtab>") 'lispy-shifttab)
+    ;; outline
+    (define-key map (kbd "M-<left>") 'lispy-outline-demote)
+    (define-key map (kbd "M-<right>") 'lispy-outline-promote)
+#+end_src
+
+
+** =lispy-mode-map-oleh=
+
+|-----+----------------+-------|
+| key | command        | notes |
+|-----+----------------+-------|
+| 0-9 | digit-argument |       |
+|-----+----------------+-------|
+
+#+begin_src emacs-lisp
+    (define-key map (kbd "φ") 'lispy-parens)
+    (define-key map (kbd "σ") 'lispy-braces)
+    (define-key map (kbd "ρ") 'lispy-brackets)
+    (define-key map (kbd "θ") 'lispy-quotes)
+    (define-key map (kbd "χ") 'lispy-right)
+    (define-key map (kbd "C-M-a") 'lispy-beginning-of-defun)
+    (define-key map (kbd "<return>") 'lispy-alt-line)
+    (define-key map (kbd "C-c C-c") 'lispy-eval-current-outline)
+    (define-key map (kbd "RET") 'lispy-newline-and-indent-plain)
+#+end_src

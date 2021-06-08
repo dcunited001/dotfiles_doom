@@ -76,13 +76,13 @@
        vi-tilde-fringe          ; fringe tildes to mark beyond EOB
        window-select            ; visually switch windows
 
-       workspaces        ; tab emulation, persistence & separate workspaces
+       workspaces      ; tab emulation, persistence & separate workspaces
        ;;zen               ; distraction-fre#e coding or writing
 
        :editor
        ;;(evil +everywhere); come to the dark side, we have cookies
        file-templates                   ; auto-snippets for empty files
-       fold                             ; (nigh) universal code folding
+       ;;fold                             ; (nigh) universal code folding
        (format +onsave)                 ; automated prettiness
        ;;god               ; run Emacs commands without modifier keys
        lispy                       ; vim for lisp, for people who don't like vim
@@ -220,7 +220,7 @@
        ;;solidity          ; do you need a blockchain? No.
        ;;swift             ; who asked for emoji variables?
        ;;terra             ; Earth and Moon in alignment for performance.
-       web               ; the tubes
+       web                              ; the tubes
        yaml                             ; JSON, but readable
 
        :email
@@ -241,5 +241,8 @@
        (default +bindings)
 
        ;; :ui
-       ;;bufler
+       ;; bufler
+
+       ;; :editor
+       ;; origami ;; not using the module bc of org-super-agenda config
        )

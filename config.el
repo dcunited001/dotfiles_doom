@@ -10,16 +10,43 @@
 ;; TODO this may need to be set before lispy loads....
 (setq lispy-compat '(cider edebug))
 
-(setq mouse-wheel-progressive-speed nil)
+(let ((bindings '(("<" "lispy-barf" "") ("A" "lispy-beginning-of-defun" "") ("j" "lispy-down" "") ("Z" "lispy-edebug-stop" "") ("B" "lispy-ediff-regions" "") ("G" "lispy-goto-local" "") ("h" "lispy-left" "") ("N" "lispy-narrow" "") ("y" "lispy-occur" "") ("o" "lispy-other-mode" "") ("J" "lispy-outline-next" "") ("K" "lispy-outline-prev" "") ("P" "lispy-paste" "") ("l" "lispy-right" "") ("I" "lispy-shifttab" "") (">" "lispy-slurp" "") ("SPC" "lispy-space" "") ("xB" "lispy-store-region-and-buffer" "") ("u" "lispy-undo" "") ("k" "lispy-up" "") ("v" "lispy-view" "") ("V" "lispy-visit" "") ("W" "lispy-widen" "") ("D" "pop-tag-mark" "") ("x" "see" "") ("L" "unbound" "") ("U" "unbound" "") ("X" "unbound" "") ("Y" "unbound" "") ("H" "lispy-ace-symbol-replace" "Edit") ("c" "lispy-clone" "Edit") ("C" "lispy-convolute" "Edit") ("n" "lispy-new-copy" "Edit") ("O" "lispy-oneline" "Edit") ("r" "lispy-raise" "Edit") ("R" "lispy-raise-some" "Edit") ("\\" "lispy-splice" "Edit") ("S" "lispy-stringify" "Edit") ("i" "lispy-tab" "Edit") ("xj" "lispy-debug-step-in" "Eval") ("xe" "lispy-edebug" "Eval") ("xT" "lispy-ert" "Eval") ("e" "lispy-eval" "Eval") ("E" "lispy-eval-and-insert" "Eval") ("xr" "lispy-eval-and-replace" "Eval") ("p" "lispy-eval-other-window" "Eval") ("q" "lispy-ace-paren" "Move") ("z" "lispy-knight" "Move") ("s" "lispy-move-down" "Move") ("w" "lispy-move-up" "Move") ("t" "lispy-teleport" "Move") ("Q" "lispy-ace-char" "Nav") ("-" "lispy-ace-subword" "Nav") ("a" "lispy-ace-symbol" "Nav") ("b" "lispy-back" "Nav") ("d" "lispy-different" "Nav") ("f" "lispy-flow" "Nav") ("F" "lispy-follow" "Nav") ("g" "lispy-goto" "Nav") ("xb" "lispy-bind-variable" "Refactor") ("xf" "lispy-flatten" "Refactor") ("xc" "lispy-to-cond" "Refactor") ("xd" "lispy-to-defun" "Refactor") ("xi" "lispy-to-ifs" "Refactor") ("xl" "lispy-to-lambda" "Refactor") ("xu" "lispy-unbind-variable" "Refactor") ("M" "lispy-multiline" "Other") ("xh" "lispy-describe" "Other") ("m" "lispy-mark-list" "Other"))))
+(eval
+ (append
+  '(defhydra dchydra/lispy-cheat-sheet (:hint nil :foreign-keys run)
+     ("C-<mouse-14>" nil "Exit" :exit t))
+  (cl-loop for x in bindings
+           unless (string= "" (elt x 2))
+           collect
+           (list (car x)
+                 (intern (elt x 1))
+                 (when (string-match "lispy-\\(?:eval-\\)?\\(.+\\)"
+                                     (elt x 1))
+                   (match-string 1 (elt x 1)))
+                 :column
+                 (elt x 2)))))
 
-;; TODO: misc subdir & project-level shortcuts (dired,project)
+(with-eval-after-load "lispy"
+  (define-key lispy-mode-map (kbd "C-<mouse-14>") 'dchydra/lispy-cheat-sheet/body))
+
+)
+
+(setq mouse-wheel-progressive-speed nil
+      mouse-wheel-scroll-amount '(8)
+      mouse-drag-and-drop-region t)
+
+;; TODO: misc subdir & project-level shortcuts (died,project)
 
 ;; for now, simply back/forward buffer ;; TODO: change =forward= to bufler or emacs-tab bar?
 (map! "S-<mouse-8>" 'previous-buffer)
 ;; TODO something else: (map! "S-<mouse-9>" 'next-buffer)
 
-(map! "<mouse-8>" 'counsel-grep-or-swiper)
-(map! "<mouse-9> " 'swiper-all-buffer-p)
+(map! "<mouse-8>" '+fold/toggle)
+(map! "<mouse-9> " 'er/expand-region)
+(map! "S-<mouse-9> " 'er/contract-region)
+
+;; (map! "<mouse-8>" 'counsel-grep-or-swiper)
+;; (map! "<mouse-9> " 'swiper-all-buffer-p)
 ;; (map! "C-<mouse-8>" '+ivy/switch-buffer)
 ;; (map! "C-<mouse-9>" '+ivy/switch-workspace-buffer)
 (map! "C-S-<mouse-8>" 'projectile-find-file)
@@ -33,8 +60,26 @@
 
 ;; TODO: something else (map! "M-<mouse-9>" 'better-jumper-jump-backward)
 
-(setq doom-theme 'doom-one
-      doom-one-brighter-modeline t)
+(map! "<mouse-12>" 'origami-toggle-node)
+(map! "C-<mouse-12>" 'origami-open-node-recursively)
+(map! "C-S-<mouse-12>" 'origami-close-node-recursively)
+
+(map! "M-<mouse-12>" 'origami-forward-fold)
+(map! "S-<mouse-12>" 'origami-backward-fold-same-level)
+(map! "M-S-<mouse-12>" 'origami-forward-fold-same-level)
+
+(map! "C-M-<mouse-12>" 'origami-close-all-nodes)
+(map! "C-M-S-<mouse-12>" 'origami-open-all-nodes)
+
+;; (map! "M-S-<mouse-12>" 'origami-show-only-node)
+
+
+
+(let* ((themes-ilike '(doom-one doom-dark+ doom-acario-dark))
+       (random-theme (nth (random (length themes-ilike)) themes-ilike)))
+  (setq doom-theme random-theme))
+
+(setq doom-one-brighter-modeline t)
 
 ;; (setq doom-theme 'doom-acario-dark
 ;;   doom-acario-dark-brighter-comments nil
@@ -117,6 +162,38 @@
 
 (setq display-line-numbers-type nil)
 
+(use-package! origami
+  :config (map! :map origami-mode-map
+                :prefix "C-c C-f"
+                "C-f" #'origami-toggle-node
+                "C-u" #'origami-open-node-recursively
+                "C-c" #'origami-close-node-recursively
+                "C-a C-r" #'origami-reset
+                "C-a C-f" #'origami-close-all-nodes
+                "C-a C-u" #'origami-open-all-nodes)
+
+  (defvar ap/org-super-agenda-auto-show-groups
+    '("Schedule" "Bills" "Priority A items" "Priority B items"))
+
+  (defun ap/org-super-agenda-origami-fold-default ()
+    "Fold certain groups by default in Org Super Agenda buffer."
+    (forward-line 3)
+    (cl-loop do (origami-forward-toggle-node (current-buffer) (point))
+             while (origami-forward-fold-same-level (current-buffer) (point)))
+    (--each ap/org-super-agenda-auto-show-groups
+      (goto-char (point-min))
+      (when (re-search-forward (rx-to-string `(seq bol " " ,it)) nil t)
+        (origami-show-node (current-buffer) (point)))))
+
+  ;; :hook ((org-agenda-mode . origami-mode)
+         ;; (org-agenda-finalize . ap/org-super-agenda-origami-fold-default))
+
+        )
+
+(add-hook 'doom-init-ui-hook
+          (lambda ()
+            (global-origami-mode +1)))
+
 (use-package! centered-cursor-mode ;: defer t
   :config (map! :leader :desc "Toggle Centered Cursor"
                 "t-" (λ! () (interactive) (centered-cursor-mode 'toggle))))
@@ -171,15 +248,21 @@
       lsp-ui-imenu-window-width 25)
 
 (setq org-directory (getenv "ORG_DIRECTORY")
-      +org-capture-journal-file "/data/org/journal.org")
+      +org-capture-journal-file (concat (file-name-as-directory org-directory) "journal.org")
+      org-calendars-directory (concat  (file-name-as-directory org-directory) "calendars"))
 
 (after! org
   (remove-hook 'after-save-hook #'+literate|recompile-maybe))
 
-(setq org-refile-use-cache t
-      org-refile-use-outline-path t)
+(setq org-refile-targets
+      '((org-agenda-files . (:maxlevel . 3))
+        (nil . (:maxlevel . 3)))
 
-(unless org-refile-cache-timer
+      org-refile-use-outline-path t
+      org-refile-allow-creating-parent-nodes 'confirm
+      org-refile-use-cache t)
+
+(unless (boundp 'org-refile-cache-timer)
   (run-with-idle-timer 300 t (lambda ()
                                (org-refile-cache-clear)
                                (org-refile-get-targets)))
@@ -189,7 +272,28 @@
 ;; to filter subtrees marked "done" from being org-refile-targets
 ;; (source: mwfogleman/englehorn)
 
+(setq org-clock-auto-clockout-timer t)
 
+;; (org)
+
+(use-package! org-super-agenda
+  :init (setq org-super-agenda-groups
+                '((:name "Today"
+                   :time-grid t
+                   :todo "Today")
+                  (:habit t)
+                  (:name "Due today"
+                   :deadline today)
+                  (:name "Overdue"
+                   :deadline past)
+                  (:name "Due soon"
+                   :deadline future)
+                  (:name "Important"
+                   :priority "A")
+                  (:priority<= "B"
+                   :order 1)
+                  ))
+  :config (org-super-agenda-mode))
 
 
 
@@ -211,6 +315,29 @@
             (setq org-drill-left-cloze-separator "]>")
             (setq org-drill-learn-fraction 0.25))
   )
+
+(let ((bindings '(("g" "edebug-go-mode" "Modes") ("SPC" "edebug-step-mode" "Modes") ("t" "edebug-trace-mode" "Modes") ("c" "edebug-continue-mode" "Modes") ("G" "edebug-Go-nonstop-mode" "Modes") ("T" "edebug-Trace-fast-mode" "Modes") ("C" "edebug-Continue-fast-mode" "Modes") ("n" "edebug-next-mode" "Modes") ("I" "edebug-set-initial-mode" "Modes") ("S" "edebug-stop" "Jumping") ("h" "edebug-goto-here" "Jumping") ("f" "edebug-forward-sexp" "Jumping") ("o" "edebug-step-out" "Jumping") ("i" "edebug-step-in" "Jumping") ("?" "edebug-help" "Misc") ("Q" "edebug-top-level-nonstop" "Misc") ("r" "edebug-previous-result" "Misc") ("d" "edebug-pop-to-backtrace" "Misc") ("=" "edebug-display-freq-count" "Misc") ("b" "edebug-set-breakpoint" "Breaks") ("B" "edebug-next-breakpoint" "Breaks") ("u" "edebug-unset-breakpoint" "Breaks") ("U" "edebug-unset-breakpoints" "Breaks") ("D" "edebug-toggle-disable-breakpoint" "Breaks") ("x" "edebug-set-conditional-breakpoint" "Breaks") ("X" "edebug-set-global-break-condition" "Breaks") ("v" "edebug-view-outside" "Views") ("P" "edebug-bounce-point" "Views") ("w" "edebug-where" "Views") ("W" "edebug-toggle-save-windows" "Views") ("e" "edebug-eval-expression" "Eval") ("C-x C-e" "edebug-eval-last-sexp" "Eval") ("E" "edebug-visit-eval-list" "Eval") ("C-j" "edebug-eval-print-last-sexp" "Eval") ("C-c C-u" "edebug-update-eval-list" "Eval") ("C-c C-d" "edebug-delete-eval-item" "Eval") ("C-c C-w" "edebug-where" "Eval"))))
+
+(eval
+ (append
+  '(defhydra dchydra/edebug-cheat-sheet (:hint nil :foreign-keys run)
+     ("C-<mouse-14>" nil "Exit" :exit t))
+  (cl-loop for x in bindings
+           unless (string= "" (elt x 2))
+           collect
+           (list (car x)
+                 (intern (elt x 1))
+                 ;; edebug-(?:eval-)?\(.+)
+                 (when (string-match "edebug-\\(.+\\)"
+                                     (elt x 1))
+                   (match-string 1 (elt x 1)))
+                 :column
+                 (elt x 2)))))
+
+(with-eval-after-load "edebug"
+  (define-key edebug-mode-map (kbd "C-<mouse-14>") 'dchydra/edebug-cheat-sheet/body))
+
+)
 
 (add-hook 'clojure-mode-hook 'zprint-mode)
 (add-hook 'clojurescript-mode-hook 'zprint-mode)
@@ -289,17 +416,3 @@
 ;; TODO fix to autoload rainbow-mode in doom theme files
 ;; (setq auto-minor-mode-alist (append '(("theme\\.el$" . rainbow-mode))
                                     ;; auto-minor-mode-alist))
-
-digraph {
-        rankdir=LR;
-        splines=true;
-        node [shape=box];
-
-        A [label="A"]
-        B [label="B"]
-        C [label="C"]
-
-        A -> B;
-        B -> C;
-        C -> A;
-}

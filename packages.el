@@ -11,6 +11,8 @@
 
 ;;(package! )
 
+(package! origami)
+
 (package! centered-cursor-mode)
 
 (package! info-colors)
