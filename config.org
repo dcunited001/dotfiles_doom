@@ -949,10 +949,13 @@ prevent over-eager dotfiles recompilation =from HaoZeke=
 
 *** Org Clock
 
-#+begin_src emacs-lisp
-(setq org-clock-auto-clockout-timer t)
+Set auto-clockout to keep time tracking accurate. Refer to [[https://orgmode.org/manual/Clocking-Work-Time.html#Clocking-Work-Time][Orgmode Manual entry]] for details.
 
-;; (org)
+#+begin_src emacs-lisp
+(setq org-clock-auto-clockout-timer 300
+      ;; org-clock-idle-time 3
+        )
+(org-clock-auto-clockout-insinuate)
 #+end_src
 
 *** Org Super Agenda
@@ -1102,7 +1105,7 @@ Plant UML is also supported by org-babel
 
 Graphviz practically works [[https://www.orgmode.org/worg/org-contrib/babel/languages/ob-doc-dot.html][out of the box]]
 
-#+begin_src dot :file img/dot/dot_test.png  :cmdline -Kdot -Tpng
+#+begin_src dot :tangle no :file img/dot/dot_test.png  :cmdline -Kdot -Tpng
 digraph {
         rankdir=LR;
         splines=true;
@@ -1117,6 +1120,7 @@ digraph {
         C -> A;
 }
 #+end_src
+
 
 #+RESULTS:
 [[file:img/dot/dot_test.png]]
@@ -1570,4 +1574,5 @@ Lispy functions of note.
 [fn:frap] frap [[https://github.com/frap/emacs-literate][emacs config]]
 [fn:ubolonton] ubolonton [[https://github.com/ubolonton/.emacs.d][emacs config]]
 [fn:iimacs] iimacs [[https://github.com/iimacs/.emacs.d][emacs config]] for [[https://github.com/kubemacs/kubemacs][kubemacs]]
+[fn:sachac] sacha [[https://github.com/sachac/.emacs.d/][emacs config]]
 [fn:irreal] irreal [[https://irreal.org/blog][blog]]

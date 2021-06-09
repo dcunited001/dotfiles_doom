@@ -251,9 +251,10 @@
 ;; to filter subtrees marked "done" from being org-refile-targets
 ;; (source: mwfogleman/englehorn)
 
-(setq org-clock-auto-clockout-timer t)
-
-;; (org)
+(setq org-clock-auto-clockout-timer 300
+      ;; org-clock-idle-time 3
+        )
+(org-clock-auto-clockout-insinuate)
 
 (use-package! org-super-agenda
   :init (setq org-super-agenda-groups
