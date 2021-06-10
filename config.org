@@ -76,7 +76,6 @@ added by Doom modules).
     - [[#point-movement][Point Movement]]
     - [[#lispy][Lispy]]
     - [[#mouse][Mouse]]
-    - [[#hydras][Hydras]]
   - [[#completion][COMPLETION]]
     - [[#completion-prompts][Completion prompts]]
     - [[#company][Company]]
@@ -99,6 +98,7 @@ added by Doom modules).
     - [[#sticky-windows][Sticky Windows]]
     - [[#misc][Misc]]
   - [[#editor][EDITOR]]
+    - [[#file-templates][File Templates]]
     - [[#origami-mode][Origami Mode]]
     - [[#centered-cursor-mode][Centered Cursor Mode]]
     - [[#snippets][Snippets]]
@@ -130,7 +130,8 @@ added by Doom modules).
     - [[#workflow][Workflow]]
     - [[#keys][Keys]]
     - [[#org-literate][Org Literate]]
-    - [[#org-capture-and-refile][Org Capture and Refile]]
+    - [[#org-capture][Org Capture]]
+    - [[#org-refile][Org Refile]]
     - [[#org-agenda][Org Agenda]]
     - [[#org-clock][Org Clock]]
     - [[#org-super-agenda][Org Super Agenda]]
@@ -164,7 +165,7 @@ added by Doom modules).
   - [[#config][CONFIG]]
     - [[#prismel][Prism.el]]
     - [[#rainbow-mode][Rainbow Mode]]
-  - [[#hydras-1][HYDRAS]]
+  - [[#hydras][HYDRAS]]
     - [[#edebug][edebug]]
     - [[#lispy-1][lispy]]
 - [[#footnotes][Footnotes]]
@@ -302,6 +303,19 @@ Combinations with Control are a little more difficult with one hand.
 
 #+end_src
 
+***** Mode Hints (Mouse 14)
+
+Mouse 14 is intended to give hints for keybindings.
+
+- =M-<mouse-14>= calls to =which-key-show-major-mode= and should not require
+  specific =config.el= behavior to be defined.
+- =C-<mouse-14>= is intended to evoke mode-specific hydras, but requires these
+  hydras to have been defined (see [[*HYDRAS][HYDRAS]])
+
+#+begin_src emacs-lisp
+(map! "M-<mouse-14>" 'which-key-show-major-mode)
+#+end_src
+
 **** TODO other mouse maps
 + and navigating =describe-= and other docs
 + helpful-at-point
@@ -319,12 +333,7 @@ Combinations with Control are a little more difficult with one hand.
 + [ ] ~(kbd "<mouse-4>")~ linux mouse wheel scroll up
 + [ ] ~(kbd "<mouse-5>")~ linux mouse wheel scroll down
 + =<fringe>= and =<modeline>=
-*** Hydras :hydras:
-
-#+begin_src emacs-lisp
-
-#+end_src
-
+ 
 
 ** COMPLETION
 
@@ -371,9 +380,9 @@ Pick a random theme from the ones I like.
 
 #+begin_src emacs-lisp
 ;; (set-frame-font "Source Code Pro 12" nil t)
-(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 14)
-      doom-unicode-font (font-spec :family "DejaVu Sans Mono" :size 14)
-      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 14)
+(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 16)
+      doom-unicode-font (font-spec :family "DejaVu Sans Mono" :size 16)
+      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 16)
       doom-font-increment 1)
 
 (unless (find-font doom-font)
@@ -559,6 +568,11 @@ to `relative'.
 #+end_src
 
 ** EDITOR
+
+*** File Templates
+
+This section defines new Doom file templates by appending yas-snippet references
+to =+file-template-alist=.
 
 *** Origami Mode
 
@@ -900,16 +914,16 @@ General Org Mode configs:
 
 #+begin_src emacs-lisp
 (setq org-directory (getenv "ORG_DIRECTORY")
-      +org-capture-journal-file "/data/org/journal.org")
+      +org-capture-journal-file (concat (file-name-as-directory org-directory) "journal.org")
+      org-calendars-directory (concat  (file-name-as-directory org-directory) "calendars"))
+
 #+end_src
+
+
 
 *** Workflow
 
-*** Keys :kbdmaps:
-
-**** TODO remap ~org-forward-heading-same-level~
-+ ~C-c C-b~ maps to ~org-backward-heading-same-level~
-+ ~C-c C-f~ conflicts with code folding (which does nothing in org/babel)
+*** Keys
 
 *** Org Literate
 
@@ -921,7 +935,12 @@ prevent over-eager dotfiles recompilation =from HaoZeke=
 #+END_SRC
 
 
-*** Org Capture and Refile
+*** Org Capture
+
+**** TODO capture tempalte for code examples
+- set the possible refile locations according to configured metarepos
+
+*** Org Refile
 
 #+begin_src emacs-lisp
 (setq org-refile-targets
@@ -1035,6 +1054,38 @@ Config and flashcard info can be found at [[https://gitlab.com//phillord/org-dri
 
 *** ELISP :elisp:
 
+**** [[https://gitlab.com/mtekman/elisp-depmap.el][Elisp Depmap]]
+
+Can be babel'd to generate graphviz pdf's of elisp libraries
+
+#+begin_src emacs-lisp :tangle ./packages.el
+(package! elisp-depmap)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! elisp-depmap
+  :bind (("C-c M-d" . elisp-depmap-graphviz-digraph)
+         ("C-c M-g" . elisp-depmap-graphviz)
+         ("C-c M-s" . elisp-depmap-makesummarytable))
+  :config (setq elisp-depmap-exec-file (getenv "GRAPHVIZ_DOT")))
+#+end_src
+
+
+#+name: eg-depmap
+#+begin_src emacs-lisp :tangle no :results output
+
+#+end_src
+
+#+RESULTS: eg-depmap
+
+#+begin_src dot :tangle no :var graph=eg-depmap :file img/dot/eg-depmap.png :exports results :cmdline -Kdot -Tpng
+graph {
+      $graph
+}
+#+end_src
+
+#+RESULTS:
+[[file:img/dot/eg-depmap.png]]
 
 *** LATEX :latex:
 
@@ -1103,7 +1154,7 @@ Plant UML is also supported by org-babel
 
 *** GRAPHVIZ :graphviz:
 
-Graphviz practically works [[https://www.orgmode.org/worg/org-contrib/babel/languages/ob-doc-dot.html][out of the box]]
+Graphviz practically works [[https://www.orgmode.org/worg/org-contrib/babel/languages/ob-doc-dot.html][out of the box]], which has an emacs lisp metaprogramming example. More examples here at [[https://github.com/dfeich/org-babel-examples/blob/master/graphviz/graphviz-babel.org][dfeich/org-babel-examples]].
 
 #+begin_src dot :tangle no :file img/dot/dot_test.png  :cmdline -Kdot -Tpng
 digraph {
@@ -1427,8 +1478,9 @@ These functions are mentioned in the emacs manual, but not mapped in the hydra
 | M-:     | eval-expression                   | Eval    |
 |---------+-----------------------------------+---------|
 
-#+BEGIN_SRC emacs-lisp :var bindings=hydra-edebug-bindings :colnames yes :results silent
++ TODO something's not right here...
 
+#+BEGIN_SRC emacs-lisp :var bindings=hydra-edebug-bindings :colnames yes :results silent
 (eval
  (append
   '(defhydra dchydra/edebug-cheat-sheet (:hint nil :foreign-keys run)
@@ -1447,6 +1499,8 @@ These functions are mentioned in the emacs manual, but not mapped in the hydra
 
 (with-eval-after-load "edebug"
   (define-key edebug-mode-map (kbd "C-<mouse-14>") 'dchydra/edebug-cheat-sheet/body))
+(with-eval-after-load "debugger"
+  (define-key debugger-mode-map (kbd "C-<mouse-14>") 'dchydra/edebug-cheat-sheet/body))
 
 #+END_SRC
 

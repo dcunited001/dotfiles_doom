@@ -52,7 +52,7 @@
 
 ;; (map! "M-S-<mouse-12>" 'origami-show-only-node)
 
-
+(map! "M-<mouse-14>" 'which-key-show-major-mode)
 
 (let* ((themes-ilike '(doom-one doom-dark+ doom-acario-dark))
        (random-theme (nth (random (length themes-ilike)) themes-ilike)))
@@ -67,9 +67,9 @@
 ;;   doom-acario-dark-padded-modeline 4)
 
 ;; (set-frame-font "Source Code Pro 12" nil t)
-(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 14)
-      doom-unicode-font (font-spec :family "DejaVu Sans Mono" :size 14)
-      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 14)
+(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 16)
+      doom-unicode-font (font-spec :family "DejaVu Sans Mono" :size 16)
+      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 16)
       doom-font-increment 1)
 
 (unless (find-font doom-font)
@@ -296,6 +296,12 @@
             (setq org-drill-learn-fraction 0.25))
   )
 
+(use-package! elisp-depmap
+  :bind (("C-c M-d" . elisp-depmap-graphviz-digraph)
+         ("C-c M-g" . elisp-depmap-graphviz)
+         ("C-c M-s" . elisp-depmap-makesummarytable))
+  :config (setq elisp-depmap-exec-file (getenv "GRAPHVIZ_DOT")))
+
 (add-hook 'clojure-mode-hook 'zprint-mode)
 (add-hook 'clojurescript-mode-hook 'zprint-mode)
 
@@ -375,7 +381,6 @@
                                     ;; auto-minor-mode-alist))
 
 (let ((bindings '(("g" "edebug-go-mode" "Modes") ("SPC" "edebug-step-mode" "Modes") ("t" "edebug-trace-mode" "Modes") ("c" "edebug-continue-mode" "Modes") ("G" "edebug-Go-nonstop-mode" "Modes") ("T" "edebug-Trace-fast-mode" "Modes") ("C" "edebug-Continue-fast-mode" "Modes") ("n" "edebug-next-mode" "Modes") ("I" "edebug-set-initial-mode" "Modes") ("S" "edebug-stop" "Jumping") ("h" "edebug-goto-here" "Jumping") ("f" "edebug-forward-sexp" "Jumping") ("o" "edebug-step-out" "Jumping") ("i" "edebug-step-in" "Jumping") ("?" "edebug-help" "Misc") ("Q" "edebug-top-level-nonstop" "Misc") ("r" "edebug-previous-result" "Misc") ("d" "edebug-pop-to-backtrace" "Misc") ("=" "edebug-display-freq-count" "Misc") ("b" "edebug-set-breakpoint" "Breaks") ("B" "edebug-next-breakpoint" "Breaks") ("u" "edebug-unset-breakpoint" "Breaks") ("U" "edebug-unset-breakpoints" "Breaks") ("D" "edebug-toggle-disable-breakpoint" "Breaks") ("x" "edebug-set-conditional-breakpoint" "Breaks") ("X" "edebug-set-global-break-condition" "Breaks") ("v" "edebug-view-outside" "Views") ("P" "edebug-bounce-point" "Views") ("w" "edebug-where" "Views") ("W" "edebug-toggle-save-windows" "Views") ("e" "edebug-eval-expression" "Eval") ("C-x C-e" "edebug-eval-last-sexp" "Eval") ("E" "edebug-visit-eval-list" "Eval") ("C-j" "edebug-eval-print-last-sexp" "Eval") ("C-c C-u" "edebug-update-eval-list" "Eval") ("C-c C-d" "edebug-delete-eval-item" "Eval") ("C-c C-w" "edebug-where" "Eval"))))
-
 (eval
  (append
   '(defhydra dchydra/edebug-cheat-sheet (:hint nil :foreign-keys run)
@@ -394,6 +399,8 @@
 
 (with-eval-after-load "edebug"
   (define-key edebug-mode-map (kbd "C-<mouse-14>") 'dchydra/edebug-cheat-sheet/body))
+(with-eval-after-load "debugger"
+  (define-key debugger-mode-map (kbd "C-<mouse-14>") 'dchydra/edebug-cheat-sheet/body))
 
 )
 
