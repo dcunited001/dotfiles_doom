@@ -15,6 +15,10 @@
 
 (package! centered-cursor-mode)
 
+(package! dotcrafter :recipe (:host github
+                               :branch "main"
+                               :repo "daviwil/dotcrafter.el"))
+
 (package! info-colors)
 
 (package! magit-tbdiff)
@@ -25,8 +29,8 @@
 
 (package! journalctl-mode)
 
-(package! pkgbuild-mode
-  :recipe (:host github :repo "juergenhoetzel/pkgbuild-mode"))
+(package! pkgbuild-mode :recipe (:host github
+                                 :repo "juergenhoetzel/pkgbuild-mode"))
 
 (package! crontab-mode)
 
@@ -46,6 +50,9 @@
 (package! org-super-agenda)
 (package! org-ql)
 (package! org-sidebar)
+
+(package! elisp-depmap
+  :recipe (:host gitlab :repo "mtekman/elisp-depmap.el"))
 
 (package! zprint-mode)
 

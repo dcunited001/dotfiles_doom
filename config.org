@@ -363,7 +363,7 @@ Removed =-childframe= for now, as these are actual frames, kinda.
 Pick a random theme from the ones I like.
 
 #+begin_src emacs-lisp
-(let* ((themes-ilike '(doom-one doom-dark+ doom-acario-dark))
+(let* ((themes-ilike '(doom-one doom-dark+ doom-acario-dark doom-molokai))
        (random-theme (nth (random (length themes-ilike)) themes-ilike)))
   (setq doom-theme random-theme))
 
@@ -640,8 +640,7 @@ Scroll lock can emulate this.
 (eval-after-load 'yasnippet
   (lambda ()
     (add-to-list 'yas-snippet-dirs 'dc/snippets)
-    (message "loading snippets")
-    (message dc/snippets)
+    (message "loading dc/snippets")
     (yas-load-directory dc/snippets t)))
 #+end_src
 
@@ -654,7 +653,7 @@ commands on the directory). Also `M-!` will run commands on the dir without
 parameterizing a subdir.
 
 #+begin_src emacs-lisp
-(setq dired-omit-files "^.DS_Store\\'\\|^.project\\(?:ile\\)?\\'\\|^.\\(svn\\|git\\)\\'\\|^.ccls-cache\\'\\|\\(?:\\.js\\)?\\.meta\\'\\|\\.\\(?:elc\\|o\\|pyo\\|swp\\|class\\)\\'")
+(setq dired-omit-files "^.DS_Store\\'\\|^.project\\(?:ile\\)?\\'\\|^.\\(svn\\)\\'\\|^.ccls-cache\\'\\|\\(?:\\.js\\)?\\.meta\\'\\|\\.\\(?:elc\\|o\\|pyo\\|swp\\|class\\)\\'")
 #+end_src
 
 ** TERM
@@ -752,8 +751,8 @@ config/control on-save shell tasks.[fn:haozeke]
 **** PKGBUILD Mode
 
 #+BEGIN_SRC emacs-lisp :tangle ./packages.el
-(package! pkgbuild-mode
-  :recipe (:host github :repo "juergenhoetzel/pkgbuild-mode"))
+(package! pkgbuild-mode :recipe (:host github
+                                 :repo "juergenhoetzel/pkgbuild-mode"))
 #+END_SRC
 
 #+begin_src emacs-lisp
@@ -1059,7 +1058,8 @@ Config and flashcard info can be found at [[https://gitlab.com//phillord/org-dri
 Can be babel'd to generate graphviz pdf's of elisp libraries
 
 #+begin_src emacs-lisp :tangle ./packages.el
-(package! elisp-depmap)
+(package! elisp-depmap
+  :recipe (:host gitlab :repo "mtekman/elisp-depmap.el"))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1410,6 +1410,8 @@ Use doom colors for theme and toggle with =:leader tP=
 #+end_src
 
 **** TODO customize doom [[file:~/.emacs.d/modules/tools/rgb/README.org::*Features][rainbow module]]
+
+
 
 ** HYDRAS
 

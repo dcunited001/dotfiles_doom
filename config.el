@@ -54,7 +54,7 @@
 
 (map! "M-<mouse-14>" 'which-key-show-major-mode)
 
-(let* ((themes-ilike '(doom-one doom-dark+ doom-acario-dark))
+(let* ((themes-ilike '(doom-one doom-dark+ doom-acario-dark doom-molokai))
        (random-theme (nth (random (length themes-ilike)) themes-ilike)))
   (setq doom-theme random-theme))
 
@@ -182,11 +182,10 @@
 (eval-after-load 'yasnippet
   (lambda ()
     (add-to-list 'yas-snippet-dirs 'dc/snippets)
-    (message "loading snippets")
-    (message dc/snippets)
+    (message "loading dc/snippets")
     (yas-load-directory dc/snippets t)))
 
-(setq dired-omit-files "^.DS_Store\\'\\|^.project\\(?:ile\\)?\\'\\|^.\\(svn\\|git\\)\\'\\|^.ccls-cache\\'\\|\\(?:\\.js\\)?\\.meta\\'\\|\\.\\(?:elc\\|o\\|pyo\\|swp\\|class\\)\\'")
+(setq dired-omit-files "^.DS_Store\\'\\|^.project\\(?:ile\\)?\\'\\|^.\\(svn\\)\\'\\|^.ccls-cache\\'\\|\\(?:\\.js\\)?\\.meta\\'\\|\\.\\(?:elc\\|o\\|pyo\\|swp\\|class\\)\\'")
 
 (setq explicit-shell-file-name "/bin/zsh")
 
