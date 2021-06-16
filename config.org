@@ -108,6 +108,7 @@ added by Doom modules).
     - [[#shell][Shell]]
   - [[#checkers][CHECKERS]]
   - [[#tools][TOOLS]]
+    - [[#dotcrafter][Dotcrafter]]
     - [[#info][Info]]
     - [[#diff-and-ediff][Diff and Ediff]]
     - [[#git][Git]]
@@ -129,6 +130,7 @@ added by Doom modules).
   - [[#org][ORG]]
     - [[#workflow][Workflow]]
     - [[#keys][Keys]]
+    - [[#mime-types-fntecosaur][Mime types [fn:tecosaur]]]
     - [[#org-literate][Org Literate]]
     - [[#org-capture][Org Capture]]
     - [[#org-refile][Org Refile]]
@@ -678,6 +680,25 @@ before or after the doom/emacs install.
 Syntax & Spellcheck
 
 ** TOOLS
+
+*** Dotcrafter
+
+[[https://github.com/daviwil/dotcrafter.el/][Dotcrafter]] helps you craft your dotfiles.
+
+#+begin_src emacs-lisp :tangle ./packages.el
+(package! dotcrafter :recipe (:host github
+                               :branch "main"
+                               :repo "daviwil/dotcrafter.el"))
+#+end_src
+
+#+begin_src emacs-lisp
+;; (use-package! dotcrafter
+;;   :custom
+;;   (dotcrafter-dotfiles-folder (getenv "DF_"))
+;;   (dotcrafter-org-files '("zsh/README.org"
+;;                           "input/README.org"
+;;                           "clojure.org")))
+#+end_src
 
 *** Info
 

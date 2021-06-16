@@ -189,6 +189,13 @@
 
 (setq explicit-shell-file-name "/bin/zsh")
 
+;; (use-package! dotcrafter
+;;   :custom
+;;   (dotcrafter-dotfiles-folder (getenv "DF_"))
+;;   (dotcrafter-org-files '("zsh/README.org"
+;;                           "input/README.org"
+;;                           "clojure.org")))
+
 (use-package! info-colors)
 
 (use-package! magit-tbdiff)
