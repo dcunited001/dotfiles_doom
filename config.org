@@ -945,6 +945,34 @@ General Org Mode configs:
 
 *** Keys
 
+*** Mime types [fn:tecosaur]
+Org mode isn't recognised as it's own mime type by default, but that can easily
+be changed with the following file. For system-wide changes try
+~/usr/share/mime/packages/org.xml~.
+
+#+begin_src xml :tangle ~/.local/share/mime/packages/org.xml :mkdirp yes :comments no
+<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+  <mime-type type="text/org">
+    <comment>Emacs Org-mode File</comment>
+    <glob pattern="*.org"/>
+    <alias type="text/org"/>
+  </mime-type>
+</mime-info>
+#+end_src
+
+What's nice is that Papirus [[https://github.com/PapirusDevelopmentTeam/papirus-icon-theme/commit/a10fb7f2423d5e30b9c4477416ccdc93c4f3849d][now]] has an icon for =text/org=.
+One simply needs to refresh their mime database
+
+#+begin_src shell :tangle (if (string= (shell-command-to-string "xdg-mime query default text/org") "") "setup.sh" "no")
+update-mime-database ~/.local/share/mime
+#+end_src
+
+Then set Emacs as the default editor
+
+#+begin_src shell :tangle (if (string= (shell-command-to-string "xdg-mime query default text/org") "emacs-client.desktop\n") "no" "setup.sh")
+xdg-mime default emacs.desktop text/org
+#+end_src
+
 *** Org Literate
 
 prevent over-eager dotfiles recompilation =from HaoZeke=
