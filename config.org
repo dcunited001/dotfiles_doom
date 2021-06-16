@@ -21,7 +21,7 @@ the end of the doc.
 I'm spending a lot of time sampling the space of available options & developing
 some familiarity with elisp. I've been through this before, and I don't want to
 regret missing out on all the "unknown unknown" tools & workflow approaches. I'm
-starting with a sparse sample of the entire space to avoid sticky global
+starting with a sparse sample of the entire space to avoid sticky local
 minimums or to avoid totally biased exploration in a small subset of dimensions.
 It's like "stochastic gradient descent" or building a sparse understanding of
 the hyperplane for an infinite-dimensional problem (like a kernel method)...
