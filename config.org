@@ -76,6 +76,8 @@ added by Doom modules).
     - [[#point-movement][Point Movement]]
     - [[#lispy][Lispy]]
     - [[#mouse][Mouse]]
+    - [[#wacom][Wacom]]
+    - [[#artist-mode][Artist Mode]]
   - [[#completion][COMPLETION]]
     - [[#completion-prompts][Completion prompts]]
     - [[#company][Company]]
@@ -96,6 +98,7 @@ added by Doom modules).
     - [[#dimmer][Dimmer]]
     - [[#window--frame-management][Window & Frame Management]]
     - [[#sticky-windows][Sticky Windows]]
+    - [[#line-numbers][Line Numbers]]
     - [[#misc][Misc]]
   - [[#editor][EDITOR]]
     - [[#file-templates][File Templates]]
@@ -255,68 +258,6 @@ see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse
 ;; TODO: something else (map! "M-<mouse-9>" 'better-jumper-jump-backward)
 #+end_src
 
-**** Wacom
-
-***** Mouse 10, 11, 12
-Mouse 12 is for code folding. It is the easiest on the Wacom to combine with
-modkeys while toggling to/from scrolling.
-
-For Mouse 10/11/12, all of the following modkey combinations are easy to toggle while keeping the index finger near Mouse 13 and Wheel.
-
-+ None
-+ C
-+ M
-+ S
-+ C-M
-+ C-S
-+ M-S (press both with thumb)
-+ C-M-S (press both with thumb)
-
-***** Mouse 13 and VWheel
-
-Since I want to use the wheel to scroll anyways (without hitting modkeys), I am unsure of whether I want to remap it to HWheel in the Wacom drivers.
-
-***** Mouse 14, 15
-
-Mouse 14 & 15 are easy to use with the following modkeys.
-
-+ None
-+ M
-+ S
-+ M-S
-
-Combinations with Control are a little more difficult with one hand.
-
-***** Origami (Mouse 12)
-
-#+begin_src emacs-lisp
-(map! "<mouse-12>" 'origami-toggle-node)
-(map! "C-<mouse-12>" 'origami-open-node-recursively)
-(map! "C-S-<mouse-12>" 'origami-close-node-recursively)
-
-(map! "M-<mouse-12>" 'origami-forward-fold)
-(map! "S-<mouse-12>" 'origami-backward-fold-same-level)
-(map! "M-S-<mouse-12>" 'origami-forward-fold-same-level)
-
-(map! "C-M-<mouse-12>" 'origami-close-all-nodes)
-(map! "C-M-S-<mouse-12>" 'origami-open-all-nodes)
-
-;; (map! "M-S-<mouse-12>" 'origami-show-only-node)
-
-#+end_src
-
-***** Mode Hints (Mouse 14)
-
-Mouse 14 is intended to give hints for keybindings.
-
-- =M-<mouse-14>= calls to =which-key-show-major-mode= and should not require
-  specific =config.el= behavior to be defined.
-- =C-<mouse-14>= is intended to evoke mode-specific hydras, but requires these
-  hydras to have been defined (see [[*HYDRAS][HYDRAS]])
-
-#+begin_src emacs-lisp
-(map! "M-<mouse-14>" 'which-key-show-major-mode)
-#+end_src
 
 **** TODO other mouse maps
 + and navigating =describe-= and other docs
@@ -335,7 +276,75 @@ Mouse 14 is intended to give hints for keybindings.
 + [ ] ~(kbd "<mouse-4>")~ linux mouse wheel scroll up
 + [ ] ~(kbd "<mouse-5>")~ linux mouse wheel scroll down
 + =<fringe>= and =<modeline>=
- 
+
+
+
+*** Wacom :wacom:
+
+**** Mouse 10, 11, 12
+Mouse 12 is for code folding. It is the easiest on the Wacom to combine with
+modkeys while toggling to/from scrolling.
+
+For Mouse 10/11/12, all of the following modkey combinations are easy to toggle while keeping the index finger near Mouse 13 and Wheel.
+
++ None
++ C
++ M
++ S
++ C-M
++ C-S
++ M-S (press both with thumb)
++ C-M-S (press both with thumb)
+
+**** Mouse 13 and VWheel
+
+Since I want to use the wheel to scroll anyways (without hitting modkeys), I am unsure of whether I want to remap it to HWheel in the Wacom drivers.
+
+**** Mouse 14, 15
+
+Mouse 14 & 15 are easy to use with the following modkeys.
+
++ None
++ M
++ S
++ M-S
+
+Combinations with Control are a little more difficult with one hand.
+
+**** Origami (Mouse 12)
+
+#+begin_src emacs-lisp
+(map! "<mouse-12>" 'origami-toggle-node)
+(map! "C-<mouse-12>" 'origami-open-node-recursively)
+(map! "C-S-<mouse-12>" 'origami-close-node-recursively)
+
+(map! "M-<mouse-12>" 'origami-forward-fold)
+(map! "S-<mouse-12>" 'origami-backward-fold-same-level)
+(map! "M-S-<mouse-12>" 'origami-forward-fold-same-level)
+
+(map! "C-M-<mouse-12>" 'origami-close-all-nodes)
+(map! "C-M-S-<mouse-12>" 'origami-open-all-nodes)
+
+;; (map! "M-S-<mouse-12>" 'origami-show-only-node)
+
+#+end_src
+
+**** Mode Hints (Mouse 14)
+
+Mouse 14 is intended to give hints for keybindings.
+
+- =M-<mouse-14>= calls to =which-key-show-major-mode= and should not require
+  specific =config.el= behavior to be defined.
+- =C-<mouse-14>= is intended to evoke mode-specific hydras, but requires these
+  hydras to have been defined (see [[*HYDRAS][HYDRAS]])
+
+#+begin_src emacs-lisp
+(map! "M-<mouse-14>" 'which-key-show-major-mode)
+#+end_src
+
+*** Artist Mode :artist_mode:
+
+[[https://www.emacswiki.org/emacs/ArtistMode][HOLY SHIT]]
 
 ** COMPLETION
 
@@ -560,7 +569,7 @@ These are simply bookmarks and thus can be reached from the doom startup menu.
 ;;(package! )
 #+end_src
 
-*** Misc
+*** Line Numbers
 
 This determines the style of line numbers. For relative line numbers, set this
 to `relative'.
@@ -568,6 +577,8 @@ to `relative'.
 #+begin_src emacs-lisp
 (setq display-line-numbers-type nil)
 #+end_src
+
+*** Misc
 
 ** EDITOR
 
