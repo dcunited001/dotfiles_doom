@@ -181,8 +181,8 @@ added by Doom modules).
 - [[#footnotes][Footnotes]]
 
 * Config.el :doom:config:
-
 :PROPERTIES:
+:header-args: :tangle ./config.el :comments link
 :END:
 
 ** INPUT
@@ -971,6 +971,17 @@ Prevent over-eager dotfiles recompilation =from HaoZeke=
 *** Workflow
 
 *** Keys
+**** TODO FIXME configure =toggle-narrow-to-subtree=
+
+#+begin_src emacs-lisp
+(map! :mode org-mode :map org-mode-map
+      :desc "Toggle Org Narrow" "T" #'org-toggle-narrow-to-subtree)
+
+#+end_src
+
+**** TODO configure =org-toggle-sidebar
+
+
 
 *** Mime types [fn:tecosaur]
 Org mode isn't recognised as it's own mime type by default, but that can easily
@@ -1213,21 +1224,6 @@ Can be babel'd to generate graphviz pdf's of elisp libraries
   :config (setq elisp-depmap-exec-file (getenv "GRAPHVIZ_DOT")))
 #+end_src
 
-
-#+name: eg-depmap
-#+begin_src emacs-lisp :tangle no :results output
-
-#+end_src
-
-#+RESULTS: eg-depmap
-
-#+begin_src dot :tangle no :var graph=eg-depmap :file img/dot/eg-depmap.png :exports results :cmdline -Kdot -Tpng
-graph {
-      $graph
-}
-#+end_src
-
-#+RESULTS:
 [[file:img/dot/eg-depmap.png]]
 
 *** LATEX :latex:
@@ -1632,7 +1628,7 @@ These functions are mentioned in the emacs manual, but not mapped in the hydra
 
 + TODO something's not right here...
 
-#+BEGIN_SRC emacs-lisp :var bindings=hydra-edebug-bindings :colnames yes :results silent
+#+BEGIN_SRC emacs-lisp :var bindings=hydra-edebug-bindings :colnames yes :results silent :comments no
 (eval
  (append
   '(defhydra dchydra/edebug-cheat-sheet (:hint nil :foreign-keys run)
@@ -1734,7 +1730,7 @@ Lispy functions of note.
    | m   | lispy-mark-list               | Other    |
    |-----+-------------------------------+----------|
 
-#+BEGIN_SRC emacs-lisp :var bindings=hydra-lispy-bindings :colnames yes :results silent
+#+BEGIN_SRC emacs-lisp :var bindings=hydra-lispy-bindings :colnames yes :results silent :comments no
 (eval
  (append
   '(defhydra dchydra/lispy-cheat-sheet (:hint nil :foreign-keys run)

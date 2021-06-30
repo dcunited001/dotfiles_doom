@@ -3,17 +3,24 @@
 (setq user-full-name "David Conner"
       user-mail-address "noreply@te.xel.io")
 
+;; [[file:config.org::*Key Maps][Key Maps:1]]
 ;; Fixes problems with dead keys
 (require 'iso-transl)
+;; Key Maps:1 ends here
 
+;; [[file:config.org::*Lispy][Lispy:1]]
 ;; TODO clojurescript hook
 ;; TODO this may need to be set before lispy loads....
 (setq lispy-compat '(cider edebug))
+;; Lispy:1 ends here
 
+;; [[file:config.org::*Misc Mouse Configs][Misc Mouse Configs:1]]
 (setq mouse-wheel-progressive-speed nil
       mouse-wheel-scroll-amount '(8)
       mouse-drag-and-drop-region t)
+;; Misc Mouse Configs:1 ends here
 
+;; [[file:config.org::*Mouse 8 and 9][Mouse 8 and 9:1]]
 ;; TODO: misc subdir & project-level shortcuts (died,project)
 
 ;; for now, simply back/forward buffer ;; TODO: change =forward= to bufler or emacs-tab bar?
@@ -38,7 +45,9 @@
 ;; (map! "M-<mouse-8>" 'better-jumper-jump-backward)
 
 ;; TODO: something else (map! "M-<mouse-9>" 'better-jumper-jump-backward)
+;; Mouse 8 and 9:1 ends here
 
+;; [[file:config.org::*Origami (Mouse 12)][Origami (Mouse 12):1]]
 (map! "<mouse-12>" 'origami-toggle-node)
 (map! "C-<mouse-12>" 'origami-open-node-recursively)
 (map! "C-S-<mouse-12>" 'origami-close-node-recursively)
@@ -51,9 +60,13 @@
 (map! "C-M-S-<mouse-12>" 'origami-open-all-nodes)
 
 ;; (map! "M-S-<mouse-12>" 'origami-show-only-node)
+;; Origami (Mouse 12):1 ends here
 
+;; [[file:config.org::*Mode Hints (Mouse 14)][Mode Hints (Mouse 14):1]]
 (map! "M-<mouse-14>" 'which-key-show-major-mode)
+;; Mode Hints (Mouse 14):1 ends here
 
+;; [[file:config.org::*Doom Theme][Doom Theme:1]]
 ;; doom-Iosvkem
 ;; doom-fairy-floss
 ;; doom-horizon
@@ -71,7 +84,9 @@
 ;;   doom-acario-dark-brighter-modeline t
 ;;   doom-acario-dark-comment-bg nil
 ;;   doom-acario-dark-padded-modeline 4)
+;; Doom Theme:1 ends here
 
+;; [[file:config.org::*Font][Font:1]]
 ;; (set-frame-font "Source Code Pro 12" nil t)
 (setq doom-font (font-spec :family "DejaVu Sans Mono" :size 16)
       doom-unicode-font (font-spec :family "DejaVu Sans Mono" :size 16)
@@ -85,35 +100,53 @@
 (unless (find-font doom-unicode-font)
   (message "couldn't find 'doom-unicode-font. using a default.")
   (setq doom-unicode-font (font-spec :family "Source Code Pro" :size 18)))
+;; Font:1 ends here
 
+;; [[file:config.org::*Ligatures][Ligatures:1]]
 (setq +ligatures-extras-in-modes
       '(not special-mode comint-mode eshell-mode term-mode vterm-mode python-mode))
+;; Ligatures:1 ends here
 
+;; [[file:config.org::*Window UI][Window UI:1]]
 (setq window-divider-default-right-width 1)
 (setq window-divider-default-bottom-width 1)
+;; Window UI:1 ends here
 
+;; [[file:config.org::*Menu Bar][Menu Bar:1]]
 (menu-bar-mode +2)
+;; Menu Bar:1 ends here
 
+;; [[file:config.org::*Highlighting][Highlighting:2]]
 (use-package! auto-highlight-symbol
   ;; should autoload on bind
   :config (map! (:prefix "M-s h" :desc "auto-highlight-mode"
                  "A" (lambda () (interactive) (auto-highlight-symbol-mode 'toggle)))))
+;; Highlighting:2 ends here
 
+;; [[file:config.org::*All The Icons][All The Icons:2]]
 (use-package! treemacs-all-the-icons)
 
 (add-hook 'doom-init-ui-hook
           (lambda () (treemacs-load-theme "Default")))
+;; All The Icons:2 ends here
 
+;; [[file:config.org::*Treemacs][Treemacs:1]]
 (after! treemacs
   (setq treemacs-width 24)
   (treemacs-filewatch-mode -1))
+;; Treemacs:1 ends here
 
+;; [[file:config.org::*Treemacs][Treemacs:2]]
 (map! :map treemacs-mode-map :after treemacs
       (:prefix "o" :desc "Tags" "t" 'treemacs-toggle-node-prefer-tag-visit))
+;; Treemacs:2 ends here
 
+;; [[file:config.org::*which-key][which-key:1]]
 (after! which-key
     (setq which-key-idle-delay 0.5))
+;; which-key:1 ends here
 
+;; [[file:config.org::*Modeline][Modeline:1]]
 (after! doom-modeline
   ;; doom-modeline workspace-name has conflicts with bufler tab-bar
   (setq doom-modeline-workspace-name nil
@@ -122,7 +155,9 @@
         ;; doom-modeline-project-detection 'ffip,'projectile,'projectile
         ;;doom-modeline-minor-modes t
         ))
+;; Modeline:1 ends here
 
+;; [[file:config.org::*Dimmer][Dimmer:2]]
 (use-package! dimmer
   :config (setq dimmer-adjustment-mode :background
                 dimmer-fraction 0.4)
@@ -133,7 +168,9 @@
   (dimmer-configure-hydra)
   (dimmer-configure-which-key)
   (dimmer-configure-posframe))
+;; Dimmer:2 ends here
 
+;; [[file:config.org::*Window & Frame Management][Window & Frame Management:2]]
 (use-package! burly
   :config (map! :leader
                 (:prefix ("w" . "workspaces/windows")
@@ -145,9 +182,13 @@
                    :desc "Copy Buffer URL" "B" #'burly-kill-buffer-url
                    :desc "Copy Window URL" "F" #'burly-kill-frames-url
                    :desc "Copy Frameset URL" "W" #'burly-kill-windows-url))))
+;; Window & Frame Management:2 ends here
 
+;; [[file:config.org::*Line Numbers][Line Numbers:1]]
 (setq display-line-numbers-type nil)
+;; Line Numbers:1 ends here
 
+;; [[file:config.org::*Origami Mode][Origami Mode:2]]
 (use-package! origami
   :config (map! :map origami-mode-map
                 :prefix "C-c C-f"
@@ -179,11 +220,15 @@
 (add-hook 'doom-init-ui-hook
           (lambda ()
             (global-origami-mode +1)))
+;; Origami Mode:2 ends here
 
+;; [[file:config.org::*Centered Cursor Mode][Centered Cursor Mode:2]]
 (use-package! centered-cursor-mode ;: defer t
   :config (map! :leader :desc "Toggle Centered Cursor"
                 "t-" (λ! () (interactive) (centered-cursor-mode 'toggle))))
+;; Centered Cursor Mode:2 ends here
 
+;; [[file:config.org::*Yasnippet-snippets][Yasnippet-snippets:1]]
 (setq dc/snippets (expand-file-name (concat doom-private-dir "snippets")))
 
 (eval-after-load 'yasnippet
@@ -191,37 +236,62 @@
     (add-to-list 'yas-snippet-dirs 'dc/snippets)
     (message "loading dc/snippets")
     (yas-load-directory dc/snippets t)))
+;; Yasnippet-snippets:1 ends here
+
+;; [[file:config.org::*AUTH][AUTH:1]]
 ;; (setq auth-sources '("~/.authinfo" "~/.authinfo.gpg" "~/.netrc"))
 (setq auth-sources (append `(,(concat (file-name-as-directory (getenv "DF_")) ".ectorepo.gpg")) auth-sources))
+;; AUTH:1 ends here
 
+;; [[file:config.org::*DIRED][DIRED:1]]
 (setq dired-omit-files "^.DS_Store\\'\\|^.project\\(?:ile\\)?\\'\\|^.\\(svn\\)\\'\\|^.ccls-cache\\'\\|\\(?:\\.js\\)?\\.meta\\'\\|\\.\\(?:elc\\|o\\|pyo\\|swp\\|class\\)\\'")
+;; DIRED:1 ends here
 
+;; [[file:config.org::*Explicit Shell][Explicit Shell:1]]
 (setq explicit-shell-file-name "/bin/zsh")
+;; Explicit Shell:1 ends here
 
+;; [[file:config.org::*Dotcrafter][Dotcrafter:2]]
 ;; (use-package! dotcrafter
 ;;   :custom
 ;;   (dotcrafter-dotfiles-folder (getenv "DF_"))
 ;;   (dotcrafter-org-files '("zsh/README.org"
 ;;                           "input/README.org"
 ;;                           "clojure.org")))
+;; Dotcrafter:2 ends here
 
+;; [[file:config.org::*Info][Info:2]]
 (use-package! info-colors)
+;; Info:2 ends here
 
+;; [[file:config.org::*Magit][Magit:2]]
 (use-package! magit-tbdiff)
+;; Magit:2 ends here
 
+;; [[file:config.org::*Repo][Repo:2]]
 (use-package! repo)
+;; Repo:2 ends here
 
+;; [[file:config.org::*Shell][Shell:2]]
 (use-package! firestarter
   :init (firestarter-mode)
   :config (setq firestarter-default-type t))
+;; Shell:2 ends here
 
+;; [[file:config.org::*PKGBUILD Mode][PKGBUILD Mode:2]]
 (use-package! pkgbuild-mode :mode "\\PKGBUILD")
+;; PKGBUILD Mode:2 ends here
 
+;; [[file:config.org::*Crontab Mode][Crontab Mode:2]]
 (use-package! crontab-mode)
+;; Crontab Mode:2 ends here
 
+;; [[file:config.org::*Ken Kesey][Ken Kesey:2]]
 (use-package! ssh-config-mode)
 (use-package! x509-mode)
+;; Ken Kesey:2 ends here
 
+;; [[file:config.org::*Docker][Docker:1]]
 (use-package! docker
   :config (setq docker-run-as-root t
                 docker-image-run-arguments '("-i" "-t" "--rm")))
@@ -229,9 +299,13 @@
 ;; so the ## -*- docker-image-name: "image-name" -*- directive works with ~dockerfile-mode~
 ;; TODO assess
 (put 'dockerfile-image-name 'safe-local-variable #'stringp)
+;; Docker:1 ends here
 
+;; [[file:config.org::*SaltStack][SaltStack:2]]
 (use-package salt-mode)
+;; SaltStack:2 ends here
 
+;; [[file:config.org::*LSP UI][LSP UI:1]]
 (setq lsp-ui-peek-list-width 25
       ;; lsp-ui-sideline--last-width
 
@@ -240,13 +314,25 @@
       ;; lsp-ui-doc--inline-width
 
       lsp-ui-imenu-window-width 25)
+;; LSP UI:1 ends here
 
+;; [[file:config.org::*ORG][ORG:2]]
 (setq org-directory (getenv "ORG_DIRECTORY")
       +org-capture-journal-file (concat (file-name-as-directory org-directory) "journal.org")
       org-calendars-directory (concat  (file-name-as-directory org-directory) "calendars"))
+;; ORG:2 ends here
 
+;; [[file:config.org::*ORG][ORG:3]]
 (after! org
   (remove-hook 'org-mode-hook #'+literate-enable-recompile-h))
+;; ORG:3 ends here
+
+;; [[file:config.org::*FIXME configure =toggle-narrow-to-subtree=][FIXME configure =toggle-narrow-to-subtree=:1]]
+(map! :mode org-mode :map org-mode-map
+      :desc "Toggle Org Narrow" "T" #'org-toggle-narrow-to-subtree)
+;; FIXME configure =toggle-narrow-to-subtree=:1 ends here
+
+;; [[file:config.org::*Roam][Roam:1]]
 ;; encapsulate org-roam-directory within (file-truename ___) if using links
 (setq org-roam-directory (concat (file-name-as-directory org-directory) "roam")
       org-roam-db-location (concat (file-name-as-directory org-roam-directory) "org-roam.db")
@@ -278,7 +364,9 @@
 
 ;; from https://org-roam.discourse.group/t/org-roam-major-redesign/1198/220
 ;;(setq org-roam-node-display-template "${title:80}  ${file:9} ${tags:20}")
+;; Roam:1 ends here
 
+;; [[file:config.org::*Refile][Refile:1]]
 (setq org-refile-targets
       '((org-agenda-files . (:maxlevel . 3))
         (nil . (:maxlevel . 3)))
@@ -296,12 +384,16 @@
 ;; TODO consider using =org-refile-target-verify-function
 ;; to filter subtrees marked "done" from being org-refile-targets
 ;; (source: mwfogleman/englehorn)
+;; Refile:1 ends here
 
+;; [[file:config.org::*Clock][Clock:1]]
 (setq org-clock-auto-clockout-timer 300
       ;; org-clock-idle-time 3
         )
 (org-clock-auto-clockout-insinuate)
+;; Clock:1 ends here
 
+;; [[file:config.org::*Super Agenda][Super Agenda:1]]
 (use-package! org-super-agenda
   :init (setq org-super-agenda-groups
                 '((:name "Today"
@@ -320,18 +412,28 @@
                    :order 1)
                   ))
   :config (org-super-agenda-mode))
+;; Super Agenda:1 ends here
 
+;; [[file:config.org::*org-ql][org-ql:1]]
 
+;; org-ql:1 ends here
 
+;; [[file:config.org::*org-sidebar][org-sidebar:1]]
 
+;; org-sidebar:1 ends here
 
+;; [[file:config.org::*Source Blocks][Source Blocks:1]]
 (setq org-edit-src-content-indentation 0)
+;; Source Blocks:1 ends here
 
+;; [[file:config.org::*Org Treeusage][Org Treeusage:1]]
 (use-package! org-treeusage
   :bind ("C-c d" . org-treeusage-mode)
   :config (setq org-treescope-overlay-header nil
                 org-treeusage-overlay-usecolorbands nil))
+;; Org Treeusage:1 ends here
 
+;; [[file:config.org::*Org Drill][Org Drill:1]]
 (use-package! org-drill
   :after org
   :config (progn
@@ -341,24 +443,34 @@
             (setq org-drill-left-cloze-separator "]>")
             (setq org-drill-learn-fraction 0.25))
   )
+;; Org Drill:1 ends here
 
+;; [[file:config.org::*\[\[https:/gitlab.com/mtekman/elisp-depmap.el\]\[Elisp Depmap\]\]][[[https://gitlab.com/mtekman/elisp-depmap.el][Elisp Depmap]]:2]]
 (use-package! elisp-depmap
   :bind (("C-c M-d" . elisp-depmap-graphviz-digraph)
          ("C-c M-g" . elisp-depmap-graphviz)
          ("C-c M-s" . elisp-depmap-makesummarytable))
   :config (setq elisp-depmap-exec-file (getenv "GRAPHVIZ_DOT")))
+;; [[https://gitlab.com/mtekman/elisp-depmap.el][Elisp Depmap]]:2 ends here
 
+;; [[file:config.org::*CLOJURE][CLOJURE:2]]
 (add-hook 'clojure-mode-hook 'zprint-mode)
 (add-hook 'clojurescript-mode-hook 'zprint-mode)
+;; CLOJURE:2 ends here
 
+;; [[file:config.org::*JULIA][JULIA:2]]
 ;; TODO: (after! org & julia-vterm?
 ;;;         ...)
 ;; (after! org-babel ... )
 ;; (org-babel-make-language-alias "julia" "julia-vterm")
+;; JULIA:2 ends here
 
+;; [[file:config.org::*Doxygen Support][Doxygen Support:2]]
 (use-package! highlight-doxygen
   :hook ((c-mode c++-mode) . highlight-doxygen-mode))
+;; Doxygen Support:2 ends here
 
+;; [[file:config.org::*More Files][More Files:1]]
 ;; from HaoZeke/dotdoom
 (setq auto-mode-alist (append '(
                                 ("\\.C$" . c++-mode)
@@ -370,13 +482,19 @@
                                 ("\\.hpp$" . c++-mode)
                                 )
                               auto-mode-alist))
+;; More Files:1 ends here
 
+;; [[file:config.org::*OPEN API][OPEN API:2]]
 (use-package! openapi-yaml-mode)
+;; OPEN API:2 ends here
 
+;; [[file:config.org::*GRAPHQL][GRAPHQL:2]]
 (use-package! graphql)
 (use-package! graphql-mode)
 (use-package ob-graphql)
+;; GRAPHQL:2 ends here
 
+;; [[file:config.org::*org-babel general config][org-babel general config:1]]
 (after! org
   (add-to-list 'org-babel-load-languages
                '((julia-vterm . t)
@@ -386,7 +504,9 @@
    'org-babel-load-languages
    org-babel-load-languages))
 ;;(defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
+;; org-babel general config:1 ends here
 
+;; [[file:config.org::*\[\[https:/github.com/krisajenkins/ob-translate\]\[ob-translate\]\]][[[https://github.com/krisajenkins/ob-translate][ob-translate]]:2]]
 (use-package! google-translate :demand t
   :init (require 'google-translate)
   :functions (my-google-translate-at-point google-translate--search-tkk)
@@ -404,7 +524,9 @@
   :bind
   ;;("C-T". my-google-translate-at-point)
 )
+;; [[https://github.com/krisajenkins/ob-translate][ob-translate]]:2 ends here
 
+;; [[file:config.org::*Prism.el][Prism.el:2]]
 (use-package! prism
   :hook ((emacs-lisp-mode . prism-mode)
          (clojure-mode . prism-mode)
@@ -417,7 +539,9 @@
                   '(red teal green magenta cyan blue orange dark-cyan violet yellow)))
                   ;; options: red orange green teal yellow blue dark blue magenta violet cyan dark cyan
   )
+;; Prism.el:2 ends here
 
+;; [[file:config.org::*Rainbow Mode][Rainbow Mode:1]]
 (map! :leader :desc "Toggle Rainbow Mode"
       "tR" (lambda () (interactive) (rainbow-mode 'toggle)))
 
@@ -425,6 +549,7 @@
 ;; TODO fix to autoload rainbow-mode in doom theme files
 ;; (setq auto-minor-mode-alist (append '(("theme\\.el$" . rainbow-mode))
                                     ;; auto-minor-mode-alist))
+;; Rainbow Mode:1 ends here
 
 (let ((bindings '(("g" "edebug-go-mode" "Modes") ("SPC" "edebug-step-mode" "Modes") ("t" "edebug-trace-mode" "Modes") ("c" "edebug-continue-mode" "Modes") ("G" "edebug-Go-nonstop-mode" "Modes") ("T" "edebug-Trace-fast-mode" "Modes") ("C" "edebug-Continue-fast-mode" "Modes") ("n" "edebug-next-mode" "Modes") ("I" "edebug-set-initial-mode" "Modes") ("S" "edebug-stop" "Jumping") ("h" "edebug-goto-here" "Jumping") ("f" "edebug-forward-sexp" "Jumping") ("o" "edebug-step-out" "Jumping") ("i" "edebug-step-in" "Jumping") ("?" "edebug-help" "Misc") ("Q" "edebug-top-level-nonstop" "Misc") ("r" "edebug-previous-result" "Misc") ("d" "edebug-pop-to-backtrace" "Misc") ("=" "edebug-display-freq-count" "Misc") ("b" "edebug-set-breakpoint" "Breaks") ("B" "edebug-next-breakpoint" "Breaks") ("u" "edebug-unset-breakpoint" "Breaks") ("U" "edebug-unset-breakpoints" "Breaks") ("D" "edebug-toggle-disable-breakpoint" "Breaks") ("x" "edebug-set-conditional-breakpoint" "Breaks") ("X" "edebug-set-global-break-condition" "Breaks") ("v" "edebug-view-outside" "Views") ("P" "edebug-bounce-point" "Views") ("w" "edebug-where" "Views") ("W" "edebug-toggle-save-windows" "Views") ("e" "edebug-eval-expression" "Eval") ("C-x C-e" "edebug-eval-last-sexp" "Eval") ("E" "edebug-visit-eval-list" "Eval") ("C-j" "edebug-eval-print-last-sexp" "Eval") ("C-c C-u" "edebug-update-eval-list" "Eval") ("C-c C-d" "edebug-delete-eval-item" "Eval") ("C-c C-w" "edebug-where" "Eval"))))
 (eval
