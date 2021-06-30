@@ -1,7 +1,7 @@
 # -*- mode: snippet -*-
 # contributor: David Conner
 # name: org-notes-template
-# key: __orgnote
+# key: ___orgnote
 # condition: t
 # --
 #+TITLE:     ${1:untitled document}

@@ -53,21 +53,23 @@
        (emoji +unicode)       ; 🙂
        ;;fill-column       ; a `fill-column' indicator
        hl-todo                ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
-       ;;hydra
+       hydra
 
        ;; FIXME conflicts with Prism.el
        ;;indent-guides     ; highlighted indent columns
-       ligatures   ; ligatures and symbols to make your code pretty again
+       ligatures        ; ligatures and symbols to make your code pretty again
        ;;minimap           ; show a map of the code on the side
-       modeline    ; snazzy, Atom-inspired modeline, plus API
+       ;;(modeline +light)    ; snazzy, Atom-inspired modeline, plus API
+       modeline                         ;this gets one more chance
+
        nav-flash   ; blink the current line after jumping
        ;;neotree           ; a project drawer, like NERDTree for vim
 
        ophints                       ; highlight the region an operation acts on
 
-       (popup                     ; tame sudden yet inevitable temporary windows
-        ;; +all                      ; catch all popups that start with an asterix
-        +defaults)                      ; default popup rules
+                                        ;(popup                     ; tame sudden yet inevitable temporary windows
+       ;; +all                      ; catch all popups that start with an asterix
+                                        ;+defaults)                      ; default popup rules
 
        ;;tabs              ; a tab bar for Emacs
        (treemacs +lsp)          ; a project drawer, like neotree but cooler
@@ -99,7 +101,7 @@
        ;;(dired ++ranger)           ; bringing the goodness of ranger to dired
        ;;NOTE: ranger is causing problems with org-agenda & elsewhere
 
-       electric                ; smarter, keyword-based electric-indent
+       ;;electric                ; smarter, keyword-based electric-indent
        ;;ibuffer         ; interactive buffer management
 
        ;; persistent, smarter undo for your inevitable mistakes
@@ -110,7 +112,7 @@
 
        :term
        eshell            ; the elisp shell that works everywhere
-       shell             ; simple shell REPL for Emacs
+       ;;shell             ; simple shell REPL for Emacs
        ;;term              ; basic terminal emulator for Emacs
        vterm                            ; the best terminal emulation in Emacs
 
@@ -138,10 +140,10 @@
         +docsets)                       ; ...on in Dash docsets locally
 
        (lsp +peek)
-       magit                    ; a git porcelain for Emacs
+       (magit +forge)           ; a git porcelain for Emacs
        make                     ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
-       ;; pdf               ; pdf enhancements
+       ;; pdf              ; pdf enhancements
        ;;prodigy           ; FIXME managing external services & code builders
        rgb        ; creating color strings
        taskrunner ; taskrunner for all your projects
@@ -199,7 +201,7 @@
 
 
        (org ;; organize your plain life in plain text
-        +jupyter +pomodoro +pretty +present +gnuplot +pandoc +journal)
+        +jupyter +pomodoro +pretty +present +gnuplot +pandoc +dragndrop)
 
        ;;php               ; perl's insecure younger brother
        plantuml         ; diagrams for confusing people more
@@ -231,7 +233,7 @@
        :app
        ;;calendar
        ;;irc               ; how neckbeards socialize
-       ;;(rss +org)        ; emacs as an RSS reader
+       (rss +org)                       ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
 
        :config

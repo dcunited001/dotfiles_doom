@@ -1,9 +1,11 @@
 #+TITLE: Doom Emacs Config
 #+AUTHOR: David Conner
 #+DESCRIPTION: Inspired by the personal Doom Emacs config of DT, HaoZeke and others
-#+PROPERTY: header-args :tangle ./config.el
 #+STARTUP: content
 #+OPTIONS: toc:nil
+:PROPERTIES:
+:ID:       6c54eaba-a267-428f-a39b-97e8687dcda2
+:END:
 
 * About this file
 
@@ -21,10 +23,10 @@ the end of the doc.
 I'm spending a lot of time sampling the space of available options & developing
 some familiarity with elisp. I've been through this before, and I don't want to
 regret missing out on all the "unknown unknown" tools & workflow approaches. I'm
-starting with a sparse sample of the entire space to avoid sticky local
-minimums or to avoid totally biased exploration in a small subset of dimensions.
-It's like "stochastic gradient descent" or building a sparse understanding of
-the hyperplane for an infinite-dimensional problem (like a kernel method)...
+starting with a sparse sample of the entire space to avoid sticky local minimums
+or to avoid totally biased exploration in a small subset of dimensions. It's
+like "stochastic gradient descent" or building a sparse understanding of the
+hyperplane for an infinite-dimensional problem (like a kernel method)...
 
 I hope to move on to projects in other languages soon, but for now things are a
 mess. The errant TODO statements will be thinned out soon enough.
@@ -40,7 +42,7 @@ are generated with =toc-org= by specifying a heading including the tag:
 
 Add the ~doom-emacs~ metadata comments to tangle exports:
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle ./config.el
 ;; -*- no-byte-compile: t; lexical-binding: t; -*-
 ;;; ~/.doom.d/config.el
 (setq user-full-name "David Conner"
@@ -106,6 +108,7 @@ added by Doom modules).
     - [[#centered-cursor-mode][Centered Cursor Mode]]
     - [[#snippets][Snippets]]
   - [[#emacs][EMACS]]
+    - [[#auth][AUTH]]
     - [[#dired][DIRED]]
   - [[#term][TERM]]
     - [[#shell][Shell]]
@@ -134,14 +137,15 @@ added by Doom modules).
     - [[#workflow][Workflow]]
     - [[#keys][Keys]]
     - [[#mime-types-fntecosaur][Mime types [fn:tecosaur]]]
-    - [[#org-literate][Org Literate]]
-    - [[#org-capture][Org Capture]]
-    - [[#org-refile][Org Refile]]
-    - [[#org-agenda][Org Agenda]]
-    - [[#org-clock][Org Clock]]
-    - [[#org-super-agenda][Org Super Agenda]]
-    - [[#org-query-language][Org Query Language]]
-    - [[#org-sidebar][Org Sidebar]]
+    - [[#journal][Journal]]
+    - [[#roam][Roam]]
+    - [[#capture][Capture]]
+    - [[#refile][Refile]]
+    - [[#agenda][Agenda]]
+    - [[#clock][Clock]]
+    - [[#super-agenda][Super Agenda]]
+    - [[#org-ql][org-ql]]
+    - [[#org-sidebar][org-sidebar]]
     - [[#source-blocks][Source Blocks]]
     - [[#org-treeusage][Org Treeusage]]
     - [[#org-drill][Org Drill]]
@@ -171,6 +175,7 @@ added by Doom modules).
     - [[#prismel][Prism.el]]
     - [[#rainbow-mode][Rainbow Mode]]
   - [[#hydras][HYDRAS]]
+    - [[#prefix-keys][prefix-keys]]
     - [[#edebug][edebug]]
     - [[#lispy-1][lispy]]
 - [[#footnotes][Footnotes]]
@@ -178,7 +183,6 @@ added by Doom modules).
 * Config.el :doom:config:
 
 :PROPERTIES:
-:VISIBILITY: children
 :END:
 
 ** INPUT
@@ -227,9 +231,6 @@ see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse
 #+end_src
 
 **** Mouse 8 and 9
-:PROPERTIES:
-:ID:       692e65d2-2cd3-4564-bd75-26dcc2b84251
-:END:
 
 #+begin_src emacs-lisp
 ;; TODO: misc subdir & project-level shortcuts (died,project)
@@ -276,8 +277,6 @@ see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse
 + [ ] ~(kbd "<mouse-4>")~ linux mouse wheel scroll up
 + [ ] ~(kbd "<mouse-5>")~ linux mouse wheel scroll down
 + =<fringe>= and =<modeline>=
-
-
 
 *** Wacom :wacom:
 
@@ -374,6 +373,12 @@ Removed =-childframe= for now, as these are actual frames, kinda.
 Pick a random theme from the ones I like.
 
 #+begin_src emacs-lisp
+;; doom-Iosvkem
+;; doom-fairy-floss
+;; doom-horizon
+;; doom-lazerwave
+;; doom-monokai
+;; doom-challenger-deep
 (let* ((themes-ilike '(doom-one doom-dark+ doom-acario-dark doom-molokai))
        (random-theme (nth (random (length themes-ilike)) themes-ilike)))
   (setq doom-theme random-theme))
@@ -515,7 +520,8 @@ customize [[https://github.com/seagle0128/doom-modeline][doom-modeline]]
 
         doom-modeline-height 24
         ;; doom-modeline-project-detection 'ffip,'projectile,'projectile
-        doom-modeline-minor-modes t))
+        ;;doom-modeline-minor-modes t
+        ))
 #+END_SRC
 
 *** Dimmer
@@ -935,6 +941,9 @@ Additonal org-mode packages:
 (package! org-treeusage)
 (package! org-drill)
 
+(package! org-roam
+  :recipe (:host github :repo "org-roam/org-roam" :branch "v2"))
+
 ;; dependencies org-super-agenda => org-ql => org-sidebar
 (package! org-super-agenda)
 (package! org-ql)
@@ -949,6 +958,13 @@ General Org Mode configs:
       org-calendars-directory (concat  (file-name-as-directory org-directory) "calendars"))
 
 #+end_src
+
+Prevent over-eager dotfiles recompilation =from HaoZeke=
+
+#+BEGIN_SRC emacs-lisp
+(after! org
+  (remove-hook 'org-mode-hook #'+literate-enable-recompile-h))
+#+END_SRC
 
 
 
@@ -978,28 +994,97 @@ One simply needs to refresh their mime database
 update-mime-database ~/.local/share/mime
 #+end_src
 
+#+RESULTS:
+
 Then set Emacs as the default editor
 
 #+begin_src shell :tangle (if (string= (shell-command-to-string "xdg-mime query default text/org") "emacs-client.desktop\n") "no" "setup.sh")
 xdg-mime default emacs.desktop text/org
 #+end_src
 
-*** Org Literate
+#+RESULTS:
 
-prevent over-eager dotfiles recompilation =from HaoZeke=
+*** Journal
 
-#+BEGIN_SRC emacs-lisp
-(after! org
-  (remove-hook 'after-save-hook #'+literate|recompile-maybe))
-#+END_SRC
+**** TODO remove
+
+#+begin_example emacs-lisp
+(setq org-journal-file-type 'daily
+      org-journal-file-header ""
+      org-journal-start-on-weekday nil)
+#+end_example
+
+**** TODO set other =org-journal= vars:
+
+Of course as soon as I start to use this, I discover =org-roam-dailies= ... which may replace this
+
++ [ ] time-prefix
++ [ ] date-prefix
++ [ ] handle-old-carryover (currently set to delete)
++ [ ] carryover-items
++ [ ] tag-persistent-alist
++ [ ] find-file
++ [ ] encrypt-journal
+  - [ ] or enable-encryption (which requires =org-crypt-tag-matcher=)
++ [ ] enable-cache
++ [ ] cache-file
++ [ ] search-forward-function (possible to set this to swiper?)
++ [ ] hide-entries-p (when true, hide other entries when creating a new one)
++ [ ] file-format (set to YYYYMMDD)
+
+*** Roam
+
+#+begin_src emacs-lisp
+
+;; encapsulate org-roam-directory within (file-truename ___) if using links
+(setq org-roam-directory (concat (file-name-as-directory org-directory) "roam")
+      org-roam-db-location (concat (file-name-as-directory org-roam-directory) "org-roam.db")
+      org-roam-file-extensions '("org")
+      org-roam-dailies-directory "dailies/"
+      org-roam-dailies-capture-templates
+      '(("d" "default" entry
+         "* %?"
+         :if-new (file+head "%<%Y-%m-%d>.org"
+                            "#+title: %<%Y-%m-%d>\n")))
+      org-roam-mode-sections (list #'org-roam-backlinks-section
+                                   #'org-roam-reflinks-section
+                                   ;; generating unlinked can be slow
+                                   ;; #'org-roam-unlinked-references-section
+                                   ))
+
+(use-package! org-roam
+  :after org
+  :commands
+  (org-roam-buffer
+   org-roam-setup
+   org-roam-capture
+   org-roam-node-find)
+  :config
+  (org-roam-setup))
+
+(use-package! org-roam-protocol
+  :after org-protocol)
+
+;; from https://org-roam.discourse.group/t/org-roam-major-redesign/1198/220
+;;(setq org-roam-node-display-template "${title:80}  ${file:9} ${tags:20}")
+
+#+end_src
+
+#+RESULTS:
+
+Current =org-journal= mappings
+
++ C-c n j j :: =org-journal-new-entry=
++ C-c n j s :: =org-journal-search-forever=
++ C-c n j j :: =org-journal-new-scheduled-entry=
 
 
-*** Org Capture
+*** Capture
 
-**** TODO capture tempalte for code examples
+**** TODO capture template for code examples
 - set the possible refile locations according to configured metarepos
 
-*** Org Refile
+*** Refile
 
 #+begin_src emacs-lisp
 (setq org-refile-targets
@@ -1020,12 +1105,11 @@ prevent over-eager dotfiles recompilation =from HaoZeke=
 ;; to filter subtrees marked "done" from being org-refile-targets
 ;; (source: mwfogleman/englehorn)
 #+end_src
-
-*** Org Agenda
+*** Agenda
 
 + protesilaos & hsinhaoyu have pretty comprehensive configs
 
-*** Org Clock
+*** Clock
 
 Set auto-clockout to keep time tracking accurate. Refer to [[https://orgmode.org/manual/Clocking-Work-Time.html#Clocking-Work-Time][Orgmode Manual entry]] for details.
 
@@ -1036,7 +1120,7 @@ Set auto-clockout to keep time tracking accurate. Refer to [[https://orgmode.org
 (org-clock-auto-clockout-insinuate)
 #+end_src
 
-*** Org Super Agenda
+*** Super Agenda
 
 + review mwfogleman's config
 
@@ -1061,13 +1145,13 @@ Set auto-clockout to keep time tracking accurate. Refer to [[https://orgmode.org
   :config (org-super-agenda-mode))
 #+end_src
 
-*** Org Query Language
+*** org-ql
 
 #+begin_src emacs-lisp
 
 #+end_src
 
-*** Org Sidebar
+*** org-sidebar
 
 #+begin_src emacs-lisp
 
@@ -1095,7 +1179,6 @@ Can be customized according to the info at the [[https://github.com/mtekman/org-
 *** Org Drill
 
 Config and flashcard info can be found at [[https://gitlab.com//phillord/org-drill    ][phillord/org-drill]]
-
 
 #+begin_src emacs-lisp
 (use-package! org-drill
@@ -1149,8 +1232,8 @@ graph {
 
 *** LATEX :latex:
 
-(From Hsin Haoyu) Apparently, [[https://mirror.aarnet.edu.au/pub/CTAN/systems/knuth/dist/tex/tex.web][the TeX source code]] was written in Pascal/TeX was
-literate programming code written by Knuth in Pascal/TeX.
+Apparently, [[https://mirror.aarnet.edu.au/pub/CTAN/systems/knuth/dist/tex/tex.web][the TeX source code]] was written in Pascal/TeX was literate
+programming code written by Knuth in Pascal/TeX; via Hsin Haoyu[fn:hsinhaoyu]
 
 *** CLOJURE :clojure:
 
@@ -1163,7 +1246,6 @@ literate programming code written by Knuth in Pascal/TeX.
 #+begin_src emacs-lisp
 (add-hook 'clojure-mode-hook 'zprint-mode)
 (add-hook 'clojurescript-mode-hook 'zprint-mode)
-
 #+end_src
 
 **** LSP :lsp:
@@ -1228,8 +1310,7 @@ digraph {
 
         A -> B;
         B -> C;
-        C -> A;
-}
+        C ->    A;}
 #+end_src
 
 
@@ -1477,6 +1558,15 @@ Use doom colors for theme and toggle with =:leader tP=
 
 These were made using pretty awesome snippet on creating hydras from an org
 table (via [[https://sachachua.com/blog/2021/04/emacs-making-a-hydra-cheatsheet-for-lispy/][sacha chua]])[fn:sachac]
+
+**** TODO hydra for commands of the week & day (+ random commands)
+
++ auto-journal the hydra-source
++ commands (in hydra) to move around random commands suggested by the hydra
+
+*** prefix-keys
+
+**** TODO implement prefix-key hydra (handle differences in mode-specific prefix keys)
 
 *** edebug
 

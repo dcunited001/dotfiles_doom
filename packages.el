@@ -46,6 +46,9 @@
 (package! org-treeusage)
 (package! org-drill)
 
+(package! org-roam
+  :recipe (:host github :repo "org-roam/org-roam" :branch "v2"))
+
 ;; dependencies org-super-agenda => org-ql => org-sidebar
 (package! org-super-agenda)
 (package! org-ql)

@@ -54,6 +54,12 @@
 
 (map! "M-<mouse-14>" 'which-key-show-major-mode)
 
+;; doom-Iosvkem
+;; doom-fairy-floss
+;; doom-horizon
+;; doom-lazerwave
+;; doom-monokai
+;; doom-challenger-deep
 (let* ((themes-ilike '(doom-one doom-dark+ doom-acario-dark doom-molokai))
        (random-theme (nth (random (length themes-ilike)) themes-ilike)))
   (setq doom-theme random-theme))
@@ -114,7 +120,8 @@
 
         doom-modeline-height 24
         ;; doom-modeline-project-detection 'ffip,'projectile,'projectile
-        doom-modeline-minor-modes t))
+        ;;doom-modeline-minor-modes t
+        ))
 
 (use-package! dimmer
   :config (setq dimmer-adjustment-mode :background
@@ -184,6 +191,8 @@
     (add-to-list 'yas-snippet-dirs 'dc/snippets)
     (message "loading dc/snippets")
     (yas-load-directory dc/snippets t)))
+;; (setq auth-sources '("~/.authinfo" "~/.authinfo.gpg" "~/.netrc"))
+(setq auth-sources (append `(,(concat (file-name-as-directory (getenv "DF_")) ".ectorepo.gpg")) auth-sources))
 
 (setq dired-omit-files "^.DS_Store\\'\\|^.project\\(?:ile\\)?\\'\\|^.\\(svn\\)\\'\\|^.ccls-cache\\'\\|\\(?:\\.js\\)?\\.meta\\'\\|\\.\\(?:elc\\|o\\|pyo\\|swp\\|class\\)\\'")
 
@@ -237,7 +246,38 @@
       org-calendars-directory (concat  (file-name-as-directory org-directory) "calendars"))
 
 (after! org
-  (remove-hook 'after-save-hook #'+literate|recompile-maybe))
+  (remove-hook 'org-mode-hook #'+literate-enable-recompile-h))
+;; encapsulate org-roam-directory within (file-truename ___) if using links
+(setq org-roam-directory (concat (file-name-as-directory org-directory) "roam")
+      org-roam-db-location (concat (file-name-as-directory org-roam-directory) "org-roam.db")
+      org-roam-file-extensions '("org")
+      org-roam-dailies-directory "dailies/"
+      org-roam-dailies-capture-templates
+      '(("d" "default" entry
+         "* %?"
+         :if-new (file+head "%<%Y-%m-%d>.org"
+                            "#+title: %<%Y-%m-%d>\n")))
+      org-roam-mode-sections (list #'org-roam-backlinks-section
+                                   #'org-roam-reflinks-section
+                                   ;; generating unlinked can be slow
+                                   ;; #'org-roam-unlinked-references-section
+                                   ))
+
+(use-package! org-roam
+  :after org
+  :commands
+  (org-roam-buffer
+   org-roam-setup
+   org-roam-capture
+   org-roam-node-find)
+  :config
+  (org-roam-setup))
+
+(use-package! org-roam-protocol
+  :after org-protocol)
+
+;; from https://org-roam.discourse.group/t/org-roam-major-redesign/1198/220
+;;(setq org-roam-node-display-template "${title:80}  ${file:9} ${tags:20}")
 
 (setq org-refile-targets
       '((org-agenda-files . (:maxlevel . 3))
