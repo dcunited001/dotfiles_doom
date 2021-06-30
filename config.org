@@ -974,9 +974,9 @@ Prevent over-eager dotfiles recompilation =from HaoZeke=
 **** TODO FIXME configure =toggle-narrow-to-subtree=
 
 #+begin_src emacs-lisp
-(map! :mode org-mode :map org-mode-map
-      :desc "Toggle Org Narrow" "T" #'org-toggle-narrow-to-subtree)
-
+(map! :map org-mode-map
+      (:prefix ("t" . "toggle")
+       :desc "Toggle Org Narrow" "T" #'org-toggle-narrow-to-subtree))
 #+end_src
 
 **** TODO configure =org-toggle-sidebar
@@ -1551,6 +1551,9 @@ Use doom colors for theme and toggle with =:leader tP=
 
 
 ** HYDRAS
+:PROPERTIES:
+:header-args: :tangle ./config.el :comments no
+:END:
 
 These were made using pretty awesome snippet on creating hydras from an org
 table (via [[https://sachachua.com/blog/2021/04/emacs-making-a-hydra-cheatsheet-for-lispy/][sacha chua]])[fn:sachac]

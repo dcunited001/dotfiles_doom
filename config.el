@@ -328,8 +328,9 @@
 ;; ORG:3 ends here
 
 ;; [[file:config.org::*FIXME configure =toggle-narrow-to-subtree=][FIXME configure =toggle-narrow-to-subtree=:1]]
-(map! :mode org-mode :map org-mode-map
-      :desc "Toggle Org Narrow" "T" #'org-toggle-narrow-to-subtree)
+(map! :map org-mode-map
+      (:prefix ("t" . "toggle")
+       :desc "Toggle Org Narrow" "T" #'org-toggle-narrow-to-subtree))
 ;; FIXME configure =toggle-narrow-to-subtree=:1 ends here
 
 ;; [[file:config.org::*Roam][Roam:1]]
