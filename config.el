@@ -323,16 +323,28 @@
 ;; ORG:2 ends here
 
 ;; [[file:config.org::*ORG][ORG:3]]
+
+;;(setq org-directory "/data/org")
+
+  (setq org-log-done 'time
+        org-support-shift-select t
+        ;;org-agenda-files (concat (file-name-as-directory org-directory) "agenda.org")
+        ;; TODO include content from Adam James
+        ))
+
 (after! org
   (remove-hook 'org-mode-hook #'+literate-enable-recompile-h))
+
 ;; ORG:3 ends here
 
 ;; [[file:config.org::*FIXME configure =toggle-narrow-to-subtree=][FIXME configure =toggle-narrow-to-subtree=:1]]
+;; [[file:config.org::*Keys][Keys:1]]
 (map! :map org-mode-map
       :leader
       :prefix ("t" . "toggle")
       :desc "Toggle Org Narrow" "T" #'org-toggle-narrow-to-subtree)
 ;; FIXME configure =toggle-narrow-to-subtree=:1 ends here
+;; Keys:1 ends here
 
 ;; [[file:config.org::*Roam][Roam:1]]
 ;; encapsulate org-roam-directory within (file-truename ___) if using links
@@ -446,6 +458,9 @@
             (setq org-drill-learn-fraction 0.25))
   )
 ;; Org Drill:1 ends here
+
+(setq org-edit-src-content-indentation 0)
+;; Source Blocks:1 ends here
 
 ;; [[file:config.org::*\[\[https:/gitlab.com/mtekman/elisp-depmap.el\]\[Elisp Depmap\]\]][[[https://gitlab.com/mtekman/elisp-depmap.el][Elisp Depmap]]:2]]
 (use-package! elisp-depmap

@@ -60,9 +60,13 @@ There may be other babel source blocks. Eventually, I would like include some
 elisp code for reflecting on Doom Emacs (e.g. extracting a list of packages
 added by Doom modules).
 
-**** TODO [#B] place light semantic-versioning constraints on packages
+**** TODO place light semantic-versioning constraints on packages
 + ~(package asdfoo-bar :pin 1234)~
 +
+**** TODO performance adjustments
++ follow advice in [[file:~/.emacs.d/docs/faq.org::*How does Doom start up so quickly?][Doom FAQ]]
++ figureout what's keeping this in custom.el ~'(auth-source-save-behavior nil)~
+
 **** TODO performance adjustments
 + follow advice in [[file:~/.emacs.d/docs/faq.org::*How does Doom start up so quickly?][Doom FAQ]]
 + figureout what's keeping this in custom.el ~'(auth-source-save-behavior nil)~
@@ -325,6 +329,72 @@ Combinations with Control are a little more difficult with one hand.
 (map! "C-M-S-<mouse-12>" 'origami-open-all-nodes)
 
 ;; (map! "M-S-<mouse-12>" 'origami-show-only-node)
+#+end_src
+
+**** Mode Hints (Mouse 14)
+
+Mouse 14 is intended to give hints for keybindings.
+
+- =M-<mouse-14>= calls to =which-key-show-major-mode= and should not require
+  specific =config.el= behavior to be defined.
+- =C-<mouse-14>= is intended to evoke mode-specific hydras, but requires these
+  hydras to have been defined (see [[*HYDRAS][HYDRAS]])
+
+#+begin_src emacs-lisp
+(map! "M-<mouse-14>" 'which-key-show-major-mode)
+#+end_src
+
+*** Artist Mode :artist_mode:
+
+[[https://www.emacswiki.org/emacs/ArtistMode][HOLY SHIT]]
+
+** COMPLETION
+
+**** Mouse 10, 11, 12
+Mouse 12 is for code folding. It is the easiest on the Wacom to combine with
+modkeys while toggling to/from scrolling.
+
+For Mouse 10/11/12, all of the following modkey combinations are easy to toggle while keeping the index finger near Mouse 13 and Wheel.
+
++ None
++ C
++ M
++ S
++ C-M
++ C-S
++ M-S (press both with thumb)
++ C-M-S (press both with thumb)
+
+**** Mouse 13 and VWheel
+
+Since I want to use the wheel to scroll anyways (without hitting modkeys), I am unsure of whether I want to remap it to HWheel in the Wacom drivers.
+
+**** Mouse 14, 15
+
+Mouse 14 & 15 are easy to use with the following modkeys.
+
++ None
++ M
++ S
++ M-S
+
+Combinations with Control are a little more difficult with one hand.
+
+**** Origami (Mouse 12)
+
+#+begin_src emacs-lisp
+(map! "<mouse-12>" 'origami-toggle-node)
+(map! "C-<mouse-12>" 'origami-open-node-recursively)
+(map! "C-S-<mouse-12>" 'origami-close-node-recursively)
+
+(map! "M-<mouse-12>" 'origami-forward-fold)
+(map! "S-<mouse-12>" 'origami-backward-fold-same-level)
+(map! "M-S-<mouse-12>" 'origami-forward-fold-same-level)
+
+(map! "C-M-<mouse-12>" 'origami-close-all-nodes)
+(map! "C-M-S-<mouse-12>" 'origami-open-all-nodes)
+
+;; (map! "M-S-<mouse-12>" 'origami-show-only-node)
 
 #+end_src
 
@@ -408,7 +478,6 @@ Pick a random theme from the ones I like.
 (unless (find-font doom-unicode-font)
   (message "couldn't find 'doom-unicode-font. using a default.")
   (setq doom-unicode-font (font-spec :family "Source Code Pro" :size 18)))
-
 #+end_src
 
 + config =doom-variable-pitch-font=?
@@ -665,6 +734,13 @@ Scroll lock can emulate this.
 
 ** EMACS
 
+*** AUTH
+
+#+BEGIN_SRC emacs-lisp
+;; (setq auth-sources '("~/.authinfo" "~/.authinfo.gpg" "~/.netrc"))
+(setq auth-sources (append `(,(concat (file-name-as-directory (getenv "DF_")) ".ectorepo.gpg")) auth-sources))
+#+END_SRC
+
 *** DIRED
 
 Remove `.` and `..` from list of omitted file patterns (so i can always run
@@ -707,6 +783,29 @@ Syntax & Spellcheck
                                :branch "main"
                                :repo "daviwil/dotcrafter.el"))
 #+end_src
+
+#+begin_src emacs-lisp
+;; (use-package! dotcrafter
+;;   :custom
+;;   (dotcrafter-dotfiles-folder (getenv "DF_"))
+;;   (dotcrafter-org-files '("zsh/README.org"
+;;                           "input/README.org"
+;;                           "clojure.org")))
+#+end_src
+
+[[https://github.com/daviwil/dotcrafter.el/][Dotcrafter]] helps you craft your dotfiles.
+
+**** TODO why the fuck does this keep fucking up?
+
+This gets de/tangled as the firestarter block, but the firestarter block doesnt
+
+#+begin_example
+#+begin_src emacs-lisp :tangle ./config.el
+;;(use-package! firestarter
+;;  :init (firestarter-mode)
+;;  :config (setq firestarter-default-type t))
+#+end_src
+#+end_example
 
 #+begin_src emacs-lisp
 ;; (use-package! dotcrafter
@@ -952,12 +1051,15 @@ Additonal org-mode packages:
 
 General Org Mode configs:
 
+*** Org Directory
+
 #+begin_src emacs-lisp
 (setq org-directory (getenv "ORG_DIRECTORY")
       +org-capture-journal-file (concat (file-name-as-directory org-directory) "journal.org")
       org-calendars-directory (concat  (file-name-as-directory org-directory) "calendars"))
-
 #+end_src
+
+*** Org Literate
 
 Prevent over-eager dotfiles recompilation =from HaoZeke=
 
@@ -965,8 +1067,6 @@ Prevent over-eager dotfiles recompilation =from HaoZeke=
 (after! org
   (remove-hook 'org-mode-hook #'+literate-enable-recompile-h))
 #+END_SRC
-
-
 
 *** Workflow
 
@@ -977,7 +1077,47 @@ Prevent over-eager dotfiles recompilation =from HaoZeke=
       :leader
       :prefix ("t" . "toggle")
       :desc "Toggle Org Narrow" "T" #'org-toggle-narrow-to-subtree)
+
+#+begin_example
+#+begin_src emacs-lisp :tangle no
+(defun dc/util--paths-from-alist (paths-alist)
+  "reduce an alist of paths, where the keys are directories and the
+values are lists of files, to produce a list of files with
+absolute paths  "
+  (let* ((path-keys (mapcar 'car paths-alist))
+        (root-paths (mapcar 'file-name-as-directory path-keys))
+        ;; (root-paths (map 'file-name-as-directory path-keys))
+                                        ;        (absolute-paths )
+                                        ;       (mapcar (lambda (file) (concat (filename-as-directory ))))
+        )
+
+    root-paths
+    ;; path-keys
+
+))
+
+
+
+
+;; map-values-apply concat
+
+(let ((agenda-map '((org-directory . '("todo.org" "notes.org" "habits.org" "projects.org"))
+                    (doom-private-dir . '("todo.org" "notes.org"))))
+
+
+      )
+(dc/util--paths-from-alist agenda-map)
+        )
+
+
+
+;; (setq org-agenda-files  )
+
+
+        ;;      (let ((agenda-root ) ) ) (mapcar (lambda (f) (concat (filename-as-directory (or (getenv "ORG_AGENDA_ROOT")
+        ;; (getenv "ORG_DIRECTORY"))) f)))
 #+end_src
+#+end_example
 
 **** TODO configure =org-toggle-sidebar
 
@@ -1046,7 +1186,17 @@ Of course as soon as I start to use this, I discover =org-roam-dailies= ... whic
 *** Roam
 
 #+begin_src emacs-lisp
+(after! org
+  (setq org-log-done 'time
+        org-support-shift-select t
+        ;;org-agenda-files (concat (file-name-as-directory org-directory) "agenda.org")
+        ;; TODO include content from Adam James
+        ))
+#+end_src
 
+This configures org-roam v2 and is not compatible with doom's org-roam module. See the updated Hitchiker's Guide for more info. As long as one bears in mind the differences between v1 and v2, then these links are also useful
+
+#+begin_src emacs-lisp
 ;; encapsulate org-roam-directory within (file-truename ___) if using links
 (setq org-roam-directory (concat (file-name-as-directory org-directory) "roam")
       org-roam-db-location (concat (file-name-as-directory org-roam-directory) "org-roam.db")
@@ -1078,6 +1228,87 @@ Of course as soon as I start to use this, I discover =org-roam-dailies= ... whic
 
 ;; from https://org-roam.discourse.group/t/org-roam-major-redesign/1198/220
 ;;(setq org-roam-node-display-template "${title:80}  ${file:9} ${tags:20}")
+#+end_src
+
+#+RESULTS:
+
+Current =org-journal= mappings
+
++ C-c n j j :: =org-journal-new-entry=
++ C-c n j s :: =org-journal-search-forever=
++ C-c n j j :: =org-journal-new-scheduled-entry=
+
+
+*** Capture
+
+**** TODO capture template for code examples
+- set the possible refile locations according to configured metarepos
+
+*** Refile
+
+#+begin_src emacs-lisp
+(setq org-refile-targets
+      '((org-agenda-files . (:maxlevel . 3))
+        (nil . (:maxlevel . 3)))
+
+      org-refile-use-outline-path t
+      org-refile-allow-creating-parent-nodes 'confirm
+      org-refile-use-cache t)
+
+(unless (boundp 'org-refile-cache-timer)
+  (run-with-idle-timer 300 t (lambda ()
+                               (org-refile-cache-clear)
+                               (org-refile-get-targets)))
+  (setq org-refile-cache-timer t))
+
+;; TODO consider using =org-refile-target-verify-function
+;; to filter subtrees marked "done" from being org-refile-targets
+;; (source: mwfogleman/englehorn)
+#+end_src
+
+*** Agenda
+
++ protesilaos & hsinhaoyu have pretty comprehensive configs
+
+*** Clock
+
+Set auto-clockout to keep time tracking accurate. Refer to [[https://orgmode.org/manual/Clocking-Work-Time.html#Clocking-Work-Time][Orgmode Manual entry]] for details.
+
+#+begin_src emacs-lisp
+(setq org-clock-auto-clockout-timer 300
+      ;; org-clock-idle-time 3
+        )
+(org-clock-auto-clockout-insinuate)
+#+end_src
+
+*** Super Agenda
+
++ review mwfogleman's config
+
+#+begin_src emacs-lisp
+(use-package! org-super-agenda
+  :init (setq org-super-agenda-groups
+                '((:name "Today"
+                   :time-grid t
+                   :todo "Today")
+                  (:habit t)
+                  (:name "Due today"
+                   :deadline today)
+                  (:name "Overdue"
+                   :deadline past)
+                  (:name "Due soon"
+                   :deadline future)
+                  (:name "Important"
+                   :priority "A")
+                  (:priority<= "B"
+                   :order 1)
+                  ))
+  :config (org-super-agenda-mode))
+#+end_src
+
+*** org-ql
+
+#+begin_src emacs-lisp
 
 #+end_src
 
@@ -1116,6 +1347,7 @@ Current =org-journal= mappings
 ;; to filter subtrees marked "done" from being org-refile-targets
 ;; (source: mwfogleman/englehorn)
 #+end_src
+
 *** Agenda
 
 + protesilaos & hsinhaoyu have pretty comprehensive configs
@@ -1547,8 +1779,6 @@ Use doom colors for theme and toggle with =:leader tP=
 #+end_src
 
 **** TODO customize doom [[file:~/.emacs.d/modules/tools/rgb/README.org::*Features][rainbow module]]
-
-
 
 ** HYDRAS
 :PROPERTIES:

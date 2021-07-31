@@ -1,11 +1,79 @@
-#+TITLE: Bufler Doom Module
+#+TITLE:   ui/bufler-tabs
 #+AUTHOR: David Conner
+#+DATE:    May 12, 2021
 #+DESCRIPTION: A module to configure bufler
-#+STARTUP: showeverything
+#+SINCE:   <replace with next tagged release version>
+#+STARTUP: inlineimages nofold
 
-* Bufler Tabs and Burly Bookmarks
+* Table of Contents :TOC_3:noexport:
+- [[#reintegrate-notes-into-doom-emacs-format][reintegrate notes into doom emacs format]]
+- [[#description][Description]]
+  - [[#maintainers][Maintainers]]
+  - [[#module-flags][Module Flags]]
+  - [[#plugins][Plugins]]
+  - [[#hacks][Hacks]]
+- [[#prerequisites][Prerequisites]]
+- [[#features][Features]]
+- [[#configuration][Configuration]]
+- [[#source][Source]]
+- [[#troubleshooting][Troubleshooting]]
+  - [[#misc-bufler-config-05][Misc bufler config]]
+  - [[#popup-rules-for-bufler][popup rules for bufler]]
+  - [[#configure-bufler-groups][configure bufler groups]]
+  - [[#remove-bufler-tabs-from-the-wrong-places-02][remove bufler tabs from the wrong places]]
+  - [[#make-compatible-with-the-doom-ui-tabs-module][make compatible with the doom =:ui tabs= module]]
 
-[[https://github.com/alphapapa/bufler.el][Bufler]] uses emacs-27 tabs
+* TODO reintegrate notes into doom emacs format
+
+* Description
+# A summary of what this module does.
+
++ If possible, include a brief list of feature highlights here
++ Like code completion, syntax checking or available snippets
++ Include links to packages & external things where possible
+
+** Maintainers
++ @username_linked_to_gihub (Author)
++ @username_linked_to_gihub
++ @username_linked_to_gihub
+
+# If this module has no maintainers, then...
+This module has no dedicated maintainers.
+
+** Module Flags
++ =+flag1= A short description of what this flag does and what it might need
+when enabled.
+
+** Plugins
+# A list of linked plugins
++ [[https://orgmode.org/][org-plus-contrib]]
++ [[https://github.com/sabof/org-bullets][org-bullets]]
++ [[https://github.com/TobiasZawada/org-yt][org-yt]]
++ [[https://github.com/sebastiencs/company-box][company-box]]* (=+childframe=)
++ =:lang crystal=
++ [[https://github.com/brantou/ob-crystal][ob-crystal]]
++ =:lang go=
++ [[https://github.com/pope/ob-go][ob-go]]
++ =+present=
++ [[https://github.com/anler/centered-window-mode][centered-window]]
++ [[https://github.com/takaxp/org-tree-slide][org-tree-slide]]
++ [[https://gitlab.com/oer/org-re-reveal][org-re-reveal]]
+
+** Hacks
+# A list of internal modifications to included packages; omit if unneeded
+
+* Prerequisites
+This module has no prerequisites.
+
+* Features
+# An in-depth list of features, how to use them, and their dependencies.
+
+* Configuration
+# How to configure this module, including common problems and how to address them.
+
+* Source
+
++ [[https://github.com/alphapapa/bufler.el][Bufler]] uses emacs-27 tabs
 
 #+begin_src emacs-lisp :tangle ./packages.el
 ;; -*- no-byte-compile: t; lexical-binding: t; -*-
@@ -25,6 +93,9 @@
             (bufler-mode +1)
             (bufler-tabs-mode +1)))
 #+end_src
+
+* Troubleshooting
+# Common issues and their solution, or places to look for help.
 
 ** TODO Misc bufler config [0/5]
 + [ ] bufler/tab-bar-mode display disappears (caused by save-desktop/autoloads)
