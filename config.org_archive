@@ -1,0 +1,29 @@
+#    -*- mode: org -*-
+
+
+Archived entries from file /home/dc/.config/dc/.doom.d/config.org
+
+
+* DONE setup autocompletion in tangles :doom:babel:
+  CLOSED: [2021-04-14 Wed 09:08]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-04-30 Fri 11:11
+  :ARCHIVE_FILE: ~/.config/dc/.doom.d/config.org
+  :ARCHIVE_OLPATH: Configuration/BABEL
+  :ARCHIVE_CATEGORY: config
+  :ARCHIVE_TODO: DONE
+  :END:
++ just use ~C-c '~ to open an indirect buffer?
+
+
+* LATEX :latex:
+:PROPERTIES:
+:ARCHIVE_TIME: 2021-06-14 Mon 22:00
+:ARCHIVE_FILE: ~/.config/dc/.doom.d/config.org
+:ARCHIVE_OLPATH: Config.el/LANG
+:ARCHIVE_CATEGORY: config
+:ARCHIVE_ITAGS: doom config
+:END:
+
+Apparently, [[https://mirror.aarnet.edu.au/pub/CTAN/systems/knuth/dist/tex/tex.web][the TeX source code]] was written in Pascal/TeX was literate
+programming code written by Knuth in Pascal/TeX; Via Hsin Haoyu[fn:hsinhaoyu]

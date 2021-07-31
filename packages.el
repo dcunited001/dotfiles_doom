@@ -50,4 +50,4 @@
 (package! google-translate)
 (package! ob-translate)
 
-(package! prism)
+(package! prism

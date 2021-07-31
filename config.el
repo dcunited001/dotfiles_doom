@@ -171,14 +171,138 @@
 (after! org
   (remove-hook 'after-save-hook #'+literate|recompile-maybe))
 
-(setq org-directory "/data/org")
+;;(setq org-directory "/data/org")
 
-(after! org
   (setq org-log-done 'time
         org-support-shift-select t
         ;;org-agenda-files (concat (file-name-as-directory org-directory) "agenda.org")
         ;; TODO include content from Adam James
         ))
+
+(after! org
+  (remove-hook 'org-mode-hook #'+literate-enable-recompile-h))
+;; ORG:3 ends here
+
+;; [[file:config.org::*Keys][Keys:1]]
+(map! :map org-mode-map
+      :leader
+      :prefix ("t" . "toggle")
+      :desc "Toggle Org Narrow" "T" #'org-toggle-narrow-to-subtree)
+;; Keys:1 ends here
+
+;; [[file:config.org::*Roam][Roam:1]]
+;; encapsulate org-roam-directory within (file-truename ___) if using links
+(setq org-roam-directory (concat (file-name-as-directory org-directory) "roam")
+      org-roam-db-location (concat (file-name-as-directory org-roam-directory) "org-roam.db")
+      org-roam-file-extensions '("org")
+      org-roam-dailies-directory "dailies/"
+      org-roam-dailies-capture-templates
+      '(("d" "default" entry
+         "* %?"
+         :if-new (file+head "%<%Y-%m-%d>.org"
+                            "#+title: %<%Y-%m-%d>\n")))
+      org-roam-mode-sections (list #'org-roam-backlinks-section
+                                   #'org-roam-reflinks-section
+                                   ;; generating unlinked can be slow
+                                   ;; #'org-roam-unlinked-references-section
+                                   ))
+
+(use-package! org-roam
+  :after org
+  :commands
+  (org-roam-buffer
+   org-roam-setup
+   org-roam-capture
+   org-roam-node-find)
+  :config
+  (org-roam-setup))
+
+(use-package! org-roam-protocol
+  :after org-protocol)
+
+;; from https://org-roam.discourse.group/t/org-roam-major-redesign/1198/220
+;;(setq org-roam-node-display-template "${title:80}  ${file:9} ${tags:20}")
+;; Roam:1 ends here
+
+;; [[file:config.org::*Refile][Refile:1]]
+(setq org-refile-targets
+      '((org-agenda-files . (:maxlevel . 3))
+        (nil . (:maxlevel . 3)))
+
+      org-refile-use-outline-path t
+      org-refile-allow-creating-parent-nodes 'confirm
+      org-refile-use-cache t)
+
+(unless (boundp 'org-refile-cache-timer)
+  (run-with-idle-timer 300 t (lambda ()
+                               (org-refile-cache-clear)
+                               (org-refile-get-targets)))
+  (setq org-refile-cache-timer t))
+
+;; TODO consider using =org-refile-target-verify-function
+;; to filter subtrees marked "done" from being org-refile-targets
+;; (source: mwfogleman/englehorn)
+;; Refile:1 ends here
+
+;; [[file:config.org::*Clock][Clock:1]]
+(setq org-clock-auto-clockout-timer 300
+      ;; org-clock-idle-time 3
+        )
+(org-clock-auto-clockout-insinuate)
+;; Clock:1 ends here
+
+;; [[file:config.org::*Super Agenda][Super Agenda:1]]
+(use-package! org-super-agenda
+  :init (setq org-super-agenda-groups
+                '((:name "Today"
+                   :time-grid t
+                   :todo "Today")
+                  (:habit t)
+                  (:name "Due today"
+                   :deadline today)
+                  (:name "Overdue"
+                   :deadline past)
+                  (:name "Due soon"
+                   :deadline future)
+                  (:name "Important"
+                   :priority "A")
+                  (:priority<= "B"
+                   :order 1)
+                  ))
+  :config (org-super-agenda-mode))
+;; Super Agenda:1 ends here
+
+;; [[file:config.org::*org-ql][org-ql:1]]
+
+;; org-ql:1 ends here
+
+;; [[file:config.org::*org-sidebar][org-sidebar:1]]
+
+;; org-sidebar:1 ends here
+
+;; [[file:config.org::*Source Blocks][Source Blocks:1]]
+(setq org-edit-src-content-indentation 0)
+;; Source Blocks:1 ends here
+
+;; [[file:config.org::*Org Treeusage][Org Treeusage:1]]
+(use-package! org-treeusage
+  :bind ("C-c d" . org-treeusage-mode)
+  :config (setq org-treescope-overlay-header nil
+                org-treeusage-overlay-usecolorbands nil))
+;; Org Treeusage:1 ends here
+
+;; [[file:config.org::*Org Drill][Org Drill:1]]
+(use-package! org-drill
+  :after org
+  :config (progn
+            (setq org-drill-add-random-noise-to-intervals-p t)
+            (setq org-drill-hint-separator "||")
+            (setq org-drill-left-cloze-separator "<[")
+            (setq org-drill-left-cloze-separator "]>")
+            (setq org-drill-learn-fraction 0.25))
+  )
+;; Org Drill:1 ends here
+>>>>>>> Stashed changes
 
 (setq org-edit-src-content-indentation 0)
 
@@ -256,3 +380,49 @@
 ;; TODO fix to autoload rainbow-mode in doom theme files
 ;; (setq auto-minor-mode-alist (append '(("theme\\.el$" . rainbow-mode))
                                     ;; auto-minor-mode-alist))
+
+(let ((bindings '(("g" "edebug-go-mode" "Modes") ("SPC" "edebug-step-mode" "Modes") ("t" "edebug-trace-mode" "Modes") ("c" "edebug-continue-mode" "Modes") ("G" "edebug-Go-nonstop-mode" "Modes") ("T" "edebug-Trace-fast-mode" "Modes") ("C" "edebug-Continue-fast-mode" "Modes") ("n" "edebug-next-mode" "Modes") ("I" "edebug-set-initial-mode" "Modes") ("S" "edebug-stop" "Jumping") ("h" "edebug-goto-here" "Jumping") ("f" "edebug-forward-sexp" "Jumping") ("o" "edebug-step-out" "Jumping") ("i" "edebug-step-in" "Jumping") ("?" "edebug-help" "Misc") ("Q" "edebug-top-level-nonstop" "Misc") ("r" "edebug-previous-result" "Misc") ("d" "edebug-pop-to-backtrace" "Misc") ("=" "edebug-display-freq-count" "Misc") ("b" "edebug-set-breakpoint" "Breaks") ("B" "edebug-next-breakpoint" "Breaks") ("u" "edebug-unset-breakpoint" "Breaks") ("U" "edebug-unset-breakpoints" "Breaks") ("D" "edebug-toggle-disable-breakpoint" "Breaks") ("x" "edebug-set-conditional-breakpoint" "Breaks") ("X" "edebug-set-global-break-condition" "Breaks") ("v" "edebug-view-outside" "Views") ("P" "edebug-bounce-point" "Views") ("w" "edebug-where" "Views") ("W" "edebug-toggle-save-windows" "Views") ("e" "edebug-eval-expression" "Eval") ("C-x C-e" "edebug-eval-last-sexp" "Eval") ("E" "edebug-visit-eval-list" "Eval") ("C-j" "edebug-eval-print-last-sexp" "Eval") ("C-c C-u" "edebug-update-eval-list" "Eval") ("C-c C-d" "edebug-delete-eval-item" "Eval") ("C-c C-w" "edebug-where" "Eval"))))
+(eval
+ (append
+  '(defhydra dchydra/edebug-cheat-sheet (:hint nil :foreign-keys run)
+     ("C-<mouse-14>" nil "Exit" :exit t))
+  (cl-loop for x in bindings
+           unless (string= "" (elt x 2))
+           collect
+           (list (car x)
+                 (intern (elt x 1))
+                 ;; edebug-(?:eval-)?\(.+)
+                 (when (string-match "edebug-\\(.+\\)"
+                                     (elt x 1))
+                   (match-string 1 (elt x 1)))
+                 :column
+                 (elt x 2)))))
+
+(with-eval-after-load "edebug"
+  (define-key edebug-mode-map (kbd "C-<mouse-14>") 'dchydra/edebug-cheat-sheet/body))
+(with-eval-after-load "debugger"
+  (define-key debugger-mode-map (kbd "C-<mouse-14>") 'dchydra/edebug-cheat-sheet/body))
+
+)
+
+(let ((bindings '(("<" "lispy-barf" "") ("A" "lispy-beginning-of-defun" "") ("j" "lispy-down" "") ("Z" "lispy-edebug-stop" "") ("B" "lispy-ediff-regions" "") ("G" "lispy-goto-local" "") ("h" "lispy-left" "") ("N" "lispy-narrow" "") ("y" "lispy-occur" "") ("o" "lispy-other-mode" "") ("J" "lispy-outline-next" "") ("K" "lispy-outline-prev" "") ("P" "lispy-paste" "") ("l" "lispy-right" "") ("I" "lispy-shifttab" "") (">" "lispy-slurp" "") ("SPC" "lispy-space" "") ("xB" "lispy-store-region-and-buffer" "") ("u" "lispy-undo" "") ("k" "lispy-up" "") ("v" "lispy-view" "") ("V" "lispy-visit" "") ("W" "lispy-widen" "") ("D" "pop-tag-mark" "") ("x" "see" "") ("L" "unbound" "") ("U" "unbound" "") ("X" "unbound" "") ("Y" "unbound" "") ("H" "lispy-ace-symbol-replace" "Edit") ("c" "lispy-clone" "Edit") ("C" "lispy-convolute" "Edit") ("n" "lispy-new-copy" "Edit") ("O" "lispy-oneline" "Edit") ("r" "lispy-raise" "Edit") ("R" "lispy-raise-some" "Edit") ("\\" "lispy-splice" "Edit") ("S" "lispy-stringify" "Edit") ("i" "lispy-tab" "Edit") ("xj" "lispy-debug-step-in" "Eval") ("xe" "lispy-edebug" "Eval") ("xT" "lispy-ert" "Eval") ("e" "lispy-eval" "Eval") ("E" "lispy-eval-and-insert" "Eval") ("xr" "lispy-eval-and-replace" "Eval") ("p" "lispy-eval-other-window" "Eval") ("q" "lispy-ace-paren" "Move") ("z" "lispy-knight" "Move") ("s" "lispy-move-down" "Move") ("w" "lispy-move-up" "Move") ("t" "lispy-teleport" "Move") ("Q" "lispy-ace-char" "Nav") ("-" "lispy-ace-subword" "Nav") ("a" "lispy-ace-symbol" "Nav") ("b" "lispy-back" "Nav") ("d" "lispy-different" "Nav") ("f" "lispy-flow" "Nav") ("F" "lispy-follow" "Nav") ("g" "lispy-goto" "Nav") ("xb" "lispy-bind-variable" "Refactor") ("xf" "lispy-flatten" "Refactor") ("xc" "lispy-to-cond" "Refactor") ("xd" "lispy-to-defun" "Refactor") ("xi" "lispy-to-ifs" "Refactor") ("xl" "lispy-to-lambda" "Refactor") ("xu" "lispy-unbind-variable" "Refactor") ("M" "lispy-multiline" "Other") ("xh" "lispy-describe" "Other") ("m" "lispy-mark-list" "Other"))))
+(eval
+ (append
+  '(defhydra dchydra/lispy-cheat-sheet (:hint nil :foreign-keys run)
+     ("C-<mouse-14>" nil "Exit" :exit t))
+  (cl-loop for x in bindings
+           unless (string= "" (elt x 2))
+           collect
+           (list (car x)
+                 (intern (elt x 1))
+                 (when (string-match "lispy-\\(?:eval-\\)?\\(.+\\)"
+                                     (elt x 1))
+                   (match-string 1 (elt x 1)))
+                 :column
+                 (elt x 2)))))
+
+(with-eval-after-load "lispy"
+  (define-key lispy-mode-map (kbd "C-<mouse-14>") 'dchydra/lispy-cheat-sheet/body))
+
+
+)

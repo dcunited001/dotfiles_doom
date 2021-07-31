@@ -107,6 +107,8 @@ forever. If this package built/installed your native-comp emacs, AFAIK you do
 not need to touch these flags, but you should at least understand what is set,
 how & why.
 
+**** TODO update with better instructions
+
 Then, run ~SRCDEST=/home/yousir/local/src makepkg -cCfiL~ where =SRCDEST= is a
 var recognized by =makepkg= (it's also in =/etc/makepkg.conf=). If you want to
 include the config options above, now is the time to do it. If you try doing
