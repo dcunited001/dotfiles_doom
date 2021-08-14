@@ -62,7 +62,6 @@ added by Doom modules).
 
 **** TODO place light semantic-versioning constraints on packages
 + ~(package asdfoo-bar :pin 1234)~
-+
 **** TODO performance adjustments
 + follow advice in [[file:~/.emacs.d/docs/faq.org::*How does Doom start up so quickly?][Doom FAQ]]
 + figureout what's keeping this in custom.el ~'(auth-source-save-behavior nil)~
@@ -85,6 +84,8 @@ added by Doom modules).
     - [[#wacom][Wacom]]
     - [[#artist-mode][Artist Mode]]
   - [[#completion][COMPLETION]]
+    - [[#artist-mode-1][Artist Mode]]
+  - [[#completion-1][COMPLETION]]
     - [[#completion-prompts][Completion prompts]]
     - [[#company][Company]]
     - [[#ivy][IVY]]
@@ -138,6 +139,8 @@ added by Doom modules).
     - [[#emacs-packages][Emacs Packages]]
   - [[#os][OS]]
   - [[#org][ORG]]
+    - [[#org-directory][Org Directory]]
+    - [[#org-literate][Org Literate]]
     - [[#workflow][Workflow]]
     - [[#keys][Keys]]
     - [[#mime-types-fntecosaur][Mime types [fn:tecosaur]]]
@@ -149,6 +152,12 @@ added by Doom modules).
     - [[#clock][Clock]]
     - [[#super-agenda][Super Agenda]]
     - [[#org-ql][org-ql]]
+    - [[#capture-1][Capture]]
+    - [[#refile-1][Refile]]
+    - [[#agenda-1][Agenda]]
+    - [[#clock-1][Clock]]
+    - [[#super-agenda-1][Super Agenda]]
+    - [[#org-ql-1][org-ql]]
     - [[#org-sidebar][org-sidebar]]
     - [[#source-blocks][Source Blocks]]
     - [[#org-treeusage][Org Treeusage]]
@@ -738,7 +747,7 @@ Scroll lock can emulate this.
 
 #+BEGIN_SRC emacs-lisp
 ;; (setq auth-sources '("~/.authinfo" "~/.authinfo.gpg" "~/.netrc"))
-(setq auth-sources (append `(,(concat (file-name-as-directory (getenv "DF_")) ".ectorepo.gpg")) auth-sources))
+;; (setq auth-sources (append `(,(concat (file-name-as-directory (getenv "DF_")) ".ectorepo.gpg")) auth-sources))
 #+END_SRC
 
 *** DIRED
@@ -1040,8 +1049,8 @@ Additonal org-mode packages:
 (package! org-treeusage)
 (package! org-drill)
 
-(package! org-roam
-  :recipe (:host github :repo "org-roam/org-roam" :branch "v2"))
+(package! org-roam)
+;; :recipe (:host github :repo "org-roam/org-roam" :branch "v2"))
 
 ;; dependencies org-super-agenda => org-ql => org-sidebar
 (package! org-super-agenda)
@@ -1077,6 +1086,7 @@ Prevent over-eager dotfiles recompilation =from HaoZeke=
       :leader
       :prefix ("t" . "toggle")
       :desc "Toggle Org Narrow" "T" #'org-toggle-narrow-to-subtree)
+#+end_src
 
 #+begin_example
 #+begin_src emacs-lisp :tangle no

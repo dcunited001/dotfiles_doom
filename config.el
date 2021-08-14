@@ -66,6 +66,25 @@
 (map! "M-<mouse-14>" 'which-key-show-major-mode)
 ;; Mode Hints (Mouse 14):1 ends here
 
+;; [[file:config.org::*Origami (Mouse 12)][Origami (Mouse 12):1]]
+(map! "<mouse-12>" 'origami-toggle-node)
+(map! "C-<mouse-12>" 'origami-open-node-recursively)
+(map! "C-S-<mouse-12>" 'origami-close-node-recursively)
+
+(map! "M-<mouse-12>" 'origami-forward-fold)
+(map! "S-<mouse-12>" 'origami-backward-fold-same-level)
+(map! "M-S-<mouse-12>" 'origami-forward-fold-same-level)
+
+(map! "C-M-<mouse-12>" 'origami-close-all-nodes)
+(map! "C-M-S-<mouse-12>" 'origami-open-all-nodes)
+
+;; (map! "M-S-<mouse-12>" 'origami-show-only-node)
+;; Origami (Mouse 12):1 ends here
+
+;; [[file:config.org::*Mode Hints (Mouse 14)][Mode Hints (Mouse 14):1]]
+(map! "M-<mouse-14>" 'which-key-show-major-mode)
+;; Mode Hints (Mouse 14):1 ends here
+
 ;; [[file:config.org::*Doom Theme][Doom Theme:1]]
 ;; doom-Iosvkem
 ;; doom-fairy-floss
@@ -240,7 +259,7 @@
 
 ;; [[file:config.org::*AUTH][AUTH:1]]
 ;; (setq auth-sources '("~/.authinfo" "~/.authinfo.gpg" "~/.netrc"))
-(setq auth-sources (append `(,(concat (file-name-as-directory (getenv "DF_")) ".ectorepo.gpg")) auth-sources))
+;; (setq auth-sources (append `(,(concat (file-name-as-directory (getenv "DF_")) ".ectorepo.gpg")) auth-sources))
 ;; AUTH:1 ends here
 
 ;; [[file:config.org::*DIRED][DIRED:1]]
@@ -259,6 +278,15 @@
 ;;                           "input/README.org"
 ;;                           "clojure.org")))
 ;; Dotcrafter:2 ends here
+
+;; [[file:config.org::*why the fuck does this keep fucking up?][why the fuck does this keep fucking up?:1]]
+;; (use-package! dotcrafter
+;;   :custom
+;;   (dotcrafter-dotfiles-folder (getenv "DF_"))
+;;   (dotcrafter-org-files '("zsh/README.org"
+;;                           "input/README.org"
+;;                           "clojure.org")))
+;; why the fuck does this keep fucking up?:1 ends here
 
 ;; [[file:config.org::*Info][Info:2]]
 (use-package! info-colors)
@@ -316,37 +344,34 @@
       lsp-ui-imenu-window-width 25)
 ;; LSP UI:1 ends here
 
-;; [[file:config.org::*ORG][ORG:2]]
+;; [[file:config.org::*Org Directory][Org Directory:1]]
 (setq org-directory (getenv "ORG_DIRECTORY")
       +org-capture-journal-file (concat (file-name-as-directory org-directory) "journal.org")
       org-calendars-directory (concat  (file-name-as-directory org-directory) "calendars"))
-;; ORG:2 ends here
+;; Org Directory:1 ends here
 
-;; [[file:config.org::*ORG][ORG:3]]
-
-;;(setq org-directory "/data/org")
-
-  (setq org-log-done 'time
-        org-support-shift-select t
-        ;;org-agenda-files (concat (file-name-as-directory org-directory) "agenda.org")
-        ;; TODO include content from Adam James
-        ))
-
+;; [[file:config.org::*Org Literate][Org Literate:1]]
 (after! org
   (remove-hook 'org-mode-hook #'+literate-enable-recompile-h))
+;; Org Literate:1 ends here
 
-;; ORG:3 ends here
-
-;; [[file:config.org::*FIXME configure =toggle-narrow-to-subtree=][FIXME configure =toggle-narrow-to-subtree=:1]]
 ;; [[file:config.org::*Keys][Keys:1]]
 (map! :map org-mode-map
       :leader
       :prefix ("t" . "toggle")
       :desc "Toggle Org Narrow" "T" #'org-toggle-narrow-to-subtree)
-;; FIXME configure =toggle-narrow-to-subtree=:1 ends here
 ;; Keys:1 ends here
 
 ;; [[file:config.org::*Roam][Roam:1]]
+(after! org
+  (setq org-log-done 'time
+        org-support-shift-select t
+        ;;org-agenda-files (concat (file-name-as-directory org-directory) "agenda.org")
+        ;; TODO include content from Adam James
+        ))
+;; Roam:1 ends here
+
+;; [[file:config.org::*Roam][Roam:2]]
 ;; encapsulate org-roam-directory within (file-truename ___) if using links
 (setq org-roam-directory (concat (file-name-as-directory org-directory) "roam")
       org-roam-db-location (concat (file-name-as-directory org-roam-directory) "org-roam.db")
@@ -378,7 +403,59 @@
 
 ;; from https://org-roam.discourse.group/t/org-roam-major-redesign/1198/220
 ;;(setq org-roam-node-display-template "${title:80}  ${file:9} ${tags:20}")
-;; Roam:1 ends here
+;; Roam:2 ends here
+
+;; [[file:config.org::*Refile][Refile:1]]
+(setq org-refile-targets
+      '((org-agenda-files . (:maxlevel . 3))
+        (nil . (:maxlevel . 3)))
+
+      org-refile-use-outline-path t
+      org-refile-allow-creating-parent-nodes 'confirm
+      org-refile-use-cache t)
+
+(unless (boundp 'org-refile-cache-timer)
+  (run-with-idle-timer 300 t (lambda ()
+                               (org-refile-cache-clear)
+                               (org-refile-get-targets)))
+  (setq org-refile-cache-timer t))
+
+;; TODO consider using =org-refile-target-verify-function
+;; to filter subtrees marked "done" from being org-refile-targets
+;; (source: mwfogleman/englehorn)
+;; Refile:1 ends here
+
+;; [[file:config.org::*Clock][Clock:1]]
+(setq org-clock-auto-clockout-timer 300
+      ;; org-clock-idle-time 3
+        )
+(org-clock-auto-clockout-insinuate)
+;; Clock:1 ends here
+
+;; [[file:config.org::*Super Agenda][Super Agenda:1]]
+(use-package! org-super-agenda
+  :init (setq org-super-agenda-groups
+                '((:name "Today"
+                   :time-grid t
+                   :todo "Today")
+                  (:habit t)
+                  (:name "Due today"
+                   :deadline today)
+                  (:name "Overdue"
+                   :deadline past)
+                  (:name "Due soon"
+                   :deadline future)
+                  (:name "Important"
+                   :priority "A")
+                  (:priority<= "B"
+                   :order 1)
+                  ))
+  :config (org-super-agenda-mode))
+;; Super Agenda:1 ends here
+
+;; [[file:config.org::*org-ql][org-ql:1]]
+
+;; org-ql:1 ends here
 
 ;; [[file:config.org::*Refile][Refile:1]]
 (setq org-refile-targets
@@ -458,9 +535,6 @@
             (setq org-drill-learn-fraction 0.25))
   )
 ;; Org Drill:1 ends here
-
-(setq org-edit-src-content-indentation 0)
-;; Source Blocks:1 ends here
 
 ;; [[file:config.org::*\[\[https:/gitlab.com/mtekman/elisp-depmap.el\]\[Elisp Depmap\]\]][[[https://gitlab.com/mtekman/elisp-depmap.el][Elisp Depmap]]:2]]
 (use-package! elisp-depmap
