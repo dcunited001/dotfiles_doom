@@ -29,12 +29,6 @@
 (package! centered-cursor-mode)
 ;; Centered Cursor Mode:1 ends here
 
-;; [[file:config.org::*Dotcrafter][Dotcrafter:1]]
-(package! dotcrafter :recipe (:host github
-                               :branch "main"
-                               :repo "daviwil/dotcrafter.el"))
-;; Dotcrafter:1 ends here
-
 ;; [[file:config.org::*Info][Info:1]]
 (package! info-colors)
 ;; Info:1 ends here

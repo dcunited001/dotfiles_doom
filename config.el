@@ -127,9 +127,16 @@
 ;; Ligatures:1 ends here
 
 ;; [[file:config.org::*Window UI][Window UI:1]]
+(tooltip-mode)
+
+(setq tooltip-delay 2
+      tooltip-short-delay 0.5)
+;; Window UI:1 ends here
+
+;; [[file:config.org::*Window UI][Window UI:2]]
 (setq window-divider-default-right-width 1)
 (setq window-divider-default-bottom-width 1)
-;; Window UI:1 ends here
+;; Window UI:2 ends here
 
 ;; [[file:config.org::*Menu Bar][Menu Bar:1]]
 (menu-bar-mode +2)
@@ -269,24 +276,6 @@
 ;; [[file:config.org::*Explicit Shell][Explicit Shell:1]]
 (setq explicit-shell-file-name "/bin/zsh")
 ;; Explicit Shell:1 ends here
-
-;; [[file:config.org::*Dotcrafter][Dotcrafter:2]]
-;; (use-package! dotcrafter
-;;   :custom
-;;   (dotcrafter-dotfiles-folder (getenv "DF_"))
-;;   (dotcrafter-org-files '("zsh/README.org"
-;;                           "input/README.org"
-;;                           "clojure.org")))
-;; Dotcrafter:2 ends here
-
-;; [[file:config.org::*why the fuck does this keep fucking up?][why the fuck does this keep fucking up?:1]]
-;; (use-package! dotcrafter
-;;   :custom
-;;   (dotcrafter-dotfiles-folder (getenv "DF_"))
-;;   (dotcrafter-org-files '("zsh/README.org"
-;;                           "input/README.org"
-;;                           "clojure.org")))
-;; why the fuck does this keep fucking up?:1 ends here
 
 ;; [[file:config.org::*Info][Info:2]]
 (use-package! info-colors)
