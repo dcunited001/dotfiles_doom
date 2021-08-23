@@ -364,6 +364,7 @@
 ;; encapsulate org-roam-directory within (file-truename ___) if using links
 (setq org-roam-directory (concat (file-name-as-directory org-directory) "roam")
       org-roam-db-location (concat (file-name-as-directory org-roam-directory) "org-roam.db")
+      org-roam-v2-ack t
       org-roam-file-extensions '("org")
       org-roam-dailies-directory "dailies/"
       org-roam-dailies-capture-templates
