@@ -107,9 +107,10 @@
 
 ;; [[file:config.org::*Font][Font:1]]
 ;; (set-frame-font "Source Code Pro 12" nil t)
-(setq doom-font (font-spec :family "Source Code Pro" :size 14)
-      doom-unicode-font (font-spec :family "Source Code Pro" :size 14)
-      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 14)
+;; Source Code Pro not available in pGTK
+(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 14)
+      doom-unicode-font (font-spec :family "DejaVu Sans Mono" :size 14)
+      doom-variable-pitch-font (font-spec :family "DejaVu Serif" :size 14)
       doom-font-increment 2)
 
 (unless (find-font doom-font)
