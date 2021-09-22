@@ -215,6 +215,10 @@
 (setq display-line-numbers-type nil)
 ;; Line Numbers:1 ends here
 
+;; [[file:config.org::*Auto Insert Mode][Auto Insert Mode:1]]
+(auto-insert-mode)
+;; Auto Insert Mode:1 ends here
+
 ;; [[file:config.org::*Origami Mode][Origami Mode:2]]
 (use-package! origami
   :config (map! :map origami-mode-map
@@ -352,6 +356,26 @@
       :desc "Toggle Org Narrow" "T" #'org-toggle-narrow-to-subtree)
 ;; Keys:1 ends here
 
+;; [[file:config.org::*Refile][Refile:1]]
+(setq org-refile-targets
+      '((org-agenda-files . (:maxlevel . 3))
+        (nil . (:maxlevel . 3)))
+
+      org-refile-use-outline-path t
+      org-refile-allow-creating-parent-nodes 'confirm
+      org-refile-use-cache t)
+
+(unless (boundp 'org-refile-cache-timer)
+  (run-with-idle-timer 300 t (lambda ()
+                               (org-refile-cache-clear)
+                               (org-refile-get-targets)))
+  (setq org-refile-cache-timer t))
+
+;; TODO consider using =org-refile-target-verify-function
+;; to filter subtrees marked "done" from being org-refile-targets
+;; (source: mwfogleman/englehorn)
+;; Refile:1 ends here
+
 ;; [[file:config.org::*Roam][Roam:1]]
 (after! org
   (setq org-log-done 'time
@@ -396,26 +420,6 @@
 ;;(setq org-roam-node-display-template "${title:80}  ${file:9} ${tags:20}")
 ;; Roam:2 ends here
 
-;; [[file:config.org::*Refile][Refile:1]]
-(setq org-refile-targets
-      '((org-agenda-files . (:maxlevel . 3))
-        (nil . (:maxlevel . 3)))
-
-      org-refile-use-outline-path t
-      org-refile-allow-creating-parent-nodes 'confirm
-      org-refile-use-cache t)
-
-(unless (boundp 'org-refile-cache-timer)
-  (run-with-idle-timer 300 t (lambda ()
-                               (org-refile-cache-clear)
-                               (org-refile-get-targets)))
-  (setq org-refile-cache-timer t))
-
-;; TODO consider using =org-refile-target-verify-function
-;; to filter subtrees marked "done" from being org-refile-targets
-;; (source: mwfogleman/englehorn)
-;; Refile:1 ends here
-
 ;; [[file:config.org::*Clock][Clock:1]]
 (setq org-clock-auto-clockout-timer 300
       ;; org-clock-idle-time 3
@@ -447,26 +451,6 @@
 ;; [[file:config.org::*org-ql][org-ql:1]]
 
 ;; org-ql:1 ends here
-
-;; [[file:config.org::*Refile][Refile:1]]
-(setq org-refile-targets
-      '((org-agenda-files . (:maxlevel . 3))
-        (nil . (:maxlevel . 3)))
-
-      org-refile-use-outline-path t
-      org-refile-allow-creating-parent-nodes 'confirm
-      org-refile-use-cache t)
-
-(unless (boundp 'org-refile-cache-timer)
-  (run-with-idle-timer 300 t (lambda ()
-                               (org-refile-cache-clear)
-                               (org-refile-get-targets)))
-  (setq org-refile-cache-timer t))
-
-;; TODO consider using =org-refile-target-verify-function
-;; to filter subtrees marked "done" from being org-refile-targets
-;; (source: mwfogleman/englehorn)
-;; Refile:1 ends here
 
 ;; [[file:config.org::*Clock][Clock:1]]
 (setq org-clock-auto-clockout-timer 300

@@ -108,6 +108,7 @@ added by Doom modules).
     - [[#line-numbers][Line Numbers]]
     - [[#misc][Misc]]
   - [[#editor][EDITOR]]
+    - [[#auto-insert-mode][Auto Insert Mode]]
     - [[#file-templates][File Templates]]
     - [[#origami-mode][Origami Mode]]
     - [[#centered-cursor-mode][Centered Cursor Mode]]
@@ -143,16 +144,13 @@ added by Doom modules).
     - [[#workflow][Workflow]]
     - [[#keys][Keys]]
     - [[#mime-types-fntecosaur][Mime types [fn:tecosaur]]]
-    - [[#journal][Journal]]
-    - [[#roam][Roam]]
     - [[#capture][Capture]]
     - [[#refile][Refile]]
+    - [[#roam][Roam]]
     - [[#agenda][Agenda]]
     - [[#clock][Clock]]
     - [[#super-agenda][Super Agenda]]
     - [[#org-ql][org-ql]]
-    - [[#capture-1][Capture]]
-    - [[#refile-1][Refile]]
     - [[#agenda-1][Agenda]]
     - [[#clock-1][Clock]]
     - [[#super-agenda-1][Super Agenda]]
@@ -675,6 +673,19 @@ to `relative'.
 
 ** EDITOR
 
+*** Auto Insert Mode
+
+[[https://www.gnu.org/software/emacs/manual/html_mono/autotype.html#Autoinserting][Auto Insert Mode]] creates headers at the tops of files automatically. This can automatically insert =;; -*- file-local-variables: values -*-= in a header comment.
+
+- auto-insert-alist :: a mapping of file types to auto-insertion behavior
+- auto-insert-query :: controls whether to prompt user
+
+#+begin_src emacs-lisp
+(auto-insert-mode)
+#+end_src
+
+**** TODO restrict =auto-insert-mode= to modes where this is needed
+
 *** File Templates
 
 This section defines new Doom file templates by appending yas-snippet references
@@ -1132,33 +1143,33 @@ xdg-mime default emacs.desktop text/org
 
 #+RESULTS:
 
-*** Journal
+*** Capture
 
-**** TODO remove
+**** TODO capture template for code examples
+- set the possible refile locations according to configured metarepos
 
-#+begin_example emacs-lisp
-(setq org-journal-file-type 'daily
-      org-journal-file-header ""
-      org-journal-start-on-weekday nil)
-#+end_example
+*** Refile
 
-**** TODO set other =org-journal= vars:
+#+begin_src emacs-lisp
+(setq org-refile-targets
+      '((org-agenda-files . (:maxlevel . 3))
+        (nil . (:maxlevel . 3)))
 
-Of course as soon as I start to use this, I discover =org-roam-dailies= ... which may replace this
+      org-refile-use-outline-path t
+      org-refile-allow-creating-parent-nodes 'confirm
+      org-refile-use-cache t)
 
-+ [ ] time-prefix
-+ [ ] date-prefix
-+ [ ] handle-old-carryover (currently set to delete)
-+ [ ] carryover-items
-+ [ ] tag-persistent-alist
-+ [ ] find-file
-+ [ ] encrypt-journal
-  - [ ] or enable-encryption (which requires =org-crypt-tag-matcher=)
-+ [ ] enable-cache
-+ [ ] cache-file
-+ [ ] search-forward-function (possible to set this to swiper?)
-+ [ ] hide-entries-p (when true, hide other entries when creating a new one)
-+ [ ] file-format (set to YYYYMMDD)
+(unless (boundp 'org-refile-cache-timer)
+  (run-with-idle-timer 300 t (lambda ()
+                               (org-refile-cache-clear)
+                               (org-refile-get-targets)))
+  (setq org-refile-cache-timer t))
+
+;; TODO consider using =org-refile-target-verify-function
+;; to filter subtrees marked "done" from being org-refile-targets
+;; (source: mwfogleman/englehorn)
+#+end_src
+
 
 *** Roam
 
@@ -1217,33 +1228,6 @@ Current =org-journal= mappings
 + C-c n j j :: =org-journal-new-scheduled-entry=
 
 
-*** Capture
-
-**** TODO capture template for code examples
-- set the possible refile locations according to configured metarepos
-
-*** Refile
-
-#+begin_src emacs-lisp
-(setq org-refile-targets
-      '((org-agenda-files . (:maxlevel . 3))
-        (nil . (:maxlevel . 3)))
-
-      org-refile-use-outline-path t
-      org-refile-allow-creating-parent-nodes 'confirm
-      org-refile-use-cache t)
-
-(unless (boundp 'org-refile-cache-timer)
-  (run-with-idle-timer 300 t (lambda ()
-                               (org-refile-cache-clear)
-                               (org-refile-get-targets)))
-  (setq org-refile-cache-timer t))
-
-;; TODO consider using =org-refile-target-verify-function
-;; to filter subtrees marked "done" from being org-refile-targets
-;; (source: mwfogleman/englehorn)
-#+end_src
-
 *** Agenda
 
 + protesilaos & hsinhaoyu have pretty comprehensive configs
@@ -1297,34 +1281,6 @@ Current =org-journal= mappings
 + C-c n j j :: =org-journal-new-entry=
 + C-c n j s :: =org-journal-search-forever=
 + C-c n j j :: =org-journal-new-scheduled-entry=
-
-
-*** Capture
-
-**** TODO capture template for code examples
-- set the possible refile locations according to configured metarepos
-
-*** Refile
-
-#+begin_src emacs-lisp
-(setq org-refile-targets
-      '((org-agenda-files . (:maxlevel . 3))
-        (nil . (:maxlevel . 3)))
-
-      org-refile-use-outline-path t
-      org-refile-allow-creating-parent-nodes 'confirm
-      org-refile-use-cache t)
-
-(unless (boundp 'org-refile-cache-timer)
-  (run-with-idle-timer 300 t (lambda ()
-                               (org-refile-cache-clear)
-                               (org-refile-get-targets)))
-  (setq org-refile-cache-timer t))
-
-;; TODO consider using =org-refile-target-verify-function
-;; to filter subtrees marked "done" from being org-refile-targets
-;; (source: mwfogleman/englehorn)
-#+end_src
 
 *** Agenda
 
