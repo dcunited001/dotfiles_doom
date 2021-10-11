@@ -564,7 +564,7 @@
 (use-package ob-graphql)
 ;; GRAPHQL:2 ends here
 
-;; [[file:config.org::*org-babel general config][org-babel general config:1]]
+;; [[file:config.org::*org-babel][org-babel:1]]
 (after! org
   (add-to-list 'org-babel-load-languages
                '((julia-vterm . t)
@@ -574,7 +574,7 @@
    'org-babel-load-languages
    org-babel-load-languages))
 ;;(defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
-;; org-babel general config:1 ends here
+;; org-babel:1 ends here
 
 ;; [[file:config.org::*\[\[https:/github.com/krisajenkins/ob-translate\]\[ob-translate\]\]][[[https://github.com/krisajenkins/ob-translate][ob-translate]]:2]]
 (use-package! google-translate :demand t

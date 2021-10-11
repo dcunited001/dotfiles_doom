@@ -121,6 +121,11 @@
 (package! ob-graphql)
 ;; GRAPHQL:1 ends here
 
+;; [[file:config.org::*SPICE][SPICE:1]]
+(package! spice-mode)
+(package! ob-spice :recipe (:host github :repo "stardiviner/ob-spice"))
+;; SPICE:1 ends here
+
 ;; [[file:config.org::*\[\[https:/github.com/krisajenkins/ob-translate\]\[ob-translate\]\]][[[https://github.com/krisajenkins/ob-translate][ob-translate]]:1]]
 (package! google-translate)
 (package! ob-translate)

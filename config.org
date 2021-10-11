@@ -174,8 +174,9 @@ added by Doom modules).
     - [[#open-api][OPEN API]]
     - [[#restclient][RESTCLIENT]]
     - [[#graphql][GRAPHQL]]
+    - [[#spice][SPICE]]
   - [[#babel][BABEL]]
-    - [[#org-babel-general-config][org-babel general config]]
+    - [[#org-babel][org-babel]]
     - [[#ob-async][ob-async]]
     - [[#ob-translate][ob-translate]]
   - [[#firewall][FIREWALL]]
@@ -1577,6 +1578,47 @@ query GetContinents {
 }
 #+end_src
 
+#+RESULTS:
+: {
+:   "data": {
+:     "continent": {
+:       "name": "Africa",
+:       "code": "AF"
+:     }
+:   }
+: }
+
+*** SPICE :spice:
+
+You'll need [[http://ngspice.sourceforge.net/ngspice-tutorial.html][ngspice]] and some components.
+
++ [[https://github.com/stardiviner/spice-mode][spice-mode]]
++ [[https://github.com/stardiviner/ob-spice][ob-spice]]
+
+#+begin_src emacs-lisp :tangle ./packages.el
+(package! spice-mode)
+(package! ob-spice :recipe (:host github :repo "stardiviner/ob-spice"))
+#+end_src
+
+**** TODO ob-spice: fix 'functions definition is void =org-babel-get-header='
+
+#+BEGIN_EXAMPLE spice :tangle no :comments none :results drawer :var file="img/spice/spice-example"
+*Virtual Ground Test: opamp gain = 1000
+vin in 0 dc 0V sin(0 0.1 100Hz)
+r1 in inn 10k
+r2 inn out 10k
+EOpamp out 0 0 inn 1000
+.tran 0.1ms 0.05s
+.print tran v(in)
+.meas tran vtest find v(in) at=0.04e-3
+.end
+.control
+run
+set gnuplot_terminal=png
+gnuplot $file v(in) v(out) v(inn)
+.endc
+#+END_EXAMPLE
+
 ** BABEL
 
 + doom handles most of this stuff in [[file:~/.emacs.d/modules/lang/org/config.el::defun +org-init-babel-lazy-loader-h (][+org-init-babel-lazy-loader-h]]
@@ -1584,7 +1626,7 @@ query GetContinents {
   - =org-babel-load-languages= describes language blocks types permitted to run
   - is the var =org-confirm-babel-evaluate= still in tact?
 
-*** org-babel general config
+*** org-babel
 Load general org-babel config after defining languages
 
 #+begin_src emacs-lisp
@@ -1604,7 +1646,6 @@ Load general org-babel config after defining languages
 *** ob-async
 
 doesn't support session (see tecosaur's notes)
-
 *** [[https://github.com/krisajenkins/ob-translate][ob-translate]]
 
 For someone who owns a ton of original langauge and interlinear/bilingual books,
