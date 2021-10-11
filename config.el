@@ -105,6 +105,10 @@
 ;;   doom-acario-dark-padded-modeline 4)
 ;; Doom Theme:1 ends here
 
+;; [[file:config.org::*Doom Dashboard][Doom Dashboard:1]]
+
+;; Doom Dashboard:1 ends here
+
 ;; [[file:config.org::*Font][Font:1]]
 ;; (set-frame-font "Source Code Pro 12" nil t)
 ;; Source Code Pro not available in pGTK

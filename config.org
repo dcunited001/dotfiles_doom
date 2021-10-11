@@ -1,11 +1,11 @@
+:PROPERTIES:
+:ID:       7560a9fe-d074-43c3-9cf5-8bd8c79d53fe
+:END:
 #+TITLE: Doom Emacs Config
 #+AUTHOR: David Conner
 #+DESCRIPTION: Inspired by the personal Doom Emacs config of Daviwil, DT, HaoZeke and others
 #+STARTUP: content
 #+OPTIONS: toc:nil
-:PROPERTIES:
-:ID:       6c54eaba-a267-428f-a39b-97e8687dcda2
-:END:
 
 * About this file
 
@@ -91,6 +91,7 @@ added by Doom modules).
     - [[#ivy][IVY]]
   - [[#ui][UI]]
     - [[#doom-theme][Doom Theme]]
+    - [[#doom-dashboard][Doom Dashboard]]
     - [[#font][Font]]
     - [[#ligatures][Ligatures]]
     - [[#indent-guides][Indent Guides]]
@@ -468,6 +469,14 @@ Pick a random theme from the ones I like.
 ;;   doom-acario-dark-padded-modeline 4)
 #+end_src
 
+*** Doom Dashboard
+
+#+begin_src emacs-lisp
+
+
+
+#+end_src
+
 *** Font
 
 #+begin_src emacs-lisp
@@ -750,6 +759,8 @@ Scroll lock can emulate this.
 *** Snippets
 
 **** Yasnippet-snippets
+
+Use =yas/describe-tables= to list snippets that match a modeset.
 
 #+begin_src emacs-lisp
 (setq dc/snippets (expand-file-name (concat doom-private-dir "snippets")))
