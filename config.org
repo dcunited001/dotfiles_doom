@@ -192,6 +192,9 @@ added by Doom modules).
     - [[#lispy-1][lispy]]
 - [[#footnotes][Footnotes]]
 
+**** TODO set =straight-host-usernames=
+- to quickly fork elisp repos and work from within =.emacs.doom/.local/straight/repo/$FORKREPO=
+
 * Config.el :doom:config:
 :PROPERTIES:
 :header-args: :tangle ./config.el :comments link
@@ -1590,20 +1593,58 @@ query GetContinents {
 
 *** SPICE :spice:
 
-You'll need [[http://ngspice.sourceforge.net/ngspice-tutorial.html][ngspice]] and some components.
+You'll need [[http://ngspice.sourceforge.net/ngspice-tutorial.html][ngspice]] and some components. The link is to the tutorial. Get this
+working first, then have a look at the [[http://ngspice.sourceforge.net/docs/ngspice-31-manual.pdf][ngspice manual]]. RTFM.
 
-+ [[https://github.com/stardiviner/spice-mode][spice-mode]]
-+ [[https://github.com/stardiviner/ob-spice][ob-spice]]
++ Emacs Packages
+  - [[https://github.com/stardiviner/spice-mode][spice-mode]]
+  - [[https://github.com/stardiviner/ob-spice][ob-spice]]
 
 #+begin_src emacs-lisp :tangle ./packages.el
 (package! spice-mode)
-(package! ob-spice :recipe (:host github :repo "stardiviner/ob-spice"))
 #+end_src
 
-**** TODO ob-spice: fix 'functions definition is void =org-babel-get-header='
+**** Setup for =spice-mode=
 
-#+BEGIN_EXAMPLE spice :tangle no :comments none :results drawer :var file="img/spice/spice-example"
-*Virtual Ground Test: opamp gain = 1000
+***** Depdendencies
+
+- gnuplot :: to render PNG's
+- ngspice :: the simulator
+- ??? :: A waveform viewer
+  - It looks like =gtkviewer= would suffice, but =spicemode= depends on these
+    and has 8000 lines. =ob-babel= mostly interacts with =ngspice= directly.
+
+***** Configuration
+
++ System defaults are loaded from =/usr/share/spinit=
++ User defaults are loaded from =myproject/spiceinit=
+ + if that's not found, then =~/.spiceinit=
+
+Default template
+
+#+begin_src spice :tangle .spice.template :eval no
+*-*- mode: spice -*-
+
+#+end_src
+
+****** TODO make sense out of =spice-mode= (any software in this domain is part of simply the most unnecessarily complex ecosystem i have ever seen)
+
+**** Setup for =ob-spice=
+
+#+begin_src emacs-lisp :tangle packages.e
+(package! ob-spice :recipe (:host github :repo "stardiviner/ob-spice"
+                            :fork (:host github :repo "dcunited001/ob-spice"
+                            :branch "fix-org-babel-api")))
+#+end_src
+
+**** Test
+
+This code, whether in this babel block or in its own file, should run.
+
++ For now, just hardcode the =$file= in the call to =gnuplot=
+
+#+BEGIN_SRC spice :tangle no :comments none :results drawer
+,*Virtual Ground Test: opamp gain = 1000
 vin in 0 dc 0V sin(0 0.1 100Hz)
 r1 in inn 10k
 r2 inn out 10k
@@ -1615,9 +1656,13 @@ EOpamp out 0 0 inn 1000
 .control
 run
 set gnuplot_terminal=png
-gnuplot $file v(in) v(out) v(inn)
+*gnuplot $file v(in) v(out) v(inn)
+gnuplot img/spice/spice-example v(in) v(out) v(inn)
 .endc
-#+END_EXAMPLE
+#+END_SRC
+
+
+**** TODO ob-spice: fix 'functions definition is void =org-babel-get-header='
 
 ** BABEL
 
