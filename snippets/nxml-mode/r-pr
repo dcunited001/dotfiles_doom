@@ -3,6 +3,6 @@
 # key: //r-pr
 # uuid: //r-pr
 # --
-<project path="$0/$1"
-         name="$0/$2"
-         groups="$3" />
+<project path="$1"
+         name="$2"
+         groups="$3" $0/>

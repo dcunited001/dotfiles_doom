@@ -160,6 +160,8 @@ added by Doom modules).
     - [[#source-blocks][Source Blocks]]
     - [[#org-treeusage][Org Treeusage]]
     - [[#org-drill][Org Drill]]
+    - [[#capture][Capture]]
+    - [[#refile][Refile]]
   - [[#lang][LANG]]
     - [[#elisp][ELISP]]
     - [[#latex][LATEX]]
@@ -171,6 +173,7 @@ added by Doom modules).
     - [[#kde][KDE]]
     - [[#qt][QT]]
     - [[#c][C++]]
+    - [[#arduino][ARDUINO]]
     - [[#open-api][OPEN API]]
     - [[#restclient][RESTCLIENT]]
     - [[#graphql][GRAPHQL]]
@@ -197,7 +200,7 @@ added by Doom modules).
 
 * Config.el :doom:config:
 :PROPERTIES:
-:header-args: :tangle ./config.el :comments link
+:header-args: :tangle ./config.el :comments link :results none
 :END:
 
 ** INPUT
@@ -491,13 +494,13 @@ Pick a random theme from the ones I like.
       doom-variable-pitch-font (font-spec :family "DejaVu Serif" :size 14)
       doom-font-increment 2)
 
-(unless (find-font doom-font)
-  (message "couldn't find 'doom-font. using a default.")
-  (setq doom-font (font-spec :family "Source Code Pro" :size 18)))
+;; (unless (find-font doom-font)
+;;   (message "couldn't find 'doom-font. using a default.")
+;;   (setq doom-font (font-spec :family "Source Code Pro" :size 18)))
 
-(unless (find-font doom-unicode-font)
-  (message "couldn't find 'doom-unicode-font. using a default.")
-  (setq doom-unicode-font (font-spec :family "Source Code Pro" :size 18)))
+;; (unless (find-font doom-unicode-font)
+;;   (message "couldn't find 'doom-unicode-font. using a default.")
+;;   (setq doom-unicode-font (font-spec :family "Source Code Pro" :size 18)))
 #+end_src
 
 + config =doom-variable-pitch-font=?
@@ -565,22 +568,15 @@ i.e. CIDER alone has like 200 functions i need to learn
 
 *** All The Icons
 
-#+begin_src emacs-lisp :tangle ./packages.el
-(package! treemacs-all-the-icons)
-#+end_src
+**** Dired
 
-#+begin_src emacs-lisp
-(use-package! treemacs-all-the-icons)
-
-(add-hook 'doom-init-ui-hook
-          (lambda () (treemacs-load-theme "Default")))
-#+End_src
+This is enabled via Doom's modules
 
 *** Treemacs
 
 Set a default width for treemacs & disable filewatch unless needed
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (after! treemacs
   (setq treemacs-width 24)
   (treemacs-filewatch-mode -1))
@@ -588,7 +584,7 @@ Set a default width for treemacs & disable filewatch unless needed
 
 Key bindings ([[https://github.com/sei40kr/spacemacs.d/blob/master/treemacs-custom.el][treemacs example in spacemacs]])
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (map! :map treemacs-mode-map :after treemacs
       (:prefix "o" :desc "Tags" "t" 'treemacs-toggle-node-prefer-tag-visit))
 #+end_src
@@ -597,6 +593,19 @@ It is possible to make the Treemacs window draggable by default with ~(setq
 treemacs--width-is-locked nil)~ on startup, which i finally figured out
 (immediately before finally discovering ~(balance-windows)~ which maximizes the
 treemacs width if it's not fixed.....)
+
+**** All The Icons
+
+#+begin_src emacs-lisp :tangle no
+(package! treemacs-all-the-icons)
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(use-package! treemacs-all-the-icons)
+
+(add-hook 'doom-init-ui-hook
+          (lambda () (treemacs-load-theme "Default")))
+#+End_src
 
 *** which-key
 
@@ -1148,43 +1157,11 @@ One simply needs to refresh their mime database
 update-mime-database ~/.local/share/mime
 #+end_src
 
-#+RESULTS:
-
 Then set Emacs as the default editor
 
 #+begin_src shell :tangle (if (string= (shell-command-to-string "xdg-mime query default text/org") "emacs-client.desktop\n") "no" "setup.sh")
 xdg-mime default emacs.desktop text/org
 #+end_src
-
-#+RESULTS:
-
-*** Capture
-
-**** TODO capture template for code examples
-- set the possible refile locations according to configured metarepos
-
-*** Refile
-
-#+begin_src emacs-lisp
-(setq org-refile-targets
-      '((org-agenda-files . (:maxlevel . 3))
-        (nil . (:maxlevel . 3)))
-
-      org-refile-use-outline-path t
-      org-refile-allow-creating-parent-nodes 'confirm
-      org-refile-use-cache t)
-
-(unless (boundp 'org-refile-cache-timer)
-  (run-with-idle-timer 300 t (lambda ()
-                               (org-refile-cache-clear)
-                               (org-refile-get-targets)))
-  (setq org-refile-cache-timer t))
-
-;; TODO consider using =org-refile-target-verify-function
-;; to filter subtrees marked "done" from being org-refile-targets
-;; (source: mwfogleman/englehorn)
-#+end_src
-
 
 *** Roam
 
@@ -1233,8 +1210,6 @@ This configures org-roam v2 and is not compatible with doom's org-roam module. S
 ;; from https://org-roam.discourse.group/t/org-roam-major-redesign/1198/220
 ;;(setq org-roam-node-display-template "${title:80}  ${file:9} ${tags:20}")
 #+end_src
-
-#+RESULTS:
 
 Current =org-journal= mappings
 
@@ -1288,8 +1263,6 @@ Set auto-clockout to keep time tracking accurate. Refer to [[https://orgmode.org
 #+begin_src emacs-lisp
 
 #+end_src
-
-#+RESULTS:
 
 Current =org-journal= mappings
 
@@ -1382,7 +1355,43 @@ Config and flashcard info can be found at [[https://gitlab.com//phillord/org-dri
             (setq org-drill-left-cloze-separator "]>")
             (setq org-drill-learn-fraction 0.25))
   )
+
 #+end_src
+
+
+
+*** Capture
+
++ Workflow for adding capture templates
+  - Experiment with snippets
+    - and in some cases, file templates
+  - For snippets needing the flexibility of =org-capture= and =org-refile=
+    (mainly refiling) gradually reimplement these as capture templates
+
+**** TODO capture template for code examples
+- set the possible refile locations according to configured metarepos
+*** Refile
+
+#+begin_src emacs-lisp
+(setq org-refile-targets
+      '((org-agenda-files . (:maxlevel . 3))
+        (nil . (:maxlevel . 3)))
+
+      org-refile-use-outline-path t
+      org-refile-allow-creating-parent-nodes 'confirm
+      org-refile-use-cache t)
+
+(unless (boundp 'org-refile-cache-timer)
+  (run-with-idle-timer 300 t (lambda ()
+                               (org-refile-cache-clear)
+                               (org-refile-get-targets)))
+  (setq org-refile-cache-timer t))
+
+;; TODO consider using =org-refile-target-verify-function
+;; to filter subtrees marked "done" from being org-refile-targets
+;; (source: mwfogleman/englehorn)
+#+end_src
+
 
 ** LANG
 
@@ -1528,6 +1537,25 @@ Doxygen for c/cpp [fn:haozeke]
                               auto-mode-alist))
 #+end_src
 
+*** ARDUINO :arduino:
+
++ [[https://github.com/stardiviner/arduino-mode/https://github.com/stardiviner/arduino-mode/][Arduino Mode]] offers flycheck & org-babel
++ [[https://github.com/motform/arduino-cli-mode][Arduino CLI Mode]] cli only
+
+#+begin_src emacs-lisp :tangle ./packages.el
+(package! arduino-mode)
+(package! arduino-cli-mode)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! arduino-mode
+
+  :hook ((arduino-mode . flycheck-arduino-setup)))
+
+;; (add-hook 'arduino-mode-hook #'flycheck-arduino-setup)
+
+#+end_src
+
 *** OPEN API :swagger:
 
 #+begin_src emacs-lisp :tangle ./packages.el
@@ -1622,7 +1650,7 @@ working first, then have a look at the [[http://ngspice.sourceforge.net/docs/ngs
 
 Default template
 
-#+begin_src spice :tangle .spice.template :eval no
+#+begin_src spice :tangle .spice.template :eval no :comments none
 *-*- mode: spice -*-
 
 #+end_src
@@ -1631,7 +1659,7 @@ Default template
 
 **** Setup for =ob-spice=
 
-#+begin_src emacs-lisp :tangle packages.e
+#+begin_src emacs-lisp :tangle ./packages.el
 (package! ob-spice :recipe (:host github :repo "stardiviner/ob-spice"
                             :fork (:host github :repo "dcunited001/ob-spice"
                             :branch "fix-org-babel-api")))
@@ -1643,8 +1671,8 @@ This code, whether in this babel block or in its own file, should run.
 
 + For now, just hardcode the =$file= in the call to =gnuplot=
 
-#+BEGIN_SRC spice :tangle no :comments none :results drawer
-,*Virtual Ground Test: opamp gain = 1000
+#+BEGIN_SRC spice :tangle no :comments none :results none
+*Virtual Ground Test: opamp gain = 1000
 vin in 0 dc 0V sin(0 0.1 100Hz)
 r1 in inn 10k
 r2 inn out 10k

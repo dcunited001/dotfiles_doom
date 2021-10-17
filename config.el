@@ -117,13 +117,13 @@
       doom-variable-pitch-font (font-spec :family "DejaVu Serif" :size 14)
       doom-font-increment 2)
 
-(unless (find-font doom-font)
-  (message "couldn't find 'doom-font. using a default.")
-  (setq doom-font (font-spec :family "Source Code Pro" :size 18)))
+;; (unless (find-font doom-font)
+;;   (message "couldn't find 'doom-font. using a default.")
+;;   (setq doom-font (font-spec :family "Source Code Pro" :size 18)))
 
-(unless (find-font doom-unicode-font)
-  (message "couldn't find 'doom-unicode-font. using a default.")
-  (setq doom-unicode-font (font-spec :family "Source Code Pro" :size 18)))
+;; (unless (find-font doom-unicode-font)
+;;   (message "couldn't find 'doom-unicode-font. using a default.")
+;;   (setq doom-unicode-font (font-spec :family "Source Code Pro" :size 18)))
 ;; Font:1 ends here
 
 ;; [[file:config.org::*Ligatures][Ligatures:1]]
@@ -553,6 +553,14 @@
                                 )
                               auto-mode-alist))
 ;; More Files:1 ends here
+
+;; [[file:config.org::*ARDUINO][ARDUINO:2]]
+(use-package! arduino-mode
+
+  :hook ((arduino-mode . flycheck-arduino-setup)))
+
+;; (add-hook 'arduino-mode-hook #'flycheck-arduino-setup)
+;; ARDUINO:2 ends here
 
 ;; [[file:config.org::*OPEN API][OPEN API:2]]
 (use-package! openapi-yaml-mode)

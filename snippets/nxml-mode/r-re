@@ -3,4 +3,4 @@
 # key: //r-re
 # uuid: //r-re
 # --
-<remote name="$0" fetch="$1" $2/>
+<remote name="$1" fetch="$2" $0/>

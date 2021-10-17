@@ -72,7 +72,8 @@
                                         ;+defaults)                      ; default popup rules
 
        ;;tabs              ; a tab bar for Emacs
-       (treemacs +lsp)          ; a project drawer, like neotree but cooler
+       ;; (treemacs +lsp)
+                                        ; a project drawer, like neotree but cooler
        unicode                  ; extended unicode support for various languages
        vc-gutter                ; vcs diff in the fringe
        vi-tilde-fringe          ; fringe tildes to mark beyond EOB
@@ -97,7 +98,7 @@
 
        :emacs
 
-       dired                            ; making dired pretty [functional]
+       (dired +icons)                   ; making dired pretty [functional]
        ;;(dired ++ranger)           ; bringing the goodness of ranger to dired
        ;;NOTE: ranger is causing problems with org-agenda & elsewhere
 
@@ -143,7 +144,7 @@
        (magit +forge)           ; a git porcelain for Emacs
        make                     ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
-       pdf              ; pdf enhancements
+       pdf                              ; pdf enhancements
        ;;prodigy           ; FIXME managing external services & code builders
        rgb        ; creating color strings
        taskrunner ; taskrunner for all your projects
@@ -153,6 +154,7 @@
 
        :os
        (:if IS-MAC macos)               ; improve compatibility with macOS
+       tty
        ;;tty               ; improve the terminal Emacs experience
 
        :lang
@@ -216,8 +218,8 @@
        ;;(ruby +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
        ;;rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        ;;scala             ; java, but good
-       (scheme +guile)            ; a fully conniving family of lisps
-       sh     ; she sells {ba,z,fi}sh shells on the C xor
+       (scheme +guile)      ; a fully conniving family of lisps
+       sh                   ; she sells {ba,z,fi}sh shells on the C xor
        ;;sml
        ;;solidity          ; do you need a blockchain? No.
        ;;swift             ; who asked for emoji variables?
