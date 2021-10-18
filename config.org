@@ -100,6 +100,8 @@ added by Doom modules).
     - [[#highlighting][Highlighting]]
     - [[#startup][Startup]]
     - [[#all-the-icons][All The Icons]]
+    - [[#popups][Popups]]
+    - [[#bufler][Bufler]]
     - [[#treemacs][Treemacs]]
     - [[#which-key][which-key]]
     - [[#modeline][Modeline]]
@@ -139,23 +141,18 @@ added by Doom modules).
     - [[#lsp-ui][LSP UI]]
     - [[#emacs-packages][Emacs Packages]]
   - [[#os][OS]]
+    - [[#terminal][Terminal]]
   - [[#org][ORG]]
     - [[#org-directory][Org Directory]]
     - [[#org-literate][Org Literate]]
     - [[#workflow][Workflow]]
     - [[#keys][Keys]]
     - [[#mime-types-fntecosaur][Mime types [fn:tecosaur]]]
-    - [[#capture][Capture]]
-    - [[#refile][Refile]]
     - [[#roam][Roam]]
     - [[#agenda][Agenda]]
     - [[#clock][Clock]]
     - [[#super-agenda][Super Agenda]]
     - [[#org-ql][org-ql]]
-    - [[#agenda-1][Agenda]]
-    - [[#clock-1][Clock]]
-    - [[#super-agenda-1][Super Agenda]]
-    - [[#org-ql-1][org-ql]]
     - [[#org-sidebar][org-sidebar]]
     - [[#source-blocks][Source Blocks]]
     - [[#org-treeusage][Org Treeusage]]
@@ -572,6 +569,51 @@ i.e. CIDER alone has like 200 functions i need to learn
 
 This is enabled via Doom's modules
 
+*** Popups
+
++ Configuration
+  + [[file:~/.emacs.doom/modules/ui/popup/autoload/settings.el::defun set-popup-rule! (predicate &rest plist][set-popup-rule!]] has an explanation of the API
+  + [[file:~/.emacs.doom/modules/ui/popup/config.el::(set-popup-rules!][./popup/config.el]] has the invocations of popup rules for =+all= and =+default=
+
+#+begin_example emacs-lisp
+; +popup-defaults
+(:side bottom
+ :height 0.16
+ :width 40
+ :quit t
+ :select ignore
+ :ttl 5)
+#+end_example
+
+#+begin_src emacs-lisp
+(set-popup-rules!
+  '(("^\\*Bufler" :vslot -5 :slot 3 :side right :select t :modeline nil :quit t)))
+#+end_src
+
++ Useful commands:
+  + +popup/toggle :: =C-`= will toggle the popups
+  + +popup/raise :: =C+~= will promote a popup into an actual window
+  + +popup/other :: =C-x p= will flip through various popups like =ace-window=
+  + +popup/restore :: will retrieve lost popups
+  + +popup/diagnose :: will help you figure out why =bufler= closes all your windows.
+
+I kinda wish I ever had the chance to have IRL conversations with people who use Doom/Emacs ... disabling =popup= really broke a lot of stuff and might be responsible for some crashes via GTK & Wayland.
+
+*** Bufler
+
+#+begin_src emacs-lisp :tangle ./packages.el
+(package! bufler)
+#+end_src
+
+#+begin_src emacs-lisp
+(add-hook 'doom-init-ui-hook
+          (lambda () ;;(global-tab-line-mode +1)
+            (map! :map ctl-x-map
+                  :desc "Bufler List"
+                  "C-b" #'bufler-list)
+            (bufler-mode +1)
+            (bufler-tabs-mode +1)))
+#+end_src
 *** Treemacs
 
 Set a default width for treemacs & disable filewatch unless needed
@@ -606,7 +648,6 @@ treemacs width if it's not fixed.....)
 (add-hook 'doom-init-ui-hook
           (lambda () (treemacs-load-theme "Default")))
 #+End_src
-
 *** which-key
 
 shorten the delay (from luca)
@@ -1043,6 +1084,23 @@ From HaoZeke[fn:haozeke]
 
 ** OS
 
+*** Terminal
+
+Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
+=xterm-mouse-mode=.
+
+**** TODO fix scroll wheel in tty (it works before =xterm-mouse-mode= loads)
+- (tangle)
+
+#+begin_src emacs-lisp :tangle no
+(defun dc/xterm-toggle-mwheel-hook ()
+    "Toggles the mouse maps for xterm-mouse-mode to setup the mouse wheel"
+
+        )
+
+(add-hook 'xterm-mouse-mode)
+#+end_src
+
 ** ORG
 
 Additonal org-mode packages:
@@ -1180,19 +1238,22 @@ This configures org-roam v2 and is not compatible with doom's org-roam module. S
 ;; encapsulate org-roam-directory within (file-truename ___) if using links
 (setq org-roam-directory (concat (file-name-as-directory org-directory) "roam")
       org-roam-db-location (concat (file-name-as-directory org-roam-directory) "org-roam.db")
-      org-roam-v2-ack t
       org-roam-file-extensions '("org")
+
+      ;; Doom Defaults
+      ;; org-roam-v2-ack t 
+      ;; org-roam-completion-everywhere t 
+      ;; org-roam-node-display-template "${doom-hierarchy:*} ${doom-tags:45}"
+      
       org-roam-dailies-directory "dailies/"
       org-roam-dailies-capture-templates
       '(("d" "default" entry
          "* %?"
          :if-new (file+head "%<%Y-%m-%d>.org"
                             "#+title: %<%Y-%m-%d>\n")))
-      org-roam-mode-sections (list #'org-roam-backlinks-section
-                                   #'org-roam-reflinks-section
-                                   ;; generating unlinked can be slow
-                                   ;; #'org-roam-unlinked-references-section
-                                   ))
+      
+      org-roam-mode-section-functions #'(org-roam-backlinks-section
+                                         org-roam-reflinks-section))
 
 (use-package! org-roam
   :after org
@@ -1217,62 +1278,18 @@ Current =org-journal= mappings
 + C-c n j s :: =org-journal-search-forever=
 + C-c n j j :: =org-journal-new-scheduled-entry=
 
+**** TODO implement some functionality from [[display-buffer-alist][davilwil/dotfiles]] :orgroam:
+
 
 *** Agenda
 
 + protesilaos & hsinhaoyu have pretty comprehensive configs
-
-*** Clock
-
-Set auto-clockout to keep time tracking accurate. Refer to [[https://orgmode.org/manual/Clocking-Work-Time.html#Clocking-Work-Time][Orgmode Manual entry]] for details.
-
-#+begin_src emacs-lisp
-(setq org-clock-auto-clockout-timer 300
-      ;; org-clock-idle-time 3
-        )
-(org-clock-auto-clockout-insinuate)
-#+end_src
-
-*** Super Agenda
-
-+ review mwfogleman's config
-
-#+begin_src emacs-lisp
-(use-package! org-super-agenda
-  :init (setq org-super-agenda-groups
-                '((:name "Today"
-                   :time-grid t
-                   :todo "Today")
-                  (:habit t)
-                  (:name "Due today"
-                   :deadline today)
-                  (:name "Overdue"
-                   :deadline past)
-                  (:name "Due soon"
-                   :deadline future)
-                  (:name "Important"
-                   :priority "A")
-                  (:priority<= "B"
-                   :order 1)
-                  ))
-  :config (org-super-agenda-mode))
-#+end_src
-
-*** org-ql
-
-#+begin_src emacs-lisp
-
-#+end_src
 
 Current =org-journal= mappings
 
 + C-c n j j :: =org-journal-new-entry=
 + C-c n j s :: =org-journal-search-forever=
 + C-c n j j :: =org-journal-new-scheduled-entry=
-
-*** Agenda
-
-+ protesilaos & hsinhaoyu have pretty comprehensive configs
 
 *** Clock
 
@@ -1370,6 +1387,15 @@ Config and flashcard info can be found at [[https://gitlab.com//phillord/org-dri
 
 **** TODO capture template for code examples
 - set the possible refile locations according to configured metarepos
+
+#+begin_example emacs-lisp
+(setq org-capture-templates
+      (append org-capture-templates
+              '(())
+
+        ))
+#+end_example
+
 *** Refile
 
 #+begin_src emacs-lisp

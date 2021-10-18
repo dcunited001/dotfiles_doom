@@ -45,7 +45,6 @@
         )
 
        :ui
-       bufler
        ;; deft          ; notational velocity for Emacs
        doom                   ; what makes DOOM look the way it does
        doom-dashboard         ; a nifty splash screen for Emacs
@@ -67,9 +66,9 @@
 
        ophints                       ; highlight the region an operation acts on
 
-                                        ;(popup                     ; tame sudden yet inevitable temporary windows
+       (popup                     ; tame sudden yet inevitable temporary windows
        ;; +all                      ; catch all popups that start with an asterix
-                                        ;+defaults)                      ; default popup rules
+        +defaults)                      ; default popup rules
 
        ;;tabs              ; a tab bar for Emacs
        ;; (treemacs +lsp)
@@ -203,7 +202,7 @@
 
 
        (org ;; organize your plain life in plain text
-        +jupyter +pomodoro +pretty +present +gnuplot +pandoc +dragndrop +noter)
+        +jupyter +pomodoro +pretty +present +gnuplot +pandoc +dragndrop +noter +roam2)
 
        ;;php               ; perl's insecure younger brother
        plantuml         ; diagrams for confusing people more
@@ -243,9 +242,6 @@
        ;; literate config in your `doom-private-dir' whenever it changes.
        literate
        (default +bindings)
-
-       ;; :ui
-       ;; bufler
 
        ;; :editor
        ;; origami ;; not using the module bc of org-super-agenda config

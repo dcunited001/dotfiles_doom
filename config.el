@@ -154,23 +154,20 @@
                  "A" (lambda () (interactive) (auto-highlight-symbol-mode 'toggle)))))
 ;; Highlighting:2 ends here
 
-;; [[file:config.org::*All The Icons][All The Icons:2]]
-(use-package! treemacs-all-the-icons)
+;; [[file:config.org::*Popups][Popups:1]]
+(set-popup-rules!
+  '(("^\\*Bufler" :vslot -5 :slot 3 :side right :select t :modeline nil :quit t)))
+;; Popups:1 ends here
 
+;; [[file:config.org::*Bufler][Bufler:2]]
 (add-hook 'doom-init-ui-hook
-          (lambda () (treemacs-load-theme "Default")))
-;; All The Icons:2 ends here
-
-;; [[file:config.org::*Treemacs][Treemacs:1]]
-(after! treemacs
-  (setq treemacs-width 24)
-  (treemacs-filewatch-mode -1))
-;; Treemacs:1 ends here
-
-;; [[file:config.org::*Treemacs][Treemacs:2]]
-(map! :map treemacs-mode-map :after treemacs
-      (:prefix "o" :desc "Tags" "t" 'treemacs-toggle-node-prefer-tag-visit))
-;; Treemacs:2 ends here
+          (lambda () ;;(global-tab-line-mode +1)
+            (map! :map ctl-x-map
+                  :desc "Bufler List"
+                  "C-b" #'bufler-list)
+            (bufler-mode +1)
+            (bufler-tabs-mode +1)))
+;; Bufler:2 ends here
 
 ;; [[file:config.org::*which-key][which-key:1]]
 (after! which-key
@@ -360,26 +357,6 @@
       :desc "Toggle Org Narrow" "T" #'org-toggle-narrow-to-subtree)
 ;; Keys:1 ends here
 
-;; [[file:config.org::*Refile][Refile:1]]
-(setq org-refile-targets
-      '((org-agenda-files . (:maxlevel . 3))
-        (nil . (:maxlevel . 3)))
-
-      org-refile-use-outline-path t
-      org-refile-allow-creating-parent-nodes 'confirm
-      org-refile-use-cache t)
-
-(unless (boundp 'org-refile-cache-timer)
-  (run-with-idle-timer 300 t (lambda ()
-                               (org-refile-cache-clear)
-                               (org-refile-get-targets)))
-  (setq org-refile-cache-timer t))
-
-;; TODO consider using =org-refile-target-verify-function
-;; to filter subtrees marked "done" from being org-refile-targets
-;; (source: mwfogleman/englehorn)
-;; Refile:1 ends here
-
 ;; [[file:config.org::*Roam][Roam:1]]
 (after! org
   (setq org-log-done 'time
@@ -393,19 +370,22 @@
 ;; encapsulate org-roam-directory within (file-truename ___) if using links
 (setq org-roam-directory (concat (file-name-as-directory org-directory) "roam")
       org-roam-db-location (concat (file-name-as-directory org-roam-directory) "org-roam.db")
-      org-roam-v2-ack t
       org-roam-file-extensions '("org")
+
+      ;; Doom Defaults
+      ;; org-roam-v2-ack t 
+      ;; org-roam-completion-everywhere t 
+      ;; org-roam-node-display-template "${doom-hierarchy:*} ${doom-tags:45}"
+      
       org-roam-dailies-directory "dailies/"
       org-roam-dailies-capture-templates
       '(("d" "default" entry
          "* %?"
          :if-new (file+head "%<%Y-%m-%d>.org"
                             "#+title: %<%Y-%m-%d>\n")))
-      org-roam-mode-sections (list #'org-roam-backlinks-section
-                                   #'org-roam-reflinks-section
-                                   ;; generating unlinked can be slow
-                                   ;; #'org-roam-unlinked-references-section
-                                   ))
+      
+      org-roam-mode-section-functions #'(org-roam-backlinks-section
+                                         org-roam-reflinks-section))
 
 (use-package! org-roam
   :after org
@@ -423,38 +403,6 @@
 ;; from https://org-roam.discourse.group/t/org-roam-major-redesign/1198/220
 ;;(setq org-roam-node-display-template "${title:80}  ${file:9} ${tags:20}")
 ;; Roam:2 ends here
-
-;; [[file:config.org::*Clock][Clock:1]]
-(setq org-clock-auto-clockout-timer 300
-      ;; org-clock-idle-time 3
-        )
-(org-clock-auto-clockout-insinuate)
-;; Clock:1 ends here
-
-;; [[file:config.org::*Super Agenda][Super Agenda:1]]
-(use-package! org-super-agenda
-  :init (setq org-super-agenda-groups
-                '((:name "Today"
-                   :time-grid t
-                   :todo "Today")
-                  (:habit t)
-                  (:name "Due today"
-                   :deadline today)
-                  (:name "Overdue"
-                   :deadline past)
-                  (:name "Due soon"
-                   :deadline future)
-                  (:name "Important"
-                   :priority "A")
-                  (:priority<= "B"
-                   :order 1)
-                  ))
-  :config (org-super-agenda-mode))
-;; Super Agenda:1 ends here
-
-;; [[file:config.org::*org-ql][org-ql:1]]
-
-;; org-ql:1 ends here
 
 ;; [[file:config.org::*Clock][Clock:1]]
 (setq org-clock-auto-clockout-timer 300
@@ -514,6 +462,26 @@
             (setq org-drill-learn-fraction 0.25))
   )
 ;; Org Drill:1 ends here
+
+;; [[file:config.org::*Refile][Refile:1]]
+(setq org-refile-targets
+      '((org-agenda-files . (:maxlevel . 3))
+        (nil . (:maxlevel . 3)))
+
+      org-refile-use-outline-path t
+      org-refile-allow-creating-parent-nodes 'confirm
+      org-refile-use-cache t)
+
+(unless (boundp 'org-refile-cache-timer)
+  (run-with-idle-timer 300 t (lambda ()
+                               (org-refile-cache-clear)
+                               (org-refile-get-targets)))
+  (setq org-refile-cache-timer t))
+
+;; TODO consider using =org-refile-target-verify-function
+;; to filter subtrees marked "done" from being org-refile-targets
+;; (source: mwfogleman/englehorn)
+;; Refile:1 ends here
 
 ;; [[file:config.org::*\[\[https:/gitlab.com/mtekman/elisp-depmap.el\]\[Elisp Depmap\]\]][[[https://gitlab.com/mtekman/elisp-depmap.el][Elisp Depmap]]:2]]
 (use-package! elisp-depmap

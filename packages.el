@@ -5,6 +5,10 @@
 (package! auto-highlight-symbol)
 ;; Highlighting:1 ends here
 
+;; [[file:config.org::*Bufler][Bufler:1]]
+(package! bufler)
+;; Bufler:1 ends here
+
 ;; [[file:config.org::*Dimmer][Dimmer:1]]
 (package! dimmer)
 ;; Dimmer:1 ends here
