@@ -496,12 +496,18 @@
 (add-hook 'clojurescript-mode-hook 'zprint-mode)
 ;; CLOJURE:2 ends here
 
-;; [[file:config.org::*JULIA][JULIA:2]]
+;; [[file:config.org::*LSP][LSP:1]]
+(let ((julia-depot-path (car (split-string (getenv "JULIA_DEPOT_PATH") (path-separator)))))
+  (setq lsp-julia-package-dir nil
+        lsp-julia-default-environment
+        (concat (file-name-as-directory julia-depot-path)
+                "environments/v1.6")))
+
 ;; TODO: (after! org & julia-vterm?
 ;;;         ...)
 ;; (after! org-babel ... )
 ;; (org-babel-make-language-alias "julia" "julia-vterm")
-;; JULIA:2 ends here
+;; LSP:1 ends here
 
 ;; [[file:config.org::*Doxygen Support][Doxygen Support:2]]
 (use-package! highlight-doxygen

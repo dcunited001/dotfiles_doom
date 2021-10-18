@@ -1075,6 +1075,17 @@ From HaoZeke[fn:haozeke]
       lsp-ui-imenu-window-width 25)
 #+end_src
 
+**** TODO setup popup rules for LSP :lsp:
++ Left
+  + [ ] =*lsp-ui-imenu*= on top of server connection details
+  + [ ] =*lsp-log ... *= ideally overtake/switch with lsp server connection details
+  + [ ] =*lsp session*=
++ Bottom
+  + [ ] =lsp-performance*=
+
+**** TODO setup key prefix for LSP
++ something like =f5= through =f9=
+
 *** Emacs Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
@@ -1270,7 +1281,7 @@ This configures org-roam v2 and is not compatible with doom's org-roam module. S
 
 ;; from https://org-roam.discourse.group/t/org-roam-major-redesign/1198/220
 ;;(setq org-roam-node-display-template "${title:80}  ${file:9} ${tags:20}")
-#+end_src
+#+End_src
 
 Current =org-journal= mappings
 
@@ -1495,7 +1506,15 @@ Requires using a =:session= variable to track the results/evaluations of blocks
 (package! ob-julia-vterm)
 #+end_src
 
+**** LSP :lsp:
+
 #+begin_src emacs-lisp
+(let ((julia-depot-path (car (split-string (getenv "JULIA_DEPOT_PATH") (path-separator)))))
+  (setq lsp-julia-package-dir nil
+        lsp-julia-default-environment
+        (concat (file-name-as-directory julia-depot-path)
+                "environments/v1.6")))
+
 ;; TODO: (after! org & julia-vterm?
 ;;;         ...)
 ;; (after! org-babel ... )
