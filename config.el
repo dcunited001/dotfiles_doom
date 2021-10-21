@@ -66,25 +66,6 @@
 (map! "M-<mouse-14>" 'which-key-show-major-mode)
 ;; Mode Hints (Mouse 14):1 ends here
 
-;; [[file:config.org::*Origami (Mouse 12)][Origami (Mouse 12):1]]
-(map! "<mouse-12>" 'origami-toggle-node)
-(map! "C-<mouse-12>" 'origami-open-node-recursively)
-(map! "C-S-<mouse-12>" 'origami-close-node-recursively)
-
-(map! "M-<mouse-12>" 'origami-forward-fold)
-(map! "S-<mouse-12>" 'origami-backward-fold-same-level)
-(map! "M-S-<mouse-12>" 'origami-forward-fold-same-level)
-
-(map! "C-M-<mouse-12>" 'origami-close-all-nodes)
-(map! "C-M-S-<mouse-12>" 'origami-open-all-nodes)
-
-;; (map! "M-S-<mouse-12>" 'origami-show-only-node)
-;; Origami (Mouse 12):1 ends here
-
-;; [[file:config.org::*Mode Hints (Mouse 14)][Mode Hints (Mouse 14):1]]
-(map! "M-<mouse-14>" 'which-key-show-major-mode)
-;; Mode Hints (Mouse 14):1 ends here
-
 ;; [[file:config.org::*Doom Theme][Doom Theme:1]]
 ;; doom-Iosvkem
 ;; doom-fairy-floss
