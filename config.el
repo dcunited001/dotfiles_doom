@@ -260,6 +260,11 @@
 (setq dired-omit-files "^.DS_Store\\'\\|^.project\\(?:ile\\)?\\'\\|^.\\(svn\\)\\'\\|^.ccls-cache\\'\\|\\(?:\\.js\\)?\\.meta\\'\\|\\.\\(?:elc\\|o\\|pyo\\|swp\\|class\\)\\'")
 ;; DIRED:1 ends here
 
+;; [[file:config.org::*DIRED][DIRED:2]]
+(map! (:map dired-mode-map
+       "q" #'find-name-dired))
+;; DIRED:2 ends here
+
 ;; [[file:config.org::*Explicit Shell][Explicit Shell:1]]
 (setq explicit-shell-file-name "/bin/zsh")
 ;; Explicit Shell:1 ends here
@@ -358,6 +363,8 @@
       ;; org-roam-completion-everywhere t
       ;; org-roam-node-display-template "${doom-hierarchy:*} ${doom-tags:45}"
 
+      ;; org-roam-extract-new-file-path doesn't work with a "slips/" path prepended to it
+      org-roam-extract-new-file-path "${slug}-%<%Y%m%d%H%M%S>-.org"
       org-roam-dailies-directory "dailies/"
       org-roam-dailies-capture-templates
       '(("d" "default" entry
@@ -382,7 +389,7 @@
 
 (map! (:map org-mode-map
        :leader
-       :prefix ("r" . "org-roam")
+       :prefix ("nr" . "org-roam")
        "T" #'dc/org-roam-toggle-open-buffer-on-find-file
        "a" #'org-roam-node-random
        "D" #'org-roam-demote-entire-buffer

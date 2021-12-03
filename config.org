@@ -781,6 +781,21 @@ parameterizing a subdir.
 (setq dired-omit-files "^.DS_Store\\'\\|^.project\\(?:ile\\)?\\'\\|^.\\(svn\\)\\'\\|^.ccls-cache\\'\\|\\(?:\\.js\\)?\\.meta\\'\\|\\.\\(?:elc\\|o\\|pyo\\|swp\\|class\\)\\'")
 #+end_src
 
+I'm transitioning to dired and consistently killing all my dired buffers with
+=q= ... I'm remapping this for now.
+
+#+begin_src emacs-lisp
+(map! (:map dired-mode-map
+       "q" #'find-name-dired))
+#+end_src
+
+This is default & I'd rather adjust to it. In the future, I may address this by:
+
++ mapping a function to toggle the variable
++ map above =find-name-dired= within another interactive fn on another key that
+  calls =map!=
++ simply confirm the =+dired/quit-all= invocation.
+
 ** TERM
 
 *** Shell
@@ -1177,7 +1192,7 @@ xdg-mime default emacs.desktop text/org
         ))
 #+end_src
 
-This configures org-roam v2 and is not compatible with doom's org-roam module. See the updated Hitchiker's Guide for more info. As long as one bears in mind the differences between v1 and v2, then these links are also useful
+This configures org-roam v2 and is not compatible with doom's org-roa module. See the updated Hitchiker's Guide for more info. As long as one bears in mind the differences between v1 and v2, then these links are also useful
 
 #+begin_src emacs-lisp
 ;; encapsulate org-roam-directory within (file-truename ___) if using links
@@ -1190,6 +1205,8 @@ This configures org-roam v2 and is not compatible with doom's org-roam module. S
       ;; org-roam-completion-everywhere t
       ;; org-roam-node-display-template "${doom-hierarchy:*} ${doom-tags:45}"
 
+      ;; org-roam-extract-new-file-path doesn't work with a "slips/" path prepended to it
+      org-roam-extract-new-file-path "${slug}-%<%Y%m%d%H%M%S>-.org"
       org-roam-dailies-directory "dailies/"
       org-roam-dailies-capture-templates
       '(("d" "default" entry
@@ -1214,7 +1231,7 @@ This configures org-roam v2 and is not compatible with doom's org-roam module. S
 
 (map! (:map org-mode-map
        :leader
-       :prefix ("r" . "org-roam")
+       :prefix ("nr" . "org-roam")
        "T" #'dc/org-roam-toggle-open-buffer-on-find-file
        "a" #'org-roam-node-random
        "D" #'org-roam-demote-entire-buffer
