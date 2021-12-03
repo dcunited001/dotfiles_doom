@@ -125,7 +125,7 @@
        ;;grammar           ; tasing grammar mistake every you make
 
        :tools
-       ;;ansible
+       ansible
        (debugger +lsp)
        ;; TODO direnv
        docker
