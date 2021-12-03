@@ -76,9 +76,7 @@
 ;; [[file:config.org::*ORG][ORG:1]]
 (package! org-treeusage)
 (package! org-drill)
-
-(package! org-roam)
-;; :recipe (:host github :repo "org-roam/org-roam" :branch "v2"))
+(package! org-ref)
 
 ;; dependencies org-super-agenda => org-ql => org-sidebar
 (package! org-super-agenda)

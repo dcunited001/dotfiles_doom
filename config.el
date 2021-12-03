@@ -354,36 +354,77 @@
       org-roam-file-extensions '("org")
 
       ;; Doom Defaults
-      ;; org-roam-v2-ack t 
-      ;; org-roam-completion-everywhere t 
+      ;; org-roam-v2-ack t
+      ;; org-roam-completion-everywhere t
       ;; org-roam-node-display-template "${doom-hierarchy:*} ${doom-tags:45}"
-      
+
       org-roam-dailies-directory "dailies/"
       org-roam-dailies-capture-templates
       '(("d" "default" entry
          "* %?"
          :if-new (file+head "%<%Y-%m-%d>.org"
                             "#+title: %<%Y-%m-%d>\n")))
-      
+
       org-roam-mode-section-functions #'(org-roam-backlinks-section
                                          org-roam-reflinks-section))
-
-(use-package! org-roam
-  :after org
-  :commands
-  (org-roam-buffer
-   org-roam-setup
-   org-roam-capture
-   org-roam-node-find)
-  :config
-  (org-roam-setup))
 
 (use-package! org-roam-protocol
   :after org-protocol)
 
 ;; from https://org-roam.discourse.group/t/org-roam-major-redesign/1198/220
 ;;(setq org-roam-node-display-template "${title:80}  ${file:9} ${tags:20}")
+
+(defun dc/org-roam-toggle-open-buffer-on-find-file ()
+  "toggles the doom +org-roam-open-buffer-on-find-file variable"
+  (interactive)
+  (setq +org-roam-open-buffer-on-find-file
+        (not +org-roam-open-buffer-on-find-file)))
+
+(map! (:map org-mode-map
+       :leader
+       :prefix ("r" . "org-roam")
+       "T" #'dc/org-roam-toggle-open-buffer-on-find-file
+       "a" #'org-roam-node-random
+       "D" #'org-roam-demote-entire-buffer
+       "I" #'org-id-get-create
+       "r" #'org-roam-refile
+       "R" #'org-roam-link-replace-all
+       "m" #'org-roam-buffer-toggle
+       "M" #'org-roam-buffer-display-dedicated
+
+       (:prefix ("o" . "node properties")
+        "a" #'org-roam-alias-add
+        "A" #'org-roam-alias-remove
+        "t" #'org-roam-tag-add
+        "T" #'org-roam-tag-remove
+        "r" #'org-roam-ref-add
+        "R" #'org-roam-ref-remove)))
+
+;; Doom is mapping these twice
+(map! (:map org-mode-map
+       :localleader
+       :prefix ("m" . "org-roam")
+       "T" #'dc/org-roam-toggle-open-buffer-on-find-file
+       "a" #'org-roam-node-random
+       "D" #'org-roam-demote-entire-buffer
+       "I" #'org-id-get-create
+       "r" #'org-roam-refile
+       "R" #'org-roam-link-replace-all
+       "m" #'org-roam-buffer-toggle
+       "M" #'org-roam-buffer-display-dedicated
+
+       (:prefix ("o" . "node properties")
+        "a" #'org-roam-alias-add
+        "A" #'org-roam-alias-remove
+        "t" #'org-roam-tag-add
+        "T" #'org-roam-tag-remove
+        "r" #'org-roam-ref-add
+        "R" #'org-roam-ref-remove)))
 ;; Roam:2 ends here
+
+;; [[file:config.org::*configure \[\[https:/github.com/jkitchin/org-ref\]\[org-ref\]\] v3][configure [[https://github.com/jkitchin/org-ref][org-ref]] v3:1]]
+;(use-package! :org-ref)
+;; configure [[https://github.com/jkitchin/org-ref][org-ref]] v3:1 ends here
 
 ;; [[file:config.org::*Clock][Clock:1]]
 (setq org-clock-auto-clockout-timer 300
