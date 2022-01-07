@@ -45,6 +45,10 @@
 (package! firestarter)
 ;; Shell:1 ends here
 
+;; [[file:config.org::*Guix][Guix:1]]
+(package! guix)
+;; Guix:1 ends here
+
 ;; [[file:config.org::*SystemD][SystemD:1]]
 (package! journalctl-mode)
 ;; SystemD:1 ends here

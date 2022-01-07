@@ -73,7 +73,7 @@
 ;; doom-lazerwave
 ;; doom-monokai
 ;; doom-challenger-deep
-(let* ((themes-ilike '(doom-one doom-dark+ doom-acario-dark doom-molokai))
+(let* ((themes-ilike '(doom-one doom-dark+ doom-acario-dark doom-molokai modus-operandi modus-vivendi))
        (random-theme (nth (random (length themes-ilike)) themes-ilike)))
   (setq doom-theme random-theme))
 
@@ -286,6 +286,18 @@
   :init (firestarter-mode)
   :config (setq firestarter-default-type t))
 ;; Shell:2 ends here
+
+;; [[file:config.org::*Tramp][Tramp:1]]
+(after! tramp
+  (appendq! tramp-remote-path
+            '("~/.guix-profile/bin" "~/.guix-profile/sbin"
+              "/run/current-system/profile/bin"
+              "/run/current-system/profile/sbin")))
+;; Tramp:1 ends here
+
+;; [[file:config.org::*Guix][Guix:2]]
+(use-package! guix)
+;; Guix:2 ends here
 
 ;; [[file:config.org::*PKGBUILD Mode][PKGBUILD Mode:2]]
 (use-package! pkgbuild-mode :mode "\\PKGBUILD")

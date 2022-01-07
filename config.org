@@ -128,6 +128,8 @@ added by Doom modules).
     - [[#github][Github]]
     - [[#repo][Repo]]
     - [[#shell-1][Shell]]
+    - [[#tramp][Tramp]]
+    - [[#guix][Guix]]
     - [[#systemd][SystemD]]
     - [[#archlinux][Archlinux]]
     - [[#ken-kesey][Ken Kesey]]
@@ -392,7 +394,7 @@ Pick a random theme from the ones I like.
 ;; doom-lazerwave
 ;; doom-monokai
 ;; doom-challenger-deep
-(let* ((themes-ilike '(doom-one doom-dark+ doom-acario-dark doom-molokai))
+(let* ((themes-ilike '(doom-one doom-dark+ doom-acario-dark doom-molokai modus-operandi modus-vivendi))
        (random-theme (nth (random (length themes-ilike)) themes-ilike)))
   (setq doom-theme random-theme))
 
@@ -878,6 +880,26 @@ config/control on-save shell tasks.[fn:haozeke]
 (use-package! firestarter
   :init (firestarter-mode)
   :config (setq firestarter-default-type t))
+#+end_src
+
+*** Tramp
+
+#+begin_src emacs-lisp
+(after! tramp
+  (appendq! tramp-remote-path
+            '("~/.guix-profile/bin" "~/.guix-profile/sbin"
+              "/run/current-system/profile/bin"
+              "/run/current-system/profile/sbin")))
+#+end_src
+
+*** Guix
+
+#+begin_src emacs-lisp :tangle ./packages.el
+(package! guix)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! guix)
 #+end_src
 
 *** SystemD
