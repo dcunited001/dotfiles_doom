@@ -73,7 +73,7 @@
 ;; doom-lazerwave
 ;; doom-monokai
 ;; doom-challenger-deep
-(let* ((themes-ilike '(doom-one doom-dark+ doom-acario-dark doom-molokai modus-operandi modus-vivendi))
+(let* ((themes-ilike '(doom-one doom-dark+ doom-acario-dark doom-molokai modus-vivendi))
        (random-theme (nth (random (length themes-ilike)) themes-ilike)))
   (setq doom-theme random-theme))
 
@@ -141,6 +141,8 @@
 ;; Popups:1 ends here
 
 ;; [[file:config.org::*Bufler][Bufler:2]]
+(use-package bufler)
+
 (add-hook 'doom-init-ui-hook
           (lambda () ;;(global-tab-line-mode +1)
             (map! :map ctl-x-map
@@ -149,6 +151,20 @@
             (bufler-mode +1)
             (bufler-tabs-mode +1)))
 ;; Bufler:2 ends here
+
+;; [[file:config.org::*Dogears][Dogears:2]]
+(use-package! dogears
+  :config (map! :prefix "M-g"
+                "d" #'dogears-go
+                "M-b" #'dogears-back
+                "M-f" #'dogears-forward
+                "M-d" #'dogears-list
+                "M-D" #'dogears-sidebar))
+
+(add-hook 'doom-init-ui-hook
+          (lambda ()
+            (dogears-mode)))
+;; Dogears:2 ends here
 
 ;; [[file:config.org::*which-key][which-key:1]]
 (after! which-key

@@ -6,8 +6,16 @@
 ;; Highlighting:1 ends here
 
 ;; [[file:config.org::*Bufler][Bufler:1]]
-(package! bufler)
+(package! bufler :recipe (:host github
+                           :repo "alphapapa/bufler.el"
+                           :files (:defaults (:exclude "helm-bufler.el"))))
 ;; Bufler:1 ends here
+
+;; [[file:config.org::*Dogears][Dogears:1]]
+(package! dogears :recipe (:host github
+                           :repo "alphapapa/dogears.el"
+                           :files (:defaults (:exclude "helm-dogears.el"))))
+;; Dogears:1 ends here
 
 ;; [[file:config.org::*Dimmer][Dimmer:1]]
 (package! dimmer)
