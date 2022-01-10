@@ -123,6 +123,7 @@ added by Doom modules).
   - [[#checkers][CHECKERS]]
   - [[#tools][TOOLS]]
     - [[#info][Info]]
+    - [[#tldr][TLDR]]
     - [[#diff-and-ediff][Diff and Ediff]]
     - [[#git][Git]]
     - [[#magit][Magit]]
@@ -864,6 +865,18 @@ test with emacs manual =C-h R=
 
 **** TODO test =info-colors= or modularize
 
+*** TLDR
+
+#+begin_src emacs-lisp :tangle ./packages.el
+(package! tldr)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! tldr
+  :config (map! :leader
+                "T" #'tldr))
+#+end_src
+
 *** Diff and Ediff
 
 *** Git
@@ -928,7 +941,9 @@ config/control on-save shell tasks.[fn:haozeke]
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package! guix)
+(use-package! guix
+  :config (map! :leader
+                "g" #'guix))
 #+end_src
 
 *** SystemD

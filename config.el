@@ -289,6 +289,12 @@
 (use-package! info-colors)
 ;; Info:2 ends here
 
+;; [[file:config.org::*TLDR][TLDR:2]]
+(use-package! tldr
+  :config (map! :leader
+                "T" #'tldr))
+;; TLDR:2 ends here
+
 ;; [[file:config.org::*Magit][Magit:2]]
 (use-package! magit-tbdiff)
 ;; Magit:2 ends here
@@ -312,7 +318,9 @@
 ;; Tramp:1 ends here
 
 ;; [[file:config.org::*Guix][Guix:2]]
-(use-package! guix)
+(use-package! guix
+  :config (map! :leader
+                "g" #'guix))
 ;; Guix:2 ends here
 
 ;; [[file:config.org::*PKGBUILD Mode][PKGBUILD Mode:2]]

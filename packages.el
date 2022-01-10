@@ -41,6 +41,10 @@
 (package! info-colors)
 ;; Info:1 ends here
 
+;; [[file:config.org::*TLDR][TLDR:1]]
+(package! tldr)
+;; TLDR:1 ends here
+
 ;; [[file:config.org::*Magit][Magit:1]]
 (package! magit-tbdiff)
 ;; Magit:1 ends here
