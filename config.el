@@ -206,20 +206,22 @@
   (dimmer-configure-hydra)
   (dimmer-configure-which-key)
   (dimmer-configure-posframe))
+
+(add-hook 'doom-init-ui-hook (lambda () (dimmer-mode)))
 ;; Dimmer:2 ends here
 
 ;; [[file:config.org::*Window & Frame Management][Window & Frame Management:2]]
 (use-package! burly
   :config (map! :leader
                 (:prefix ("w" . "workspaces/windows")
-                  (:prefix ("B" . "Burly bookmarks")
-                   :desc "Restore windows/frames" "o" #'burly-open-bookmark
-                   :desc "Open Burly URL" "O" #'burly-open-url
-                   :desc "Bookmark Windows" "w" #'burly-bookmark-windows
-                   :desc "Bookmark Frameset" "f" #'burly-bookmark-frames
-                   :desc "Copy Buffer URL" "B" #'burly-kill-buffer-url
-                   :desc "Copy Window URL" "F" #'burly-kill-frames-url
-                   :desc "Copy Frameset URL" "W" #'burly-kill-windows-url))))
+                 (:prefix ("B" . "Burly bookmarks")
+                  :desc "Restore windows/frames" "o" #'burly-open-bookmark
+                  :desc "Open Burly URL" "O" #'burly-open-url
+                  :desc "Bookmark Windows" "w" #'burly-bookmark-windows
+                  :desc "Bookmark Frameset" "f" #'burly-bookmark-frames
+                  :desc "Copy Buffer URL" "B" #'burly-kill-buffer-url
+                  :desc "Copy Window URL" "F" #'burly-kill-frames-url
+                  :desc "Copy Frameset URL" "W" #'burly-kill-windows-url))))
 ;; Window & Frame Management:2 ends here
 
 ;; [[file:config.org::*Line Numbers][Line Numbers:1]]
@@ -294,10 +296,6 @@
 (map! (:map dired-mode-map
        "q" #'find-name-dired))
 ;; DIRED:2 ends here
-
-;; [[file:config.org::*Explicit Shell][Explicit Shell:1]]
-(setq explicit-shell-file-name "/bin/zsh")
-;; Explicit Shell:1 ends here
 
 ;; [[file:config.org::*Info][Info:2]]
 (use-package! info-colors)
