@@ -550,8 +550,6 @@ Popup Defaults (defined in =+popup-defaults=)
   + +popup/restore :: will retrieve lost popups
   + +popup/diagnose :: will help you figure out why =bufler= closes all your windows.
 
-I kinda wish I ever had the chance to have IRL conversations with people who use Doom/Emacs ... disabling =popup= really broke a lot of stuff and might be responsible for some crashes via GTK & Wayland.
-
 *** Bufler
 
 #+begin_src emacs-lisp :tangle ./packages.el
