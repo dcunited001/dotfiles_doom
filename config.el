@@ -137,7 +137,17 @@
 
 ;; [[file:config.org::*Popups][Popups:1]]
 (set-popup-rules!
-  '(("^\\*Bufler" :vslot -5 :slot 3 :side right :select t :modeline nil :quit t)))
+  '(("^\\*Bufler" :side right :width 60
+     :vslot -5 :slot 3
+     :modeline nil :select t :quit t)
+
+    ;; NOTE this works, but the functionality in geiser/geiser-popup.el only covers *Geiser buffers
+    ;; - so =C-`= works to toggle, but all scheme-mode functionality will send repl buffers to other-window
+    ;; ("^\\* Guile REPL" :side bottom
+    ;;  :vslot 3 :slot 3
+    ;;  :modeline nil
+    ;;  :select t :quit t)
+    ))
 ;; Popups:1 ends here
 
 ;; [[file:config.org::*Bufler][Bufler:2]]
@@ -149,7 +159,8 @@
                   :desc "Bufler List"
                   "C-b" #'bufler-list)
             (bufler-mode +1)
-            (bufler-tabs-mode +1)))
+            ;(bufler-tabs-mode +1)
+            ))
 ;; Bufler:2 ends here
 
 ;; [[file:config.org::*Dogears][Dogears:2]]
@@ -530,8 +541,9 @@
 
 ;; [[file:config.org::*Refile][Refile:1]]
 (setq org-refile-targets
-      '((org-agenda-files . (:maxlevel . 3))
-        (nil . (:maxlevel . 3)))
+      '((org-agenda-files . (:maxlevel . 2))
+        (("./todo.org" "./notes.org") . (:maxlevel . 3))
+        (nil . (:maxlevel . 2)))
 
       org-refile-use-outline-path t
       org-refile-allow-creating-parent-nodes 'confirm
@@ -647,7 +659,9 @@
 (use-package! prism
   :hook ((emacs-lisp-mode . prism-mode)
          (clojure-mode . prism-mode)
-         (clojurescript-mode . prism-mode))
+         (clojurescript-mode . prism-mode)
+         (common-lisp-mode . prism-mode)
+         (scheme-mode . prism-mode))
   :config (map! :leader :desc "Toggle Prism"
                 "tP" (lambda () (interactive) (prism-mode 'toggle)))
 
@@ -692,7 +706,7 @@
 
 )
 
-(let ((bindings '(("<" "lispy-barf" "") ("A" "lispy-beginning-of-defun" "") ("j" "lispy-down" "") ("Z" "lispy-edebug-stop" "") ("B" "lispy-ediff-regions" "") ("G" "lispy-goto-local" "") ("h" "lispy-left" "") ("N" "lispy-narrow" "") ("y" "lispy-occur" "") ("o" "lispy-other-mode" "") ("J" "lispy-outline-next" "") ("K" "lispy-outline-prev" "") ("P" "lispy-paste" "") ("l" "lispy-right" "") ("I" "lispy-shifttab" "") (">" "lispy-slurp" "") ("SPC" "lispy-space" "") ("xB" "lispy-store-region-and-buffer" "") ("u" "lispy-undo" "") ("k" "lispy-up" "") ("v" "lispy-view" "") ("V" "lispy-visit" "") ("W" "lispy-widen" "") ("D" "pop-tag-mark" "") ("x" "see" "") ("L" "unbound" "") ("U" "unbound" "") ("X" "unbound" "") ("Y" "unbound" "") ("H" "lispy-ace-symbol-replace" "Edit") ("c" "lispy-clone" "Edit") ("C" "lispy-convolute" "Edit") ("n" "lispy-new-copy" "Edit") ("O" "lispy-oneline" "Edit") ("r" "lispy-raise" "Edit") ("R" "lispy-raise-some" "Edit") ("\\" "lispy-splice" "Edit") ("S" "lispy-stringify" "Edit") ("i" "lispy-tab" "Edit") ("xj" "lispy-debug-step-in" "Eval") ("xe" "lispy-edebug" "Eval") ("xT" "lispy-ert" "Eval") ("e" "lispy-eval" "Eval") ("E" "lispy-eval-and-insert" "Eval") ("xr" "lispy-eval-and-replace" "Eval") ("p" "lispy-eval-other-window" "Eval") ("q" "lispy-ace-paren" "Move") ("z" "lispy-knight" "Move") ("s" "lispy-move-down" "Move") ("w" "lispy-move-up" "Move") ("t" "lispy-teleport" "Move") ("Q" "lispy-ace-char" "Nav") ("-" "lispy-ace-subword" "Nav") ("a" "lispy-ace-symbol" "Nav") ("b" "lispy-back" "Nav") ("d" "lispy-different" "Nav") ("f" "lispy-flow" "Nav") ("F" "lispy-follow" "Nav") ("g" "lispy-goto" "Nav") ("xb" "lispy-bind-variable" "Refactor") ("xf" "lispy-flatten" "Refactor") ("xc" "lispy-to-cond" "Refactor") ("xd" "lispy-to-defun" "Refactor") ("xi" "lispy-to-ifs" "Refactor") ("xl" "lispy-to-lambda" "Refactor") ("xu" "lispy-unbind-variable" "Refactor") ("M" "lispy-multiline" "Other") ("xh" "lispy-describe" "Other") ("m" "lispy-mark-list" "Other"))))
+(let ((bindings '(("<" "lispy-barf" "") (">" "lispy-slurp" "") ("A" "lispy-beginning-of-defun" "") ("j" "lispy-down" "") ("B" "lispy-ediff-regions" "") ("G" "lispy-goto-local" "") ("h" "lispy-left" "") ("o" "lispy-other-mode" "") ("l" "lispy-right" "") ("SPC" "lispy-space" "") ("xB" "lispy-store-region-and-buffer" "") ("k" "lispy-up" "") ("v" "lispy-view" "") ("V" "lispy-visit" "") ("D" "pop-tag-mark" "") ("x" "see" "") ("L" "unbound" "") ("U" "unbound" "") ("X" "unbound" "") ("Y" "unbound" "") ("H" "lispy-ace-symbol-replace" "Edit") ("c" "lispy-clone" "Edit") ("C" "lispy-convolute" "Edit") ("n" "lispy-new-copy" "Edit") ("O" "lispy-oneline" "Edit") ("P" "lispy-paste" "Edit") ("r" "lispy-raise" "Edit") ("R" "lispy-raise-some" "Edit") ("\\" "lispy-splice" "Edit") ("Z" "lispy-edebug-stop" "Eval") ("S" "lispy-stringify" "Edit") ("xj" "lispy-debug-step-in" "Eval") ("xe" "lispy-edebug" "Eval") ("xT" "lispy-ert" "Eval") ("e" "lispy-eval" "Eval") ("E" "lispy-eval-and-insert" "Eval") ("xr" "lispy-eval-and-replace" "Eval") ("p" "lispy-eval-other-window" "Eval") ("q" "lispy-ace-paren" "Move") ("z" "lispy-knight" "Move") ("s" "lispy-move-down" "Move") ("w" "lispy-move-up" "Move") ("t" "lispy-teleport" "Move") ("Q" "lispy-ace-char" "Nav") ("-" "lispy-ace-subword" "Nav") ("a" "lispy-ace-symbol" "Nav") ("b" "lispy-back" "Nav") ("d" "lispy-different" "Nav") ("f" "lispy-flow" "Nav") ("F" "lispy-follow" "Nav") ("g" "lispy-goto" "Nav") ("xb" "lispy-bind-variable" "Refactor") ("xf" "lispy-flatten" "Refactor") ("xc" "lispy-to-cond" "Refactor") ("xd" "lispy-to-defun" "Refactor") ("xi" "lispy-to-ifs" "Refactor") ("xl" "lispy-to-lambda" "Refactor") ("xu" "lispy-unbind-variable" "Refactor") ("i" "lispy-tab" "Outline") ("I" "lispy-shifttab" "Outline") ("J" "lispy-outline-next" "Outline") ("K" "lispy-outline-prev" "Outline") ("l" "lispy-outline-promote" "Outline") ("h" "lispy-outline-demote" "Outline") ("M" "lispy-multiline" "Other") ("xh" "lispy-describe" "Other") ("m" "lispy-mark-list" "Other") ("u" "lispy-undo" "Other") ("N" "lispy-narrow" "Other") ("y" "lispy-occur" "Other") ("W" "lispy-widen" "Other"))))
 (eval
  (append
   '(defhydra dchydra/lispy-cheat-sheet (:hint nil :foreign-keys run)
