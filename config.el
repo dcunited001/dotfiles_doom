@@ -586,11 +586,6 @@
         lsp-julia-default-environment
         (concat (file-name-as-directory julia-depot-path)
                 "environments/v1.6")))
-
-;; TODO: (after! org & julia-vterm?
-;;;         ...)
-;; (after! org-babel ... )
-;; (org-babel-make-language-alias "julia" "julia-vterm")
 ;; LSP (julia):1 ends here
 
 ;; [[file:config.org::*Doxygen Support][Doxygen Support:2]]
@@ -632,14 +627,18 @@
 
 ;; [[file:config.org::*org-babel][org-babel:1]]
 (after! org
-  (add-to-list 'org-babel-load-languages
-               '((julia-vterm . t)
-                 (clojure . t)
-                 (dot . t)))
+  (setq org-babel-load-languages
+        (append org-babel-load-languages
+                '((julia-vterm . t)
+                  (clojure . t)
+                  (dot . t))))
   (org-babel-do-load-languages
    'org-babel-load-languages
    org-babel-load-languages))
-;;(defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
+(org-babel-make-language-alias "julia" "julia-vterm")
+
+;; this is insufficient as make-language-alias remaps a few other symbols
+;; (defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
 ;; org-babel:1 ends here
 
 ;; [[file:config.org::*\[\[https:/github.com/krisajenkins/ob-translate\]\[ob-translate\]\]][[[https://github.com/krisajenkins/ob-translate][ob-translate]]:2]]

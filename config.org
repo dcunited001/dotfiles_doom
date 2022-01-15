@@ -104,6 +104,7 @@ added by Doom modules).
     - [[#treemacs][Treemacs]]
     - [[#which-key][which-key]]
     - [[#modeline][Modeline]]
+    - [[#nav-flash][Nav Flash]]
     - [[#dimmer][Dimmer]]
     - [[#window--frame-management][Window & Frame Management]]
     - [[#sticky-windows][Sticky Windows]]
@@ -637,7 +638,7 @@ shorten the delay (from luca)
 
 customize [[https://github.com/seagle0128/doom-modeline][doom-modeline]]
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! doom-modeline
   ;; doom-modeline workspace-name has conflicts with bufler tab-bar
   (setq doom-modeline-workspace-name nil
@@ -646,7 +647,13 @@ customize [[https://github.com/seagle0128/doom-modeline][doom-modeline]]
         ;; doom-modeline-project-detection 'ffip,'projectile,'projectile
         ;;doom-modeline-minor-modes t
         ))
-#+END_SRC
+#+end_src
+
+
+
+*** Nav Flash
+
+
 
 *** Dimmer
 
@@ -1599,11 +1606,6 @@ Requires using a =:session= variable to track the results/evaluations of blocks
         lsp-julia-default-environment
         (concat (file-name-as-directory julia-depot-path)
                 "environments/v1.6")))
-
-;; TODO: (after! org & julia-vterm?
-;;;         ...)
-;; (after! org-babel ... )
-;; (org-babel-make-language-alias "julia" "julia-vterm")
 #+end_src
 
 *** PLANTUML :plantuml:
@@ -1833,14 +1835,18 @@ Load general org-babel config after defining languages
 
 #+begin_src emacs-lisp
 (after! org
-  (add-to-list 'org-babel-load-languages
-               '((julia-vterm . t)
-                 (clojure . t)
-                 (dot . t)))
+  (setq org-babel-load-languages
+        (append org-babel-load-languages
+                '((julia-vterm . t)
+                  (clojure . t)
+                  (dot . t))))
   (org-babel-do-load-languages
    'org-babel-load-languages
    org-babel-load-languages))
-;;(defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
+(org-babel-make-language-alias "julia" "julia-vterm")
+
+;; this is insufficient as make-language-alias remaps a few other symbols
+;; (defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
 #+end_src
 
 **** TODO ensure the above is necessary with =+org-init-babel-lazy-loader-h=
