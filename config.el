@@ -574,7 +574,13 @@
 (add-hook 'clojurescript-mode-hook 'zprint-mode)
 ;; CLOJURE:2 ends here
 
-;; [[file:config.org::*LSP][LSP:1]]
+;; [[file:config.org::*CIDER][CIDER:1]]
+(add-hook 'cider-mode-hook #'clj-refactor-mode)
+
+(setq org-babel-clojure-backend 'cider)
+;; CIDER:1 ends here
+
+;; [[file:config.org::*LSP (julia)][LSP (julia):1]]
 (let ((julia-depot-path (car (split-string (getenv "JULIA_DEPOT_PATH") (path-separator)))))
   (setq lsp-julia-package-dir nil
         lsp-julia-default-environment
@@ -585,7 +591,7 @@
 ;;;         ...)
 ;; (after! org-babel ... )
 ;; (org-babel-make-language-alias "julia" "julia-vterm")
-;; LSP:1 ends here
+;; LSP (julia):1 ends here
 
 ;; [[file:config.org::*Doxygen Support][Doxygen Support:2]]
 (use-package! highlight-doxygen

@@ -109,12 +109,6 @@
 (package! zprint-mode)
 ;; CLOJURE:1 ends here
 
-;; [[file:config.org::*CIDER][CIDER:1]]
-(add-hook 'cider-mode-hook #'clj-refactor-mode)
-
-(setq org-babel-clojure-backend 'cider)
-;; CIDER:1 ends here
-
 ;; [[file:config.org::*JULIA][JULIA:1]]
 (package! julia-vterm)
 (package! ob-julia-vterm)
