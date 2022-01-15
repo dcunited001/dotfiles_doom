@@ -179,7 +179,7 @@
 
 ;; [[file:config.org::*which-key][which-key:1]]
 (after! which-key
-    (setq which-key-idle-delay 0.5))
+    (setq which-key-idle-delay 1.0))
 ;; which-key:1 ends here
 
 ;; [[file:config.org::*Modeline][Modeline:1]]
@@ -195,8 +195,10 @@
 
 ;; [[file:config.org::*Dimmer][Dimmer:2]]
 (use-package! dimmer
-  :config (setq dimmer-adjustment-mode :background
-                dimmer-fraction 0.4)
+  :config (progn  (setq dimmer-adjustment-mode :background
+                        dimmer-fraction 0.05)
+                  (map! :leader
+                        "tD" :desc "Dimmer Mode"))
 
   (dimmer-configure-company-box)
   (dimmer-configure-magit)
@@ -257,15 +259,16 @@
 
         )
 
-(add-hook 'doom-init-ui-hook
-          (lambda ()
-            (global-origami-mode +1)))
+(add-hook 'doom-init-ui-hook (lambda () (global-origami-mode +1)))
 ;; Origami Mode:2 ends here
 
 ;; [[file:config.org::*Centered Cursor Mode][Centered Cursor Mode:2]]
 (use-package! centered-cursor-mode ;: defer t
   :config (map! :leader :desc "Toggle Centered Cursor"
                 "t-" (λ! () (interactive) (centered-cursor-mode 'toggle))))
+
+;; NOTE now i have to remember how to turn it off everytime i start emacs
+(add-hook 'doom-init-ui-hook (lambda () (centered-cursor-mode)))
 ;; Centered Cursor Mode:2 ends here
 
 ;; [[file:config.org::*Yasnippet-snippets][Yasnippet-snippets:1]]

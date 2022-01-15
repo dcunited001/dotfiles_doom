@@ -415,8 +415,6 @@ Pick a random theme from the ones I like.
 
 #+begin_src emacs-lisp
 
-
-
 #+end_src
 
 *** Font
@@ -591,7 +589,6 @@ Popup Defaults (defined in =+popup-defaults=)
 (add-hook 'doom-init-ui-hook
           (lambda ()
             (dogears-mode)))
-
 #+end_src
 
 *** Treemacs
@@ -632,10 +629,10 @@ treemacs width if it's not fixed.....)
 
 shorten the delay (from luca)
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (after! which-key
-    (setq which-key-idle-delay 0.5))
-#+END_SRC
+    (setq which-key-idle-delay 1.0))
+#+end_src
 
 *** Modeline
 
@@ -660,8 +657,10 @@ customize [[https://github.com/seagle0128/doom-modeline][doom-modeline]]
 
 #+begin_src emacs-lisp
 (use-package! dimmer
-  :config (setq dimmer-adjustment-mode :background
-                dimmer-fraction 0.4)
+  :config (progn  (setq dimmer-adjustment-mode :background
+                        dimmer-fraction 0.05)
+                  (map! :leader
+                        "tD" :desc "Dimmer Mode"))
 
   (dimmer-configure-company-box)
   (dimmer-configure-magit)
@@ -669,6 +668,8 @@ customize [[https://github.com/seagle0128/doom-modeline][doom-modeline]]
   (dimmer-configure-hydra)
   (dimmer-configure-which-key)
   (dimmer-configure-posframe))
+
+(add-hook 'doom-init-ui-hook (lambda () (dimmer-mode)))
 #+end_src
 
 *** Window & Frame Management
@@ -687,14 +688,14 @@ These are simply bookmarks and thus can be reached from the doom startup menu.
 (use-package! burly
   :config (map! :leader
                 (:prefix ("w" . "workspaces/windows")
-                  (:prefix ("B" . "Burly bookmarks")
-                   :desc "Restore windows/frames" "o" #'burly-open-bookmark
-                   :desc "Open Burly URL" "O" #'burly-open-url
-                   :desc "Bookmark Windows" "w" #'burly-bookmark-windows
-                   :desc "Bookmark Frameset" "f" #'burly-bookmark-frames
-                   :desc "Copy Buffer URL" "B" #'burly-kill-buffer-url
-                   :desc "Copy Window URL" "F" #'burly-kill-frames-url
-                   :desc "Copy Frameset URL" "W" #'burly-kill-windows-url))))
+                 (:prefix ("B" . "Burly bookmarks")
+                  :desc "Restore windows/frames" "o" #'burly-open-bookmark
+                  :desc "Open Burly URL" "O" #'burly-open-url
+                  :desc "Bookmark Windows" "w" #'burly-bookmark-windows
+                  :desc "Bookmark Frameset" "f" #'burly-bookmark-frames
+                  :desc "Copy Buffer URL" "B" #'burly-kill-buffer-url
+                  :desc "Copy Window URL" "F" #'burly-kill-frames-url
+                  :desc "Copy Frameset URL" "W" #'burly-kill-windows-url))))
 #+end_src
 
 *** Sticky Windows
@@ -771,9 +772,7 @@ Origami mode
 
         )
 
-(add-hook 'doom-init-ui-hook
-          (lambda ()
-            (global-origami-mode +1)))
+(add-hook 'doom-init-ui-hook (lambda () (global-origami-mode +1)))
 #+end_src
 
 *** Centered Cursor Mode
@@ -788,6 +787,9 @@ Scroll lock can emulate this.
 (use-package! centered-cursor-mode ;: defer t
   :config (map! :leader :desc "Toggle Centered Cursor"
                 "t-" (λ! () (interactive) (centered-cursor-mode 'toggle))))
+
+;; NOTE now i have to remember how to turn it off everytime i start emacs
+(add-hook 'doom-init-ui-hook (lambda () (centered-cursor-mode)))
 #+end_src
 
 *** Snippets
@@ -845,21 +847,6 @@ This is default & I'd rather adjust to it. In the future, I may address this by:
 + simply confirm the =+dired/quit-all= invocation.
 
 ** TERM
-
-*** Shell
-
-**** Explicit Shell
-
-This fixes an issue i'm having where ~/bin/fish~ is the default shell no matter
-how i've configured things with ~chsh~. This was done by Garuda/Arch either
-before or after the doom/emacs install.
-
-#+begin_src emacs-lisp
-(setq explicit-shell-file-name "/bin/zsh")
-#+end_src
-
-**** TODO check luca shell configs
-
 
 ** CHECKERS
 
@@ -1190,7 +1177,7 @@ Prevent over-eager dotfiles recompilation =from HaoZeke=
       :desc "Toggle Org Narrow" "T" #'org-toggle-narrow-to-subtree)
 #+end_src
 
-#+begin_example
+#+begin_example org
 #+begin_src emacs-lisp :tangle no
 (defun dc/util--paths-from-alist (paths-alist)
   "reduce an alist of paths, where the keys are directories and the
@@ -1461,7 +1448,6 @@ Config and flashcard info can be found at [[https://gitlab.com//phillord/org-dri
             (setq org-drill-left-cloze-separator "]>")
             (setq org-drill-learn-fraction 0.25))
   )
-
 #+end_src
 
 
@@ -1474,9 +1460,6 @@ Config and flashcard info can be found at [[https://gitlab.com//phillord/org-dri
   - For snippets needing the flexibility of =org-capture= and =org-refile=
     (mainly refiling) gradually reimplement these as capture templates
 
-**** TODO capture template for code examples
-- set the possible refile locations according to configured metarepos
-
 #+begin_example emacs-lisp
 (setq org-capture-templates
       (append org-capture-templates
@@ -1484,6 +1467,10 @@ Config and flashcard info can be found at [[https://gitlab.com//phillord/org-dri
 
         ))
 #+end_example
+
+
+**** TODO capture template for code examples
++ [ ] HaoZeke [[file:/data/ecto/x.files/HaoZeke/doom/config.org::*Templates][protocol links]]
 
 *** Refile
 
@@ -1508,6 +1495,20 @@ Config and flashcard info can be found at [[https://gitlab.com//phillord/org-dri
 ;; (source: mwfogleman/englehorn)
 #+end_src
 
+Notes:
+
+**** TODO configure =org-refile-targets= in the projectile template for =.dir-locals.el=
+
++ The following works for /refiling out of projects with todo.org/ or for
+  cleaning up projects with messy todo lists mixed into org notes
+  - =(("./todo.org" "./notes.org") . (:maxlevel . 3))=
+  - it's convenient because you can initialize =org-agenda-files= to something
+    sparse when emacs starts, but still manage to process errant TODO's in org
+    files ... without adding/removing files to =org-agenda-files=
+    - it keeps your =org-refile-targets= slim while generally adding what you
+      want when you want it... ?
+  - however, it needs to be set up in =.dir-locals.el= and it needs to be
+    configured like =(locate-dominating-file default-directory "todo.org")=
 
 ** LANG
 
