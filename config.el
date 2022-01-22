@@ -403,7 +403,7 @@
 (after! org
   (setq org-log-done 'time
         org-support-shift-select t
-        ;;org-agenda-files (concat (file-name-as-directory org-directory) "agenda.org")
+        org-agenda-files (list  (concat (file-name-as-directory (concat  org-directory "/roam/dailies" ))))
         ;; TODO include content from Adam James
         ))
 ;; Roam:1 ends here
