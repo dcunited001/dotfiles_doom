@@ -17,6 +17,14 @@
                            :files (:defaults (:exclude "helm-dogears.el"))))
 ;; Dogears:1 ends here
 
+;; [[file:config.org::*Modeline][Modeline:2]]
+;(package! diminish)
+;; Modeline:2 ends here
+
+;; [[file:config.org::*Beacon][Beacon:1]]
+(package! beacon)
+;; Beacon:1 ends here
+
 ;; [[file:config.org::*Dimmer][Dimmer:1]]
 (package! dimmer)
 ;; Dimmer:1 ends here
@@ -119,7 +127,7 @@
 ;; Doxygen Support:1 ends here
 
 ;; [[file:config.org::*ARDUINO][ARDUINO:1]]
-(package! arduino-mode)
+;(package! arduino-mode)
 (package! arduino-cli-mode)
 ;; ARDUINO:1 ends here
 
@@ -135,13 +143,13 @@
 ;; GRAPHQL:1 ends here
 
 ;; [[file:config.org::*SPICE][SPICE:1]]
-(package! spice-mode)
+;(package! spice-mode)
 ;; SPICE:1 ends here
 
 ;; [[file:config.org::*Setup for =ob-spice=][Setup for =ob-spice=:1]]
-(package! ob-spice :recipe (:host github :repo "stardiviner/ob-spice"
-                            :fork (:host github :repo "dcunited001/ob-spice"
-                            :branch "fix-org-babel-api")))
+;; (package! ob-spice :recipe (:host github :repo "stardiviner/ob-spice"
+;;                             :fork (:host github :repo "dcunited001/ob-spice"
+;;                             :branch "fix-org-babel-api")))
 ;; Setup for =ob-spice=:1 ends here
 
 ;; [[file:config.org::*\[\[https:/github.com/krisajenkins/ob-translate\]\[ob-translate\]\]][[[https://github.com/krisajenkins/ob-translate][ob-translate]]:1]]

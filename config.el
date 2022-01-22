@@ -77,8 +77,6 @@
        (random-theme (nth (random (length themes-ilike)) themes-ilike)))
   (setq doom-theme random-theme))
 
-(setq doom-one-brighter-modeline t)
-
 ;; (setq doom-theme 'doom-acario-dark
 ;;   doom-acario-dark-brighter-comments nil
 ;;   doom-acario-dark-brighter-modeline t
@@ -183,15 +181,25 @@
 ;; which-key:1 ends here
 
 ;; [[file:config.org::*Modeline][Modeline:1]]
-(after! doom-modeline
-  ;; doom-modeline workspace-name has conflicts with bufler tab-bar
-  (setq doom-modeline-workspace-name nil
-
-        doom-modeline-height 24
-        ;; doom-modeline-project-detection 'ffip,'projectile,'projectile
-        ;;doom-modeline-minor-modes t
-        ))
+(setq +modeline-height 31)
 ;; Modeline:1 ends here
+
+;; [[file:config.org::*Modeline][Modeline:3]]
+;(use-package! diminish
+; :ensure t)
+;; Modeline:3 ends here
+
+;; [[file:config.org::*Visual Bell][Visual Bell:1]]
+(setq visible-bell t)
+;; Visual Bell:1 ends here
+
+;; [[file:config.org::*Beacon][Beacon:2]]
+(use-package! beacon
+  :diminish
+  :init (beacon-mode)
+  :config (map! :leader
+                "tB" :desc "Beacon Mode"))
+;; Beacon:2 ends here
 
 ;; [[file:config.org::*Dimmer][Dimmer:2]]
 (use-package! dimmer
@@ -418,7 +426,7 @@
       '(("d" "default" entry
          "* %?"
          :if-new (file+head "%<%Y-%m-%d>.org"
-                            "#+title: %<%Y-%m-%d>\n")))
+                            "#+title: %<%Y-%m-%d>\n\n* Tasks \n\n* Notes")))
 
       org-roam-mode-section-functions #'(org-roam-backlinks-section
                                          org-roam-reflinks-section))
@@ -608,10 +616,8 @@
 ;; More Files:1 ends here
 
 ;; [[file:config.org::*ARDUINO][ARDUINO:2]]
-(use-package! arduino-mode
-
-  :hook ((arduino-mode . flycheck-arduino-setup)))
-
+;; (use-package! arduino-mode
+;;   :hook ((arduino-mode . flycheck-arduino-setup)))
 ;; (add-hook 'arduino-mode-hook #'flycheck-arduino-setup)
 ;; ARDUINO:2 ends here
 

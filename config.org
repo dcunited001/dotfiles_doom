@@ -104,7 +104,7 @@ added by Doom modules).
     - [[#treemacs][Treemacs]]
     - [[#which-key][which-key]]
     - [[#modeline][Modeline]]
-    - [[#nav-flash][Nav Flash]]
+    - [[#ui-alerts][UI Alerts]]
     - [[#dimmer][Dimmer]]
     - [[#window--frame-management][Window & Frame Management]]
     - [[#sticky-windows][Sticky Windows]]
@@ -205,6 +205,15 @@ added by Doom modules).
 :header-args: :tangle ./config.el :comments link :results none
 :END:
 
+Packages will remain installed until you:
+
+#+begin_src sh :tangle no
+bin/doom purge
+bin/doom clean
+bin/doom (upgrade|sync|build)
+#+end_src
+
+
 ** INPUT
 
 [[file:~/.emacs.d/core/core-keybinds.el][.emacs.d/core/core-keybinds.el]] makes for a very useful key & map! reference
@@ -233,8 +242,6 @@ Most of these configs should be in their individual ~*-mode~ sections or under t
 ;; TODO this may need to be set before lispy loads....
 (setq lispy-compat '(cider edebug))
 #+end_src
-
-**** TODO fix auto-formatting so that lispy's ;;** outline sytnax works without auto-format fucking it up
 
 **** TODO setup lispy to run automatically in cider-mode
 
@@ -401,8 +408,6 @@ Pick a random theme from the ones I like.
 (let* ((themes-ilike '(doom-one doom-dark+ doom-acario-dark doom-molokai modus-vivendi))
        (random-theme (nth (random (length themes-ilike)) themes-ilike)))
   (setq doom-theme random-theme))
-
-(setq doom-one-brighter-modeline t)
 
 ;; (setq doom-theme 'doom-acario-dark
 ;;   doom-acario-dark-brighter-comments nil
@@ -593,6 +598,10 @@ Popup Defaults (defined in =+popup-defaults=)
 
 *** Treemacs
 
+This is too much for me. Also I have a bug where editing a buffer name makes the
+UI element unclickable ... so you can never close it. IDK. The config is still
+here in case I change my mind.
+
 Set a default width for treemacs & disable filewatch unless needed
 
 #+begin_src emacs-lisp :tangle no
@@ -625,6 +634,7 @@ treemacs width if it's not fixed.....)
 (add-hook 'doom-init-ui-hook
           (lambda () (treemacs-load-theme "Default")))
 #+End_src
+
 *** which-key
 
 shorten the delay (from luca)
@@ -636,24 +646,56 @@ shorten the delay (from luca)
 
 *** Modeline
 
-customize [[https://github.com/seagle0128/doom-modeline][doom-modeline]]
+Customize [[https://github.com/seagle0128/doom-modeline][doom-modeline]]
 
 #+begin_src emacs-lisp
-(after! doom-modeline
-  ;; doom-modeline workspace-name has conflicts with bufler tab-bar
-  (setq doom-modeline-workspace-name nil
-
-        doom-modeline-height 24
-        ;; doom-modeline-project-detection 'ffip,'projectile,'projectile
-        ;;doom-modeline-minor-modes t
-        ))
+(setq +modeline-height 31)
 #+end_src
 
+Setup diminish
 
+#+begin_src emacs-lisp :tangle ./packages.el
+;(package! diminish)
+#+end_src
 
-*** Nav Flash
+Configure Diminish
 
+#+begin_src emacs-lisp
+;(use-package! diminish
+; :ensure t)
+#+end_src
 
+**** TODO configure :diminish on other modes/packages
++ [ ] how to do this on packages loaded by doom?
+
+*** UI Alerts
+
+**** Visual Bell
+
+#+begin_src emacs-lisp
+(setq visible-bell t)
+#+end_src
+
+**** Beacon
+
+#+begin_src emacs-lisp :tangle ./packages.el
+(package! beacon)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! beacon
+  :diminish
+  :init (beacon-mode)
+  :config (map! :leader
+                "tB" :desc "Beacon Mode"))
+#+end_src
+
+**** Nav Flash
+
+By default =+nav-flash/blink-cursor= is set to activate on
+=doom-switch-window-hook=, but occasionally has periods where it doesn't
+activeate. Not sure, but it appears that navigating through transient/magit
+buffers will trigger this.
 
 *** Dimmer
 
@@ -1287,7 +1329,7 @@ This configures org-roam v2 and is not compatible with doom's org-roa module. Se
       '(("d" "default" entry
          "* %?"
          :if-new (file+head "%<%Y-%m-%d>.org"
-                            "#+title: %<%Y-%m-%d>\n")))
+                            "#+title: %<%Y-%m-%d>\n\n* Tasks \n\n* Notes")))
 
       org-roam-mode-section-functions #'(org-roam-backlinks-section
                                          org-roam-reflinks-section))
@@ -1675,15 +1717,13 @@ Doxygen for c/cpp [fn:haozeke]
 + [[https://github.com/motform/arduino-cli-mode][Arduino CLI Mode]] cli only
 
 #+begin_src emacs-lisp :tangle ./packages.el
-(package! arduino-mode)
+;(package! arduino-mode)
 (package! arduino-cli-mode)
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package! arduino-mode
-
-  :hook ((arduino-mode . flycheck-arduino-setup)))
-
+;; (use-package! arduino-mode
+;;   :hook ((arduino-mode . flycheck-arduino-setup)))
 ;; (add-hook 'arduino-mode-hook #'flycheck-arduino-setup)
 #+end_src
 
@@ -1760,7 +1800,7 @@ working first, then have a look at the [[http://ngspice.sourceforge.net/docs/ngs
   - [[https://github.com/stardiviner/ob-spice][ob-spice]]
 
 #+begin_src emacs-lisp :tangle ./packages.el
-(package! spice-mode)
+;(package! spice-mode)
 #+end_src
 
 **** Setup for =spice-mode=
@@ -1791,9 +1831,9 @@ Default template
 **** Setup for =ob-spice=
 
 #+begin_src emacs-lisp :tangle ./packages.el
-(package! ob-spice :recipe (:host github :repo "stardiviner/ob-spice"
-                            :fork (:host github :repo "dcunited001/ob-spice"
-                            :branch "fix-org-babel-api")))
+;; (package! ob-spice :recipe (:host github :repo "stardiviner/ob-spice"
+;;                             :fork (:host github :repo "dcunited001/ob-spice"
+;;                             :branch "fix-org-babel-api")))
 #+end_src
 
 **** Test
