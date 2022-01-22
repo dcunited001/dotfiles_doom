@@ -738,3 +738,24 @@
   (define-key lispy-mode-map (kbd "C-<mouse-14>") 'dchydra/lispy-cheat-sheet/body))
 
 )
+
+(let ((bindings '(("key" "function" "column") ("TAB" "org-agenda-goto" "View") ("L" "org-agenda-recenter" "View") ("F" "org-agenda-follow-mode" "View") ("C-c C-x b" "org-agenda-tree-to-indirect-buffer" "View") ("//" "org-agenda-filter" "Display") ("v" "org-agenda-view-mode-dispatch" "Display") ("/$" "org-agenda-archive" "Edit") ("e" "org-agenda-set-effort" "Edit") ("C-k" "org-agenda-kill" "Edit") ("t" "org-agenda-todo" "Edit") (":" "org-agenda-set-tags" "Edit"))))
+(eval
+ (append
+  '(defhydra dchydra/agenda-cheat-sheet (:hint nil :foreign-keys run)
+     ("C-<mouse-14>" nil "Exit" :exit t))
+  (cl-loop for x in bindings
+           unless (string= "" (elt x 2))
+           collect
+           (list (car x)
+                 (intern (elt x 1))
+                 (when (string-match "org-agenda-\\(?:eval-\\)?\\(.+\\)"
+                                     (elt x 1))
+                   (match-string 1 (elt x 1)))
+                 :column
+                 (elt x 2)))))
+
+(with-eval-after-load "agenda"
+  (define-key agenda-mode-map (kbd "C-<mouse-14>") 'dchydra/agenda-cheat-sheet/body))
+
+)
