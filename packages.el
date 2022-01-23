@@ -1,103 +1,88 @@
 ;; -*- no-byte-compile: t; lexical-binding: t; -*-
-;;; ~/.doom.d/packages.el
+;; ~/.doom.d/packages.el
 
-;; [[file:config.org::*Highlighting][Highlighting:1]]
+;; [[file:config.org::*INPUT][INPUT:1]]
+;;** INPUT
+;; INPUT:1 ends here
+
+;; [[file:config.org::*COMPLETION][COMPLETION:1]]
+;;** COMPLETION
+;; COMPLETION:1 ends here
+
+;; [[file:config.org::*UI][UI:1]]
+;;** UI
+(package! diminish)
 (package! auto-highlight-symbol)
-;; Highlighting:1 ends here
+(package! bufler :recipe (:host github
+                           :repo "alphapapa/bufler.el"
+                           :files (:defaults (:exclude "helm-bufler.el"))))
+(package! dogears :recipe (:host github
+                           :repo "alphapapa/dogears.el"
+                           :files (:defaults (:exclude "helm-dogears.el"))))
+
+(package! dimmer)
+(package! beacon)
+(package! burly)
+;; UI:1 ends here
 
 ;; [[file:config.org::*Bufler][Bufler:1]]
+;;*** Bufler
 (package! bufler :recipe (:host github
                            :repo "alphapapa/bufler.el"
                            :files (:defaults (:exclude "helm-bufler.el"))))
 ;; Bufler:1 ends here
 
 ;; [[file:config.org::*Dogears][Dogears:1]]
+;;*** Dogears
 (package! dogears :recipe (:host github
                            :repo "alphapapa/dogears.el"
                            :files (:defaults (:exclude "helm-dogears.el"))))
 ;; Dogears:1 ends here
 
-;; [[file:config.org::*Modeline][Modeline:2]]
-;(package! diminish)
-;; Modeline:2 ends here
-
-;; [[file:config.org::*Beacon][Beacon:1]]
-(package! beacon)
-;; Beacon:1 ends here
-
-;; [[file:config.org::*Dimmer][Dimmer:1]]
-(package! dimmer)
-;; Dimmer:1 ends here
-
-;; [[file:config.org::*Window & Frame Management][Window & Frame Management:1]]
-(package! burly)
-;; Window & Frame Management:1 ends here
-
-;; [[file:config.org::*Sticky Windows][Sticky Windows:1]]
-;;(package! )
-;; Sticky Windows:1 ends here
-
-;; [[file:config.org::*Origami Mode][Origami Mode:1]]
+;; [[file:config.org::*EDITOR][EDITOR:1]]
+;;** EDITOR
 (package! origami)
-;; Origami Mode:1 ends here
-
-;; [[file:config.org::*Centered Cursor Mode][Centered Cursor Mode:1]]
 (package! centered-cursor-mode)
-;; Centered Cursor Mode:1 ends here
+;; EDITOR:1 ends here
 
-;; [[file:config.org::*Info][Info:1]]
+;; [[file:config.org::*EMACS][EMACS:1]]
+;;** EMACS
+;; EMACS:1 ends here
+
+;; [[file:config.org::*TERM][TERM:1]]
+;;** TERM
+;; TERM:1 ends here
+
+;; [[file:config.org::*CHECKERS][CHECKERS:1]]
+;;** CHECKERS
+;; CHECKERS:1 ends here
+
+;; [[file:config.org::*TOOLS][TOOLS:1]]
+;;** TOOLS
 (package! info-colors)
-;; Info:1 ends here
-
-;; [[file:config.org::*TLDR][TLDR:1]]
 (package! tldr)
-;; TLDR:1 ends here
-
-;; [[file:config.org::*Magit][Magit:1]]
 (package! magit-tbdiff)
-;; Magit:1 ends here
-
-;; [[file:config.org::*Repo][Repo:1]]
 (package! repo)
-;; Repo:1 ends here
-
-;; [[file:config.org::*Shell][Shell:1]]
 (package! firestarter)
-;; Shell:1 ends here
-
-;; [[file:config.org::*Guix][Guix:1]]
 (package! guix)
-;; Guix:1 ends here
-
-;; [[file:config.org::*SystemD][SystemD:1]]
 (package! journalctl-mode)
-;; SystemD:1 ends here
-
-;; [[file:config.org::*PKGBUILD Mode][PKGBUILD Mode:1]]
-(package! pkgbuild-mode :recipe (:host github
-                                 :repo "juergenhoetzel/pkgbuild-mode"))
-;; PKGBUILD Mode:1 ends here
-
-;; [[file:config.org::*Crontab Mode][Crontab Mode:1]]
+(package! pkgbuild-mode
+  :recipe (:host github
+           :repo "juergenhoetzel/pkgbuild-mode"))
 (package! crontab-mode)
-;; Crontab Mode:1 ends here
-
-;; [[file:config.org::*Ken Kesey][Ken Kesey:1]]
 (package! ssh-config-mode)
 (package! x509-mode)
 ;; TODO ssh-agency
 ;; TODO ssh-tunnels
-;; Ken Kesey:1 ends here
-
-;; [[file:config.org::*SaltStack][SaltStack:1]]
 (package! salt-mode)
-;; SaltStack:1 ends here
+;; TOOLS:1 ends here
 
-;; [[file:config.org::*Emacs Packages][Emacs Packages:1]]
-
-;; Emacs Packages:1 ends here
+;; [[file:config.org::*OS][OS:1]]
+;;** OS
+;; OS:1 ends here
 
 ;; [[file:config.org::*ORG][ORG:1]]
+;;** ORG
 (package! org-treeusage)
 (package! org-drill)
 (package! org-ref)
@@ -108,49 +93,25 @@
 (package! org-sidebar)
 ;; ORG:1 ends here
 
-;; [[file:config.org::*\[\[https:/gitlab.com/mtekman/elisp-depmap.el\]\[Elisp Depmap\]\]][[[https://gitlab.com/mtekman/elisp-depmap.el][Elisp Depmap]]:1]]
+;; [[file:config.org::*LANG][LANG:1]]
+;;** LANG
 (package! elisp-depmap
   :recipe (:host gitlab :repo "mtekman/elisp-depmap.el"))
-;; [[https://gitlab.com/mtekman/elisp-depmap.el][Elisp Depmap]]:1 ends here
-
-;; [[file:config.org::*CLOJURE][CLOJURE:1]]
 (package! zprint-mode)
-;; CLOJURE:1 ends here
-
-;; [[file:config.org::*JULIA][JULIA:1]]
 (package! julia-vterm)
 (package! ob-julia-vterm)
-;; JULIA:1 ends here
-
-;; [[file:config.org::*Doxygen Support][Doxygen Support:1]]
 (package! highlight-doxygen)
-;; Doxygen Support:1 ends here
-
-;; [[file:config.org::*ARDUINO][ARDUINO:1]]
-;(package! arduino-mode)
 (package! arduino-cli-mode)
-;; ARDUINO:1 ends here
-
-;; [[file:config.org::*OPEN API][OPEN API:1]]
 (package! openapi-yaml-mode
   :recipe (:host github :repo "esc-emacs/openapi-yaml-mode"))
-;; OPEN API:1 ends here
-
-;; [[file:config.org::*GRAPHQL][GRAPHQL:1]]
 (package! graphql)
 (package! graphql-mode)
 (package! ob-graphql)
-;; GRAPHQL:1 ends here
+;; LANG:1 ends here
 
-;; [[file:config.org::*SPICE][SPICE:1]]
-;(package! spice-mode)
-;; SPICE:1 ends here
-
-;; [[file:config.org::*Setup for =ob-spice=][Setup for =ob-spice=:1]]
-;; (package! ob-spice :recipe (:host github :repo "stardiviner/ob-spice"
-;;                             :fork (:host github :repo "dcunited001/ob-spice"
-;;                             :branch "fix-org-babel-api")))
-;; Setup for =ob-spice=:1 ends here
+;; [[file:config.org::*BABEL][BABEL:1]]
+;;** BABEL
+;; BABEL:1 ends here
 
 ;; [[file:config.org::*\[\[https:/github.com/krisajenkins/ob-translate\]\[ob-translate\]\]][[[https://github.com/krisajenkins/ob-translate][ob-translate]]:1]]
 (package! google-translate)
@@ -158,9 +119,22 @@
 ;; [[https://github.com/krisajenkins/ob-translate][ob-translate]]:1 ends here
 
 ;; [[file:config.org::*FIREWALL][FIREWALL:1]]
-
+;;** FIREWALL
 ;; FIREWALL:1 ends here
 
-;; [[file:config.org::*Prism.el][Prism.el:1]]
+;; [[file:config.org::*EMAIL][EMAIL:1]]
+;;** EMAIL
+;; EMAIL:1 ends here
+
+;; [[file:config.org::*APP][APP:1]]
+;;** APP
+;; APP:1 ends here
+
+;; [[file:config.org::*CONFIG][CONFIG:1]]
+;;** CONFIG
 (package! prism)
-;; Prism.el:1 ends here
+;; CONFIG:1 ends here
+
+;; [[file:config.org::*HYDRAS][HYDRAS:1]]
+;;** HYDRAS
+;; HYDRAS:1 ends here

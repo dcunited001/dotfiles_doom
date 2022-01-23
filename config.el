@@ -1,5 +1,5 @@
 ;; -*- no-byte-compile: t; lexical-binding: t; -*-
-;;; ~/.doom.d/config.el
+;; ~/.doom.d/config.el
 (setq user-full-name "David Conner"
       user-mail-address "noreply@te.xel.io")
 
@@ -67,12 +67,8 @@
 ;; Mode Hints (Mouse 14):1 ends here
 
 ;; [[file:config.org::*Doom Theme][Doom Theme:1]]
-;; doom-Iosvkem
-;; doom-fairy-floss
-;; doom-horizon
-;; doom-lazerwave
-;; doom-monokai
-;; doom-challenger-deep
+;;** UI
+;;*** Doom Theme
 (let* ((themes-ilike '(doom-one doom-dark+ doom-acario-dark doom-molokai modus-vivendi))
        (random-theme (nth (random (length themes-ilike)) themes-ilike)))
   (setq doom-theme random-theme))
@@ -85,10 +81,11 @@
 ;; Doom Theme:1 ends here
 
 ;; [[file:config.org::*Doom Dashboard][Doom Dashboard:1]]
-
+;;*** Doom Dashboard
 ;; Doom Dashboard:1 ends here
 
 ;; [[file:config.org::*Font][Font:1]]
+;;*** Font
 ;; (set-frame-font "Source Code Pro 12" nil t)
 ;; Source Code Pro not available in pGTK
 (setq doom-font (font-spec :family "DejaVu Sans Mono" :size 14)
@@ -106,11 +103,13 @@
 ;; Font:1 ends here
 
 ;; [[file:config.org::*Ligatures][Ligatures:1]]
+;;*** Ligatures
 (setq +ligatures-extras-in-modes
       '(not special-mode comint-mode eshell-mode term-mode vterm-mode python-mode))
 ;; Ligatures:1 ends here
 
 ;; [[file:config.org::*Window UI][Window UI:1]]
+;;*** Window UI
 (tooltip-mode)
 
 (setq tooltip-delay 2
@@ -118,22 +117,27 @@
 ;; Window UI:1 ends here
 
 ;; [[file:config.org::*Window UI][Window UI:2]]
+;;*** Window Dividers
 (setq window-divider-default-right-width 1)
 (setq window-divider-default-bottom-width 1)
 ;; Window UI:2 ends here
 
 ;; [[file:config.org::*Menu Bar][Menu Bar:1]]
+;;*** Menu
 (menu-bar-mode +2)
 ;; Menu Bar:1 ends here
 
-;; [[file:config.org::*Highlighting][Highlighting:2]]
+;; [[file:config.org::*Highlighting][Highlighting:1]]
+;;*** Highlighting
 (use-package! auto-highlight-symbol
   ;; should autoload on bind
   :config (map! (:prefix "M-s h" :desc "auto-highlight-mode"
                  "A" (lambda () (interactive) (auto-highlight-symbol-mode 'toggle)))))
-;; Highlighting:2 ends here
+;; Highlighting:1 ends here
 
 ;; [[file:config.org::*Popups][Popups:1]]
+;;*** Popups
+
 (set-popup-rules!
   '(("^\\*Bufler" :side right :width 60
      :vslot -5 :slot 3
@@ -149,6 +153,7 @@
 ;; Popups:1 ends here
 
 ;; [[file:config.org::*Bufler][Bufler:2]]
+;;*** Bufler
 (use-package bufler)
 
 (add-hook 'doom-init-ui-hook
@@ -162,6 +167,7 @@
 ;; Bufler:2 ends here
 
 ;; [[file:config.org::*Dogears][Dogears:2]]
+;;*** Dogears
 (use-package! dogears
   :config (map! :prefix "M-g"
                 "d" #'dogears-go
@@ -176,6 +182,7 @@
 ;; Dogears:2 ends here
 
 ;; [[file:config.org::*which-key][which-key:1]]
+;;*** Which Key
 (after! which-key
     (setq which-key-idle-delay 1.0))
 ;; which-key:1 ends here
@@ -184,24 +191,22 @@
 (setq +modeline-height 31)
 ;; Modeline:1 ends here
 
-;; [[file:config.org::*Modeline][Modeline:3]]
-;(use-package! diminish
-; :ensure t)
-;; Modeline:3 ends here
+;; [[file:config.org::*Modeline][Modeline:2]]
+(use-package! diminish
+ :ensure t)
+;; Modeline:2 ends here
 
-;; [[file:config.org::*Visual Bell][Visual Bell:1]]
+;; [[file:config.org::*UI Alerts][UI Alerts:1]]
+;;*** UI Alerts
 (setq visible-bell t)
-;; Visual Bell:1 ends here
 
-;; [[file:config.org::*Beacon][Beacon:2]]
+;;**** Beacon
 (use-package! beacon
-  :diminish
+  :diminish beacon-mode
   :init (beacon-mode)
   :config (map! :leader
                 "tB" :desc "Beacon Mode"))
-;; Beacon:2 ends here
-
-;; [[file:config.org::*Dimmer][Dimmer:2]]
+;;**** Dimmer
 (use-package! dimmer
   :config (progn  (setq dimmer-adjustment-mode :background
                         dimmer-fraction 0.05)
@@ -216,9 +221,10 @@
   (dimmer-configure-posframe))
 
 (add-hook 'doom-init-ui-hook (lambda () (dimmer-mode)))
-;; Dimmer:2 ends here
+;; UI Alerts:1 ends here
 
-;; [[file:config.org::*Window & Frame Management][Window & Frame Management:2]]
+;; [[file:config.org::*Window & Frame Management][Window & Frame Management:1]]
+;;*** Window & Frames
 (use-package! burly
   :config (map! :leader
                 (:prefix ("w" . "workspaces/windows")
@@ -230,17 +236,28 @@
                   :desc "Copy Buffer URL" "B" #'burly-kill-buffer-url
                   :desc "Copy Window URL" "F" #'burly-kill-frames-url
                   :desc "Copy Frameset URL" "W" #'burly-kill-windows-url))))
-;; Window & Frame Management:2 ends here
+;; Window & Frame Management:1 ends here
 
 ;; [[file:config.org::*Line Numbers][Line Numbers:1]]
+;;*** Line Numbers
 (setq display-line-numbers-type nil)
 ;; Line Numbers:1 ends here
 
-;; [[file:config.org::*Auto Insert Mode][Auto Insert Mode:1]]
-(auto-insert-mode)
-;; Auto Insert Mode:1 ends here
+;; [[file:config.org::*EDITOR][EDITOR:2]]
+;;** EDITOR
 
-;; [[file:config.org::*Origami Mode][Origami Mode:2]]
+;;*** Auto Insert
+
+;; TODO determine whether auto-insert-mode is necessary
+;; - esp. with doom's +file-templates module
+;(auto-insert-mode)
+
+;;*** Doom File Templates
+;; TODO add new file templates to +file-template-alist where needed
+;; - use set-file-template!
+;; EDITOR:2 ends here
+
+;; [[file:config.org::*Origami Mode][Origami Mode:1]]
 (use-package! origami
   :config (map! :map origami-mode-map
                 :prefix "C-c C-f"
@@ -270,16 +287,16 @@
         )
 
 (add-hook 'doom-init-ui-hook (lambda () (global-origami-mode +1)))
-;; Origami Mode:2 ends here
+;; Origami Mode:1 ends here
 
-;; [[file:config.org::*Centered Cursor Mode][Centered Cursor Mode:2]]
+;; [[file:config.org::*Centered Cursor Mode][Centered Cursor Mode:1]]
 (use-package! centered-cursor-mode ;: defer t
   :config (map! :leader :desc "Toggle Centered Cursor"
                 "t-" (λ! () (interactive) (centered-cursor-mode 'toggle))))
 
 ;; NOTE now i have to remember how to turn it off everytime i start emacs
 (add-hook 'doom-init-ui-hook (lambda () (centered-cursor-mode)))
-;; Centered Cursor Mode:2 ends here
+;; Centered Cursor Mode:1 ends here
 
 ;; [[file:config.org::*Yasnippet-snippets][Yasnippet-snippets:1]]
 (setq dc/snippets (expand-file-name (concat doom-private-dir "snippets")))
@@ -305,29 +322,29 @@
        "q" #'find-name-dired))
 ;; DIRED:2 ends here
 
-;; [[file:config.org::*Info][Info:2]]
+;; [[file:config.org::*Info][Info:1]]
 (use-package! info-colors)
-;; Info:2 ends here
+;; Info:1 ends here
 
-;; [[file:config.org::*TLDR][TLDR:2]]
+;; [[file:config.org::*TLDR][TLDR:1]]
 (use-package! tldr
   :config (map! :leader
                 "T" #'tldr))
-;; TLDR:2 ends here
+;; TLDR:1 ends here
 
-;; [[file:config.org::*Magit][Magit:2]]
+;; [[file:config.org::*Magit][Magit:1]]
 (use-package! magit-tbdiff)
-;; Magit:2 ends here
+;; Magit:1 ends here
 
-;; [[file:config.org::*Repo][Repo:2]]
+;; [[file:config.org::*Repo][Repo:1]]
 (use-package! repo)
-;; Repo:2 ends here
+;; Repo:1 ends here
 
-;; [[file:config.org::*Shell][Shell:2]]
+;; [[file:config.org::*Shell][Shell:1]]
 (use-package! firestarter
   :init (firestarter-mode)
   :config (setq firestarter-default-type t))
-;; Shell:2 ends here
+;; Shell:1 ends here
 
 ;; [[file:config.org::*Tramp][Tramp:1]]
 (after! tramp
@@ -337,24 +354,24 @@
               "/run/current-system/profile/sbin")))
 ;; Tramp:1 ends here
 
-;; [[file:config.org::*Guix][Guix:2]]
+;; [[file:config.org::*Guix][Guix:1]]
 (use-package! guix
   :config (map! :leader
                 "g" #'guix))
-;; Guix:2 ends here
+;; Guix:1 ends here
 
-;; [[file:config.org::*PKGBUILD Mode][PKGBUILD Mode:2]]
+;; [[file:config.org::*PKGBUILD Mode][PKGBUILD Mode:1]]
 (use-package! pkgbuild-mode :mode "\\PKGBUILD")
-;; PKGBUILD Mode:2 ends here
+;; PKGBUILD Mode:1 ends here
 
-;; [[file:config.org::*Crontab Mode][Crontab Mode:2]]
+;; [[file:config.org::*Crontab Mode][Crontab Mode:1]]
 (use-package! crontab-mode)
-;; Crontab Mode:2 ends here
+;; Crontab Mode:1 ends here
 
-;; [[file:config.org::*Ken Kesey][Ken Kesey:2]]
+;; [[file:config.org::*Ken Kesey][Ken Kesey:1]]
 (use-package! ssh-config-mode)
 (use-package! x509-mode)
-;; Ken Kesey:2 ends here
+;; Ken Kesey:1 ends here
 
 ;; [[file:config.org::*Docker][Docker:1]]
 (use-package! docker
@@ -366,9 +383,9 @@
 (put 'dockerfile-image-name 'safe-local-variable #'stringp)
 ;; Docker:1 ends here
 
-;; [[file:config.org::*SaltStack][SaltStack:2]]
+;; [[file:config.org::*SaltStack][SaltStack:1]]
 (use-package salt-mode)
-;; SaltStack:2 ends here
+;; SaltStack:1 ends here
 
 ;; [[file:config.org::*LSP UI][LSP UI:1]]
 (setq lsp-ui-peek-list-width 25
@@ -431,9 +448,6 @@
       org-roam-mode-section-functions #'(org-roam-backlinks-section
                                          org-roam-reflinks-section))
 
-(use-package! org-roam-protocol
-  :after org-protocol)
-
 ;; from https://org-roam.discourse.group/t/org-roam-major-redesign/1198/220
 ;;(setq org-roam-node-display-template "${title:80}  ${file:9} ${tags:20}")
 
@@ -442,14 +456,52 @@
   (interactive)
   (setq +org-roam-open-buffer-on-find-file
         (not +org-roam-open-buffer-on-find-file)))
+;; Roam:2 ends here
 
+;; [[file:config.org::*Roam][Roam:3]]
+;;* Daviwil org-roam
+
+;;**  Project Templates
+(defvar dw/org-roam-project-template
+  '("p" "project" plain "** TODO %?"
+    :if-new (file+head+olp "%<%Y%m%d%H%M%S>-${slug}.org"
+                           "#+title: ${title}\n#+category: ${title}\n$+filetags: Projects\n"
+                           ("Tasks"))))
+
+;;*** decide whether these functions are going to work for me (problems with roam subdirectories)
+;; TODO (defun my/org-roam-filter-by-tag ...)
+;; TODO (defun my/org-list-notes-by-tag ...)
+
+;;** Roam Node Insert
+;; NOTE: (interactive "P") version of org-roam-node-insert
+(defun dw/org-roam-insert-immediate (arg &rest args)
+  (interactive "P")
+  (let ((args (push arg args))
+        (org-roam-capture-templates (list (append (car org-roam-capture-templates)
+                                                  '(:immediate-finish t)))))
+    (apply #'org-roam-node-insert args)))
+
+
+;;** Roam Capture Task (project captures)
+(defun dw/org-roam-capture-task ()
+  (interactive)
+  ;; TODO
+  ;(add-hook 'org-capture-after-finalize-hook #'my/org-roam-project-finalize-hook)
+
+
+  )
+;; Roam:3 ends here
+
+;; [[file:config.org::*Roam][Roam:4]]
 (map! (:map org-mode-map
        :leader
        :prefix ("nr" . "org-roam")
        "T" #'dc/org-roam-toggle-open-buffer-on-find-file
        "a" #'org-roam-node-random
        "D" #'org-roam-demote-entire-buffer
-       "I" #'org-id-get-create
+       "i" #'dw/org-roam-insert-immediate
+       "I" #'org-roam-insert-node
+       "#" #'org-id-get-create
        "r" #'org-roam-refile
        "R" #'org-roam-link-replace-all
        "m" #'org-roam-buffer-toggle
@@ -470,7 +522,9 @@
        "T" #'dc/org-roam-toggle-open-buffer-on-find-file
        "a" #'org-roam-node-random
        "D" #'org-roam-demote-entire-buffer
-       "I" #'org-id-get-create
+       "i" #'dw/org-roam-insert-immediate
+       "I" #'org-roam-insert-node
+       "#" #'org-id-get-create
        "r" #'org-roam-refile
        "R" #'org-roam-link-replace-all
        "m" #'org-roam-buffer-toggle
@@ -483,7 +537,12 @@
         "T" #'org-roam-tag-remove
         "r" #'org-roam-ref-add
         "R" #'org-roam-ref-remove)))
-;; Roam:2 ends here
+;; Roam:4 ends here
+
+;; [[file:config.org::*setup =org-roam-protocol= and mime types for org roam][setup =org-roam-protocol= and mime types for org roam:1]]
+(use-package! org-roam-protocol
+  :after org-protocol)
+;; setup =org-roam-protocol= and mime types for org roam:1 ends here
 
 ;; [[file:config.org::*configure \[\[https:/github.com/jkitchin/org-ref\]\[org-ref\]\] v3][configure [[https://github.com/jkitchin/org-ref][org-ref]] v3:1]]
 ;(use-package! :org-ref)
@@ -569,18 +628,18 @@
 ;; (source: mwfogleman/englehorn)
 ;; Refile:1 ends here
 
-;; [[file:config.org::*\[\[https:/gitlab.com/mtekman/elisp-depmap.el\]\[Elisp Depmap\]\]][[[https://gitlab.com/mtekman/elisp-depmap.el][Elisp Depmap]]:2]]
+;; [[file:config.org::*\[\[https:/gitlab.com/mtekman/elisp-depmap.el\]\[Elisp Depmap\]\]][[[https://gitlab.com/mtekman/elisp-depmap.el][Elisp Depmap]]:1]]
 (use-package! elisp-depmap
   :bind (("C-c M-d" . elisp-depmap-graphviz-digraph)
          ("C-c M-g" . elisp-depmap-graphviz)
          ("C-c M-s" . elisp-depmap-makesummarytable))
   :config (setq elisp-depmap-exec-file (getenv "GRAPHVIZ_DOT")))
-;; [[https://gitlab.com/mtekman/elisp-depmap.el][Elisp Depmap]]:2 ends here
+;; [[https://gitlab.com/mtekman/elisp-depmap.el][Elisp Depmap]]:1 ends here
 
-;; [[file:config.org::*CLOJURE][CLOJURE:2]]
+;; [[file:config.org::*CLOJURE][CLOJURE:1]]
 (add-hook 'clojure-mode-hook 'zprint-mode)
 (add-hook 'clojurescript-mode-hook 'zprint-mode)
-;; CLOJURE:2 ends here
+;; CLOJURE:1 ends here
 
 ;; [[file:config.org::*CIDER][CIDER:1]]
 (add-hook 'cider-mode-hook #'clj-refactor-mode)
@@ -596,10 +655,10 @@
                 "environments/v1.6")))
 ;; LSP (julia):1 ends here
 
-;; [[file:config.org::*Doxygen Support][Doxygen Support:2]]
+;; [[file:config.org::*Doxygen Support][Doxygen Support:1]]
 (use-package! highlight-doxygen
   :hook ((c-mode c++-mode) . highlight-doxygen-mode))
-;; Doxygen Support:2 ends here
+;; Doxygen Support:1 ends here
 
 ;; [[file:config.org::*More Files][More Files:1]]
 ;; from HaoZeke/dotdoom
@@ -615,21 +674,21 @@
                               auto-mode-alist))
 ;; More Files:1 ends here
 
-;; [[file:config.org::*ARDUINO][ARDUINO:2]]
+;; [[file:config.org::*ARDUINO][ARDUINO:1]]
 ;; (use-package! arduino-mode
 ;;   :hook ((arduino-mode . flycheck-arduino-setup)))
 ;; (add-hook 'arduino-mode-hook #'flycheck-arduino-setup)
-;; ARDUINO:2 ends here
+;; ARDUINO:1 ends here
 
-;; [[file:config.org::*OPEN API][OPEN API:2]]
+;; [[file:config.org::*OPEN API][OPEN API:1]]
 (use-package! openapi-yaml-mode)
-;; OPEN API:2 ends here
+;; OPEN API:1 ends here
 
-;; [[file:config.org::*GRAPHQL][GRAPHQL:2]]
+;; [[file:config.org::*GRAPHQL][GRAPHQL:1]]
 (use-package! graphql)
 (use-package! graphql-mode)
-(use-package ob-graphql)
-;; GRAPHQL:2 ends here
+(use-package! ob-graphql)
+;; GRAPHQL:1 ends here
 
 ;; [[file:config.org::*org-babel][org-babel:1]]
 (after! org
@@ -667,7 +726,7 @@
 )
 ;; [[https://github.com/krisajenkins/ob-translate][ob-translate]]:2 ends here
 
-;; [[file:config.org::*Prism.el][Prism.el:2]]
+;; [[file:config.org::*Prism.el][Prism.el:1]]
 (use-package! prism
   :hook ((emacs-lisp-mode . prism-mode)
          (clojure-mode . prism-mode)
@@ -682,7 +741,7 @@
                   '(red teal green magenta cyan blue orange dark-cyan violet yellow)))
                   ;; options: red orange green teal yellow blue dark blue magenta violet cyan dark cyan
   )
-;; Prism.el:2 ends here
+;; Prism.el:1 ends here
 
 ;; [[file:config.org::*Rainbow Mode][Rainbow Mode:1]]
 (map! :leader :desc "Toggle Rainbow Mode"
@@ -693,69 +752,3 @@
 ;; (setq auto-minor-mode-alist (append '(("theme\\.el$" . rainbow-mode))
                                     ;; auto-minor-mode-alist))
 ;; Rainbow Mode:1 ends here
-
-(let ((bindings '(("g" "edebug-go-mode" "Modes") ("SPC" "edebug-step-mode" "Modes") ("t" "edebug-trace-mode" "Modes") ("c" "edebug-continue-mode" "Modes") ("G" "edebug-Go-nonstop-mode" "Modes") ("T" "edebug-Trace-fast-mode" "Modes") ("C" "edebug-Continue-fast-mode" "Modes") ("n" "edebug-next-mode" "Modes") ("I" "edebug-set-initial-mode" "Modes") ("S" "edebug-stop" "Jumping") ("h" "edebug-goto-here" "Jumping") ("f" "edebug-forward-sexp" "Jumping") ("o" "edebug-step-out" "Jumping") ("i" "edebug-step-in" "Jumping") ("?" "edebug-help" "Misc") ("Q" "edebug-top-level-nonstop" "Misc") ("r" "edebug-previous-result" "Misc") ("d" "edebug-pop-to-backtrace" "Misc") ("=" "edebug-display-freq-count" "Misc") ("b" "edebug-set-breakpoint" "Breaks") ("B" "edebug-next-breakpoint" "Breaks") ("u" "edebug-unset-breakpoint" "Breaks") ("U" "edebug-unset-breakpoints" "Breaks") ("D" "edebug-toggle-disable-breakpoint" "Breaks") ("x" "edebug-set-conditional-breakpoint" "Breaks") ("X" "edebug-set-global-break-condition" "Breaks") ("v" "edebug-view-outside" "Views") ("P" "edebug-bounce-point" "Views") ("w" "edebug-where" "Views") ("W" "edebug-toggle-save-windows" "Views") ("e" "edebug-eval-expression" "Eval") ("C-x C-e" "edebug-eval-last-sexp" "Eval") ("E" "edebug-visit-eval-list" "Eval") ("C-j" "edebug-eval-print-last-sexp" "Eval") ("C-c C-u" "edebug-update-eval-list" "Eval") ("C-c C-d" "edebug-delete-eval-item" "Eval") ("C-c C-w" "edebug-where" "Eval"))))
-(eval
- (append
-  '(defhydra dchydra/edebug-cheat-sheet (:hint nil :foreign-keys run)
-     ("C-<mouse-14>" nil "Exit" :exit t))
-  (cl-loop for x in bindings
-           unless (string= "" (elt x 2))
-           collect
-           (list (car x)
-                 (intern (elt x 1))
-                 ;; edebug-(?:eval-)?\(.+)
-                 (when (string-match "edebug-\\(.+\\)"
-                                     (elt x 1))
-                   (match-string 1 (elt x 1)))
-                 :column
-                 (elt x 2)))))
-
-(with-eval-after-load "edebug"
-  (define-key edebug-mode-map (kbd "C-<mouse-14>") 'dchydra/edebug-cheat-sheet/body))
-(with-eval-after-load "debugger"
-  (define-key debugger-mode-map (kbd "C-<mouse-14>") 'dchydra/edebug-cheat-sheet/body))
-
-)
-
-(let ((bindings '(("<" "lispy-barf" "") (">" "lispy-slurp" "") ("A" "lispy-beginning-of-defun" "") ("j" "lispy-down" "") ("B" "lispy-ediff-regions" "") ("G" "lispy-goto-local" "") ("h" "lispy-left" "") ("o" "lispy-other-mode" "") ("l" "lispy-right" "") ("SPC" "lispy-space" "") ("xB" "lispy-store-region-and-buffer" "") ("k" "lispy-up" "") ("v" "lispy-view" "") ("V" "lispy-visit" "") ("D" "pop-tag-mark" "") ("x" "see" "") ("L" "unbound" "") ("U" "unbound" "") ("X" "unbound" "") ("Y" "unbound" "") ("H" "lispy-ace-symbol-replace" "Edit") ("c" "lispy-clone" "Edit") ("C" "lispy-convolute" "Edit") ("n" "lispy-new-copy" "Edit") ("O" "lispy-oneline" "Edit") ("P" "lispy-paste" "Edit") ("r" "lispy-raise" "Edit") ("R" "lispy-raise-some" "Edit") ("\\" "lispy-splice" "Edit") ("Z" "lispy-edebug-stop" "Eval") ("S" "lispy-stringify" "Edit") ("xj" "lispy-debug-step-in" "Eval") ("xe" "lispy-edebug" "Eval") ("xT" "lispy-ert" "Eval") ("e" "lispy-eval" "Eval") ("E" "lispy-eval-and-insert" "Eval") ("xr" "lispy-eval-and-replace" "Eval") ("p" "lispy-eval-other-window" "Eval") ("q" "lispy-ace-paren" "Move") ("z" "lispy-knight" "Move") ("s" "lispy-move-down" "Move") ("w" "lispy-move-up" "Move") ("t" "lispy-teleport" "Move") ("Q" "lispy-ace-char" "Nav") ("-" "lispy-ace-subword" "Nav") ("a" "lispy-ace-symbol" "Nav") ("b" "lispy-back" "Nav") ("d" "lispy-different" "Nav") ("f" "lispy-flow" "Nav") ("F" "lispy-follow" "Nav") ("g" "lispy-goto" "Nav") ("xb" "lispy-bind-variable" "Refactor") ("xf" "lispy-flatten" "Refactor") ("xc" "lispy-to-cond" "Refactor") ("xd" "lispy-to-defun" "Refactor") ("xi" "lispy-to-ifs" "Refactor") ("xl" "lispy-to-lambda" "Refactor") ("xu" "lispy-unbind-variable" "Refactor") ("i" "lispy-tab" "Outline") ("I" "lispy-shifttab" "Outline") ("J" "lispy-outline-next" "Outline") ("K" "lispy-outline-prev" "Outline") ("l" "lispy-outline-promote" "Outline") ("h" "lispy-outline-demote" "Outline") ("M" "lispy-multiline" "Other") ("xh" "lispy-describe" "Other") ("m" "lispy-mark-list" "Other") ("u" "lispy-undo" "Other") ("N" "lispy-narrow" "Other") ("y" "lispy-occur" "Other") ("W" "lispy-widen" "Other"))))
-(eval
- (append
-  '(defhydra dchydra/lispy-cheat-sheet (:hint nil :foreign-keys run)
-     ("C-<mouse-14>" nil "Exit" :exit t))
-  (cl-loop for x in bindings
-           unless (string= "" (elt x 2))
-           collect
-           (list (car x)
-                 (intern (elt x 1))
-                 (when (string-match "lispy-\\(?:eval-\\)?\\(.+\\)"
-                                     (elt x 1))
-                   (match-string 1 (elt x 1)))
-                 :column
-                 (elt x 2)))))
-
-(with-eval-after-load "lispy"
-  (define-key lispy-mode-map (kbd "C-<mouse-14>") 'dchydra/lispy-cheat-sheet/body))
-
-)
-
-(let ((bindings '(("key" "function" "column") ("TAB" "org-agenda-goto" "View") ("L" "org-agenda-recenter" "View") ("F" "org-agenda-follow-mode" "View") ("C-c C-x b" "org-agenda-tree-to-indirect-buffer" "View") ("//" "org-agenda-filter" "Display") ("v" "org-agenda-view-mode-dispatch" "Display") ("/$" "org-agenda-archive" "Edit") ("e" "org-agenda-set-effort" "Edit") ("C-k" "org-agenda-kill" "Edit") ("t" "org-agenda-todo" "Edit") (":" "org-agenda-set-tags" "Edit"))))
-(eval
- (append
-  '(defhydra dchydra/agenda-cheat-sheet (:hint nil :foreign-keys run)
-     ("C-<mouse-14>" nil "Exit" :exit t))
-  (cl-loop for x in bindings
-           unless (string= "" (elt x 2))
-           collect
-           (list (car x)
-                 (intern (elt x 1))
-                 (when (string-match "org-agenda-\\(?:eval-\\)?\\(.+\\)"
-                                     (elt x 1))
-                   (match-string 1 (elt x 1)))
-                 :column
-                 (elt x 2)))))
-
-(with-eval-after-load "agenda"
-  (define-key agenda-mode-map (kbd "C-<mouse-14>") 'dchydra/agenda-cheat-sheet/body))
-
-)
