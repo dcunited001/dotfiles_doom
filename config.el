@@ -67,26 +67,35 @@
 (map! "M-<mouse-14>" 'which-key-show-major-mode)
 ;; INPUT:2 ends here
 
-;; [[file:config.org::*Doom Theme][Doom Theme:1]]
+;; [[file:config.org::*COMPLETION][COMPLETION:2]]
+;;** COMPLETION
+;; COMPLETION:2 ends here
+
+;; [[file:config.org::*UI][UI:2]]
 ;;** UI
 
+;;*** Diminish
+;; should probably be loaded before :diminish directives
+(use-package! diminish
+ :ensure t)
+
 ;;*** Doom Theme
+;; Pick a random theme from the ones I like.
 (let* ((themes-ilike '(doom-one doom-dark+ doom-acario-dark doom-molokai modus-vivendi))
        (random-theme (nth (random (length themes-ilike)) themes-ilike)))
   (setq doom-theme random-theme))
+
+;; NOTE just set modus-vivendi for now
+(setq doom-theme 'modus-vivendi)
 
 ;; (setq doom-theme 'doom-acario-dark
 ;;   doom-acario-dark-brighter-comments nil
 ;;   doom-acario-dark-brighter-modeline t
 ;;   doom-acario-dark-comment-bg nil
 ;;   doom-acario-dark-padded-modeline 4)
-;; Doom Theme:1 ends here
 
-;; [[file:config.org::*Doom Dashboard][Doom Dashboard:1]]
 ;;*** Doom Dashboard
-;; Doom Dashboard:1 ends here
 
-;; [[file:config.org::*Font][Font:1]]
 ;;*** Font
 ;; (set-frame-font "Source Code Pro 12" nil t)
 ;; Source Code Pro not available in pGTK
@@ -102,42 +111,62 @@
 ;; (unless (find-font doom-unicode-font)
 ;;   (message "couldn't find 'doom-unicode-font. using a default.")
 ;;   (setq doom-unicode-font (font-spec :family "Source Code Pro" :size 18)))
-;; Font:1 ends here
 
-;; [[file:config.org::*Ligatures][Ligatures:1]]
 ;;*** Ligatures
+;; NOTE: ligatures is inactive (as of 2022-01-24)
 (setq +ligatures-extras-in-modes
-      '(not special-mode comint-mode eshell-mode term-mode vterm-mode python-mode))
-;; Ligatures:1 ends here
+      '(not special-mode
+            comint-mode
+            eshell-mode
+            term-mode
+            vterm-mode
+            python-mode))
 
-;; [[file:config.org::*Window UI][Window UI:1]]
+;;*** Indent Guides
+;;NOTE don't use them (they're taxing)
+
 ;;*** Window UI
 (tooltip-mode)
 
 (setq tooltip-delay 2
       tooltip-short-delay 0.5)
-;; Window UI:1 ends here
 
-;; [[file:config.org::*Window UI][Window UI:2]]
 ;;*** Window Dividers
-(setq window-divider-default-right-width 1)
-(setq window-divider-default-bottom-width 1)
-;; Window UI:2 ends here
+;; Dividers are too thin to grab if only 1px
+;; ... but what the hell. why not?
+(setq window-divider-default-right-width 1
+      window-divider-default-bottom-width 1)
 
-;; [[file:config.org::*Menu Bar][Menu Bar:1]]
 ;;*** Menu
 (menu-bar-mode +2)
-;; Menu Bar:1 ends here
 
-;; [[file:config.org::*Highlighting][Highlighting:1]]
 ;;*** Highlighting
+
+
 (use-package! auto-highlight-symbol
   ;; should autoload on bind
   :config (map! (:prefix "M-s h" :desc "auto-highlight-mode"
-                 "A" (lambda () (interactive) (auto-highlight-symbol-mode 'toggle)))))
-;; Highlighting:1 ends here
+                 "A" #'dc/toggle-auto-highlight-symbol-mode)))
 
-;; [[file:config.org::*Popups][Popups:1]]
+;; TODO try global-auto-highlight-symbol-mode
+;; doom-specific
+(add-hook 'doom-init-ui-hook
+          #'global-auto-highlight-symbol-mode)
+
+(defun dc/toggle-auto-highlight-symbol-mode ()
+  "Toggle auto-highlight-symbol-mode"
+  (interactive)
+  (auto-highlight-symbol-mode 'toggle))
+
+(defun dc/toggle-global-auto-highlight-symbol-mode ()
+  "Toggle global-auto-highlight-symbol-mode"
+  (interactive)
+  (global-auto-highlight-symbol-mode 'toggle))
+
+(map! :leader
+      :prefix ("t" . "toggle")
+      :desc "Toggle Global Auto Highlight" "H" #'dc/toggle-global-auto-highlight-symbol-mode)
+
 ;;*** Popups
 
 (set-popup-rules!
@@ -152,23 +181,30 @@
     ;;  :modeline nil
     ;;  :select t :quit t)
     ))
-;; Popups:1 ends here
 
-;; [[file:config.org::*Bufler][Bufler:2]]
+;;*** Burly
+
+(use-package! burly
+  :config (map! :leader
+                (:prefix ("w" . "workspaces/windows")
+                 (:prefix ("B" . "Burly bookmarks")
+                  :desc "Restore windows/frames" "o" #'burly-open-bookmark
+                  :desc "Open Burly URL" "O" #'burly-open-url
+                  :desc "Bookmark Windows" "w" #'burly-bookmark-windows
+                  :desc "Bookmark Frameset" "f" #'burly-bookmark-frames
+                  :desc "Copy Buffer URL" "B" #'burly-kill-buffer-url
+                  :desc "Copy Window URL" "F" #'burly-kill-frames-url
+                  :desc "Copy Frameset URL" "W" #'burly-kill-windows-url))))
+
 ;;*** Bufler
-(use-package bufler)
+(use-package! bufler
+  :config (map! :map ctl-x-map
+                  :desc "Bufler List"
+                  "C-b" #'bufler-list))
 
 (add-hook 'doom-init-ui-hook
-          (lambda () ;;(global-tab-line-mode +1)
-            (map! :map ctl-x-map
-                  :desc "Bufler List"
-                  "C-b" #'bufler-list)
-            (bufler-mode +1)
-            ;(bufler-tabs-mode +1)
-            ))
-;; Bufler:2 ends here
+          #'bufler-mode)
 
-;; [[file:config.org::*Dogears][Dogears:2]]
 ;;*** Dogears
 (use-package! dogears
   :config (map! :prefix "M-g"
@@ -179,26 +215,20 @@
                 "M-D" #'dogears-sidebar))
 
 (add-hook 'doom-init-ui-hook
-          (lambda ()
-            (dogears-mode)))
-;; Dogears:2 ends here
+          #'dogears-mode)
 
-;; [[file:config.org::*which-key][which-key:1]]
-;;*** Which Key
-(after! which-key
-    (setq which-key-idle-delay 1.0))
-;; which-key:1 ends here
-
-;; [[file:config.org::*Modeline][Modeline:1]]
+;;*** Modeline
 (setq +modeline-height 31)
-;; Modeline:1 ends here
 
-;; [[file:config.org::*Modeline][Modeline:2]]
-(use-package! diminish
- :ensure t)
-;; Modeline:2 ends here
+;;*** Which Key
+;(after! which-key
+    (setq which-key-idle-delay 1.0)
+;   )
 
-;; [[file:config.org::*UI Alerts][UI Alerts:1]]
+;;*** Line Numbers
+;; For relative line numbers, set this to `relative'.
+(setq display-line-numbers-type nil)
+
 ;;*** UI Alerts
 (setq visible-bell t)
 
@@ -223,29 +253,9 @@
   (dimmer-configure-which-key)
   (dimmer-configure-posframe))
 
-(add-hook 'doom-init-ui-hook (lambda () (dimmer-mode)))
-;; UI Alerts:1 ends here
-
-;; [[file:config.org::*Window & Frame Management][Window & Frame Management:1]]
-;;*** Window & Frames
-(use-package! burly
-  :config (map! :leader
-                (:prefix ("w" . "workspaces/windows")
-                 (:prefix ("B" . "Burly bookmarks")
-                  :desc "Restore windows/frames" "o" #'burly-open-bookmark
-                  :desc "Open Burly URL" "O" #'burly-open-url
-                  :desc "Bookmark Windows" "w" #'burly-bookmark-windows
-                  :desc "Bookmark Frameset" "f" #'burly-bookmark-frames
-                  :desc "Copy Buffer URL" "B" #'burly-kill-buffer-url
-                  :desc "Copy Window URL" "F" #'burly-kill-frames-url
-                  :desc "Copy Frameset URL" "W" #'burly-kill-windows-url))))
-;; Window & Frame Management:1 ends here
-
-;; [[file:config.org::*Line Numbers][Line Numbers:1]]
-;;*** Line Numbers
-;; For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type nil)
-;; Line Numbers:1 ends here
+(add-hook 'doom-init-ui-hook
+          #'dimmer-mode)
+;; UI:2 ends here
 
 ;; [[file:config.org::*EDITOR][EDITOR:2]]
 ;;** EDITOR
@@ -259,9 +269,9 @@
 ;;*** Doom File Templates
 ;; TODO add new file templates to +file-template-alist where needed
 ;; - use set-file-template!
-;; EDITOR:2 ends here
 
-;; [[file:config.org::*Origami Mode][Origami Mode:1]]
+;;*** Code Folding
+
 (use-package! origami
   :config (map! :map origami-mode-map
                 :prefix "C-c C-f"
@@ -290,19 +300,33 @@
 
         )
 
-(add-hook 'doom-init-ui-hook (lambda () (global-origami-mode +1)))
-;; Origami Mode:1 ends here
+(add-hook 'doom-init-ui-hook
+          #'global-origami-mode)
 
-;; [[file:config.org::*Centered Cursor Mode][Centered Cursor Mode:1]]
-(use-package! centered-cursor-mode ;: defer t
-  :config (map! :leader :desc "Toggle Centered Cursor"
-                "t-" (λ! () (interactive) (centered-cursor-mode 'toggle))))
+;;*** centered-cursor-mode
 
-;; NOTE now i have to remember how to turn it off everytime i start emacs
-(add-hook 'doom-init-ui-hook (lambda () (centered-cursor-mode)))
-;; Centered Cursor Mode:1 ends here
+(use-package! centered-cursor-mode      ;: defer t
+  :config (map! :leader
+                :desc "Toggle Centered Cursor" "t-" #'dc/toggle-global-centered-cursor-mode
+                :desc "Toggle Centered Cursor" "t_" #'dc/toggle-centered-cursor-mode))
 
-;; [[file:config.org::*Yasnippet-snippets][Yasnippet-snippets:1]]
+(defun dc/toggle-centered-cursor-mode ()
+  "Toggle centered-cursor-mode"
+  (interactive)
+  (centered-cursor-mode 'toggle))
+
+(defun dc/toggle-global-centered-cursor-mode ()
+  "Toggle centered-cursor-mode"
+  (interactive)
+  (global-centered-cursor-mode 'toggle))
+
+;; TODO try global-centered-cursor-mode by default
+;; (mostly to remind myself that it exists
+(add-hook 'doom-init-ui-hook
+          #'global-centered-cursor-mode)
+
+;;*** Snippets
+
 (setq dc/snippets (expand-file-name (concat doom-private-dir "snippets")))
 
 (eval-after-load 'yasnippet
@@ -310,88 +334,127 @@
     (add-to-list 'yas-snippet-dirs 'dc/snippets)
     (message "loading dc/snippets")
     (yas-load-directory dc/snippets t)))
-;; Yasnippet-snippets:1 ends here
+;; EDITOR:2 ends here
 
-;; [[file:config.org::*AUTH][AUTH:1]]
+;; [[file:config.org::*EMACS][EMACS:2]]
+;;** EMACS
+
+;;*** GPG
+
 ;; (setq auth-sources '("~/.authinfo" "~/.authinfo.gpg" "~/.netrc"))
 ;; (setq auth-sources (append `(,(concat (file-name-as-directory (getenv "DF_")) ".ectorepo.gpg")) auth-sources))
-;; AUTH:1 ends here
 
-;; [[file:config.org::*DIRED][DIRED:1]]
+;;*** DIRED
 (setq dired-omit-files "^.DS_Store\\'\\|^.project\\(?:ile\\)?\\'\\|^.\\(svn\\)\\'\\|^.ccls-cache\\'\\|\\(?:\\.js\\)?\\.meta\\'\\|\\.\\(?:elc\\|o\\|pyo\\|swp\\|class\\)\\'")
-;; DIRED:1 ends here
 
-;; [[file:config.org::*DIRED][DIRED:2]]
+;; Remove `.` and `..` from list of omitted file patterns
+;; (so i can always run commands on the directory)
 (map! (:map dired-mode-map
-       "q" #'find-name-dired))
-;; DIRED:2 ends here
+       ;; godammit don't close all the fucking dired buffers
+       "q" #'find-name-dired
 
-;; [[file:config.org::*Info][Info:1]]
+       ;; ... but potentially a good idea with TRAMP ... maybe?)
+       :leader :desc "Close all direds" "Q" #'+dired/quit-all))
+;; EMACS:2 ends here
+
+;; [[file:config.org::*TERM][TERM:2]]
+;;** TERM
+;; TERM:2 ends here
+
+;; [[file:config.org::*CHECKERS][CHECKERS:2]]
+;;** CHECKERS
+;; CHECKERS:2 ends here
+
+;; [[file:config.org::*TOOLS][TOOLS:2]]
+;;** TOOLS
+
+;;*** INFO
 (use-package! info-colors)
-;; Info:1 ends here
 
-;; [[file:config.org::*TLDR][TLDR:1]]
+;;*** TLDR
 (use-package! tldr
-  :config (map! :leader
-                "T" #'tldr))
-;; TLDR:1 ends here
+  :config (map! :leader "T" #'tldr))
 
-;; [[file:config.org::*Magit][Magit:1]]
+;;*** EDIFF
+
+
+;;*** GIT
+
+;;*** MAGIT
+;; magit-tbdiff: diff over ranges of commits
 (use-package! magit-tbdiff)
-;; Magit:1 ends here
 
-;; [[file:config.org::*Repo][Repo:1]]
+;;*** FORGE
+
+
+;;*** GITHUB
+
+
+;;*** REPO
 (use-package! repo)
-;; Repo:1 ends here
 
-;; [[file:config.org::*Shell][Shell:1]]
+
+;;*** SHELL
+;; enables =./.dir-local.el= variables and file-local declarations to
+;; config/control on-save shell tasks.[fn:haozeke]
 (use-package! firestarter
   :init (firestarter-mode)
   :config (setq firestarter-default-type t))
-;; Shell:1 ends here
 
-;; [[file:config.org::*Tramp][Tramp:1]]
+
+;;*** TRAMP
 (after! tramp
   (appendq! tramp-remote-path
             '("~/.guix-profile/bin" "~/.guix-profile/sbin"
               "/run/current-system/profile/bin"
               "/run/current-system/profile/sbin")))
-;; Tramp:1 ends here
 
-;; [[file:config.org::*Guix][Guix:1]]
+;;*** GUIX
 (use-package! guix
-  :config (map! :leader
-                "g" #'guix))
-;; Guix:1 ends here
+  :config (map! :leader "g" #'guix))
 
-;; [[file:config.org::*PKGBUILD Mode][PKGBUILD Mode:1]]
+;;*** PKGBUILD (arch)
 (use-package! pkgbuild-mode :mode "\\PKGBUILD")
-;; PKGBUILD Mode:1 ends here
 
-;; [[file:config.org::*Crontab Mode][Crontab Mode:1]]
+;;*** CRON
 (use-package! crontab-mode)
-;; Crontab Mode:1 ends here
 
-;; [[file:config.org::*Ken Kesey][Ken Kesey:1]]
+;;*** SSH
+;; For =ssh-config-mode= add this file-local variable to configs
+;; =# -*- mode: ssh-config -*-=
+
 (use-package! ssh-config-mode)
-(use-package! x509-mode)
-;; Ken Kesey:1 ends here
 
-;; [[file:config.org::*Docker][Docker:1]]
+;; TODO ssh-agency
+;; TODO ssh-tunnels
+
+;;*** X.509 certs
+(use-package! x509-mode)
+
+;;*** DOCKER
 (use-package! docker
   :config (setq docker-run-as-root t
                 docker-image-run-arguments '("-i" "-t" "--rm")))
 
-;; so the ## -*- docker-image-name: "image-name" -*- directive works with ~dockerfile-mode~
-;; TODO assess
-(put 'dockerfile-image-name 'safe-local-variable #'stringp)
-;; Docker:1 ends here
+;; TODO assess autoloading -*- docker-image-name: "image-name" -*-
+;; (put 'dockerfile-image-name 'safe-local-variable #'stringp)
 
-;; [[file:config.org::*SaltStack][SaltStack:1]]
-(use-package salt-mode)
-;; SaltStack:1 ends here
+;;**** LSP DOCKER
+;; this requires pulling emacslisp/lsp-docker-full
 
-;; [[file:config.org::*LSP UI][LSP UI:1]]
+;;*** SALTSTACK
+;; NOTE i'm not really using salt
+;; (use-package! salt-mode)
+
+;;*** AST
+;; TOOLS:2 ends here
+
+;; [[file:config.org::*LSP][LSP:2]]
+;;** LSP
+
+;;*** LSP MODE
+
+;;*** LSP UI
 (setq lsp-ui-peek-list-width 25
       ;; lsp-ui-sideline--last-width
 
@@ -400,7 +463,11 @@
       ;; lsp-ui-doc--inline-width
 
       lsp-ui-imenu-window-width 25)
-;; LSP UI:1 ends here
+;; LSP:2 ends here
+
+;; [[file:config.org::*OS][OS:2]]
+;;** OS
+;; OS:2 ends here
 
 ;; [[file:config.org::*ORG][ORG:2]]
 ;;** ORG
@@ -678,40 +745,47 @@
       :desc "Toggle Org Treeusage" "U" #'org-treeusage-mode)
 ;; ORG:2 ends here
 
-;; [[file:config.org::*\[\[https:/gitlab.com/mtekman/elisp-depmap.el\]\[Elisp Depmap\]\]][[[https://gitlab.com/mtekman/elisp-depmap.el][Elisp Depmap]]:1]]
+;; [[file:config.org::*LANG][LANG:2]]
+;;** LANG
+
+;;*** ELISP
 (use-package! elisp-depmap
   :bind (("C-c M-d" . elisp-depmap-graphviz-digraph)
          ("C-c M-g" . elisp-depmap-graphviz)
          ("C-c M-s" . elisp-depmap-makesummarytable))
   :config (setq elisp-depmap-exec-file (getenv "GRAPHVIZ_DOT")))
-;; [[https://gitlab.com/mtekman/elisp-depmap.el][Elisp Depmap]]:1 ends here
 
-;; [[file:config.org::*CLOJURE][CLOJURE:1]]
+;;*** LATEX
+
+;;*** CLOJURE
 (add-hook 'clojure-mode-hook 'zprint-mode)
 (add-hook 'clojurescript-mode-hook 'zprint-mode)
-;; CLOJURE:1 ends here
 
-;; [[file:config.org::*CIDER][CIDER:1]]
+;;**** LSP (clojure)
+
+;;**** CIDER
 (add-hook 'cider-mode-hook #'clj-refactor-mode)
-
 (setq org-babel-clojure-backend 'cider)
-;; CIDER:1 ends here
 
-;; [[file:config.org::*LSP (julia)][LSP (julia):1]]
-(let ((julia-depot-path (car (split-string (getenv "JULIA_DEPOT_PATH") (path-separator)))))
+;;*** JULIA
+(let ((julia-depot-path
+       (car (split-string (getenv "JULIA_DEPOT_PATH") (path-separator)))))
   (setq lsp-julia-package-dir nil
         lsp-julia-default-environment
         (concat (file-name-as-directory julia-depot-path)
                 "environments/v1.6")))
-;; LSP (julia):1 ends here
 
-;; [[file:config.org::*Doxygen Support][Doxygen Support:1]]
+;;**** LSP (julia)
+
+;;*** XML
+
+;;*** C++
+
+;;**** DOXYGEN
 (use-package! highlight-doxygen
   :hook ((c-mode c++-mode) . highlight-doxygen-mode))
-;; Doxygen Support:1 ends here
 
-;; [[file:config.org::*More Files][More Files:1]]
-;; from HaoZeke/dotdoom
+;;**** FILES
 (setq auto-mode-alist (append '(
                                 ("\\.C$" . c++-mode)
                                 ("\\.cc$" . c++-mode)
@@ -722,25 +796,30 @@
                                 ("\\.hpp$" . c++-mode)
                                 )
                               auto-mode-alist))
-;; More Files:1 ends here
 
-;; [[file:config.org::*ARDUINO][ARDUINO:1]]
+;;*** ARDUINO
 ;; (use-package! arduino-mode
 ;;   :hook ((arduino-mode . flycheck-arduino-setup)))
 ;; (add-hook 'arduino-mode-hook #'flycheck-arduino-setup)
-;; ARDUINO:1 ends here
 
-;; [[file:config.org::*OPEN API][OPEN API:1]]
+
+;;*** SPICE
+
+;;*** OPEN API
 (use-package! openapi-yaml-mode)
-;; OPEN API:1 ends here
 
-;; [[file:config.org::*GRAPHQL][GRAPHQL:1]]
+;;*** RESTCLIENT
+
+
+;;*** GRAPHQL
 (use-package! graphql)
 (use-package! graphql-mode)
 (use-package! ob-graphql)
-;; GRAPHQL:1 ends here
+;; LANG:2 ends here
 
-;; [[file:config.org::*org-babel][org-babel:1]]
+;; [[file:config.org::*BABEL][BABEL:2]]
+;;** BABEL
+
 (after! org
   (setq org-babel-load-languages
         (append org-babel-load-languages
@@ -751,12 +830,10 @@
    'org-babel-load-languages
    org-babel-load-languages))
 (org-babel-make-language-alias "julia" "julia-vterm")
-
-;; this is insufficient as make-language-alias remaps a few other symbols
-;; (defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
-;; org-babel:1 ends here
+;; BABEL:2 ends here
 
 ;; [[file:config.org::*\[\[https:/github.com/krisajenkins/ob-translate\]\[ob-translate\]\]][[[https://github.com/krisajenkins/ob-translate][ob-translate]]:2]]
+;;*** ob-translate
 (use-package! google-translate :demand t
   :init (require 'google-translate)
   :functions (my-google-translate-at-point google-translate--search-tkk)
@@ -776,36 +853,63 @@
 )
 ;; [[https://github.com/krisajenkins/ob-translate][ob-translate]]:2 ends here
 
-;; [[file:config.org::*Prism.el][Prism.el:1]]
+;; [[file:config.org::*FIREWALL][FIREWALL:2]]
+;;** FIREWALL
+;; FIREWALL:2 ends here
+
+;; [[file:config.org::*EMAIL][EMAIL:2]]
+;;** EMAIL
+;; EMAIL:2 ends here
+
+;; [[file:config.org::*APP][APP:2]]
+;;** APP
+;; APP:2 ends here
+
+;; [[file:config.org::*CONFIG][CONFIG:2]]
+;;** CONFIG
+
+;;*** Prism
+(defun dc/prism-get-modus-colors ()
+  "get modus colors for prism"
+  (-map (lambda (c) (cdr (assq c modus-themes-vivendi-colors)))
+        '(red blue-alt-other-faint green magenta cyan-alt-other blue orange-intense
+              green-alt-other-faint purple-intense yellow-intense)))
+
+(defun dc/prism-get-doom-colors ()
+  "get doom colors which will return nil and result in the 'emacs config from hell',
+   which prevents lispy-mode (and many moooore) and ALSO deletes the results of the
+   C-c ' blocks"
+  (-map #'doom-color '(red teal green magenta cyan blue orange
+                           dark-cyan violet yellow)))
+
 (use-package! prism
   :hook ((emacs-lisp-mode . prism-mode)
          (clojure-mode . prism-mode)
          (clojurescript-mode . prism-mode)
          (common-lisp-mode . prism-mode)
          (scheme-mode . prism-mode))
-  :config (map! :leader :desc "Toggle Prism"
-                "tP" (lambda () (interactive) (prism-mode 'toggle)))
+  :config (map! :leader :desc "Toggle Prism" "tP"
+                (lambda () (interactive) (prism-mode 'toggle)))
 
-  (prism-set-colors :lightens '(0 5 10) :desaturations '(-2.5 0 2.5)
-    :colors (-map #'doom-color
-                  '(red teal green magenta cyan blue orange dark-cyan violet yellow)))
-                  ;; options: red orange green teal yellow blue dark blue magenta violet cyan dark cyan
-  )
-;; Prism.el:1 ends here
+  (prism-set-colors
+   :lightens '(0 5 10)
+   :desaturations '(-2.5 0 2.5)
+   :colors (dc/prism-get-modus-colors)))
 
-;; [[file:config.org::*Rainbow Mode][Rainbow Mode:1]]
-(map! :leader :desc "Toggle Rainbow Mode"
-      "tR" (lambda () (interactive) (rainbow-mode 'toggle)))
+;;*** Rainbow Mode
 
+(map! :leader :desc "Toggle Rainbow Mode" "tR"
+      (lambda () (interactive) (rainbow-mode 'toggle)))
 
-;; TODO fix to autoload rainbow-mode in doom theme files
-;; (setq auto-minor-mode-alist (append '(("theme\\.el$" . rainbow-mode))
-                                    ;; auto-minor-mode-alist))
-;; Rainbow Mode:1 ends here
+;; TODO fix to autoload rainbow-mode in doom theme files (setq
+;; auto-minor-mode-alist (append '(("theme\\.el$" . rainbow-mode))
+;; auto-minor-mode-alist))
+;; CONFIG:2 ends here
 
 ;; [[file:config.org::*HYDRAS][HYDRAS:2]]
 ;;** HYDRAS
 
-(load-file (expand-file-name (concat (file-name-as-directory (getenv "DOOMDIR"))
-                                     "scripts/hydras.el")))
+;; (load-file (expand-file-name
+;;             (concat (file-name-as-directory (getenv "DOOMDIR"))
+;;                     "scripts/hydras.el")))
 ;; HYDRAS:2 ends here

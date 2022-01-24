@@ -84,6 +84,7 @@ added by Doom modules).
   - [[#term][TERM]]
   - [[#checkers][CHECKERS]]
   - [[#tools][TOOLS]]
+  - [[#lsp][LSP]]
   - [[#os][OS]]
   - [[#org][ORG]]
   - [[#lang][LANG]]
@@ -114,12 +115,15 @@ bin/doom (upgrade|sync|build)
 
 ** INPUT
 
+Packages
+
 #+begin_src emacs-lisp :tangle ./packages.el
 
 ;;** INPUT
 
 #+end_src
 
+Configs
 
 #+begin_src emacs-lisp
 
@@ -270,8 +274,20 @@ Mouse 14 is intended to give hints for keybindings.
 
 ** COMPLETION
 
+Packages
+
 #+begin_src emacs-lisp :tangle ./packages.el
+
 ;;** COMPLETION
+
+#+end_src
+
+Configs
+
+#+begin_src emacs-lisp
+
+;;** COMPLETION
+
 #+end_src
 
 *** Completion prompts
@@ -281,22 +297,17 @@ Mouse 14 is intended to give hints for keybindings.
 For hotkeys, check the Doom [[file:~/.emacs.d/modules/completion/company/README.org::*Code completion][Company module]] docs (company boxes negate =C-h m=
 and other help commands)
 
-**** TODO check luca: delay/prefix, disable tab? and yasnippets in company
-
-**** [[https://github.com/osv/company-web][company-web]] and [[https://github.com/smihica/emmet-mode][emmet-mode]]
-
-These are included with Doom, but worth linking in.
-
 *** IVY :ivy:
 
 Removed =-childframe= for now, as these are actual frames, kinda.
 
-**** HOLD configure views to use with ~ivy-switch-view~ (or just use bufler?)
-
 ** UI
+
+Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
 ;;** UI
+
 (package! diminish)
 (package! auto-highlight-symbol)
 (package! bufler :recipe (:host github
@@ -304,25 +315,44 @@ Removed =-childframe= for now, as these are actual frames, kinda.
                            :files (:defaults (:exclude "helm-bufler.el"))))
 (package! dogears :recipe (:host github
                            :repo "alphapapa/dogears.el"
-                           :files (:defaults (:exclude "helm-dogears.el"))))
+                           :files (:defaults (:exclude "helm-dogears.el"))))[][][][][][]
 
 (package! dimmer)
 ;; (package! beacon)
+
+
+
+;;*** Alphapapa
 (package! burly)
+(package! bufler
+  :recipe (:host github
+           :repo "alphapapa/bufler.el"
+           :files (:defaults (:exclude "helm-bufler.el"))))
+(package! dogears
+  :recipe (:host github
+           :repo "alphapapa/dogears.el"
+           :files (:defaults (:exclude "helm-dogears.el"))))
 #+end_src
 
-*** Doom Theme
-
-Pick a random theme from the ones I like.
+Configs
 
 #+begin_src emacs-lisp
 
 ;;** UI
 
+;;*** Diminish
+;; should probably be loaded before :diminish directives
+(use-package! diminish
+ :ensure t)
+
 ;;*** Doom Theme
+;; Pick a random theme from the ones I like.
 (let* ((themes-ilike '(doom-one doom-dark+ doom-acario-dark doom-molokai modus-vivendi))
        (random-theme (nth (random (length themes-ilike)) themes-ilike)))
   (setq doom-theme random-theme))
+
+;; NOTE just set modus-vivendi for now
+(setq doom-theme 'modus-vivendi)
 
 ;; (setq doom-theme 'doom-acario-dark
 ;;   doom-acario-dark-brighter-comments nil
@@ -330,18 +360,8 @@ Pick a random theme from the ones I like.
 ;;   doom-acario-dark-comment-bg nil
 ;;   doom-acario-dark-padded-modeline 4)
 
-#+end_src
-
-*** Doom Dashboard
-
-#+begin_src emacs-lisp
 ;;*** Doom Dashboard
 
-#+end_src
-
-*** Font
-
-#+begin_src emacs-lisp
 ;;*** Font
 ;; (set-frame-font "Source Code Pro 12" nil t)
 ;; Source Code Pro not available in pGTK
@@ -358,74 +378,156 @@ Pick a random theme from the ones I like.
 ;;   (message "couldn't find 'doom-unicode-font. using a default.")
 ;;   (setq doom-unicode-font (font-spec :family "Source Code Pro" :size 18)))
 
-#+end_src
-
-+ config =doom-variable-pitch-font=?
-+ config =ivy-posframe-font=
-
-*** Ligatures
-
-Disable extra ligatures in a few modes [fn:luca_doom]
-
-#+BEGIN_SRC emacs-lisp
 ;;*** Ligatures
+;; NOTE: ligatures is inactive (as of 2022-01-24)
 (setq +ligatures-extras-in-modes
-      '(not special-mode comint-mode eshell-mode term-mode vterm-mode python-mode))
+      '(not special-mode
+            comint-mode
+            eshell-mode
+            term-mode
+            vterm-mode
+            python-mode))
 
-#+END_SRC
+;;*** Indent Guides
+;;NOTE don't use them (they're taxing)
 
-*** Indent Guides
-
-The =indent-guides= doom module conflicts with =prism=, so i removed indent
-guides. These must be applied to each buffer in this order:
-
-1. prism
-2. indent-guide
-
-*** Window UI
-
-Tooltips are causing some serious slowdown for me
-
-#+begin_src emacs-lisp
 ;;*** Window UI
 (tooltip-mode)
 
 (setq tooltip-delay 2
       tooltip-short-delay 0.5)
-#+end_src
-
-Dividers are too thin to grab if only 1px
-
-#+begin_src emacs-lisp
 
 ;;*** Window Dividers
-(setq window-divider-default-right-width 1)
-(setq window-divider-default-bottom-width 1)
+;; Dividers are too thin to grab if only 1px
+;; ... but what the hell. why not?
+(setq window-divider-default-right-width 1
+      window-divider-default-bottom-width 1)
+
+;;*** Menu
+(menu-bar-mode +2)
+
+;;*** Highlighting
+
+
+(use-package! auto-highlight-symbol
+  ;; should autoload on bind
+  :config (map! (:prefix "M-s h" :desc "auto-highlight-mode"
+                 "A" #'dc/toggle-auto-highlight-symbol-mode)))
+
+;; TODO try global-auto-highlight-symbol-mode
+;; doom-specific
+(add-hook 'doom-init-ui-hook
+          #'global-auto-highlight-symbol-mode)
+
+(defun dc/toggle-auto-highlight-symbol-mode ()
+  "Toggle auto-highlight-symbol-mode"
+  (interactive)
+  (auto-highlight-symbol-mode 'toggle))
+
+(defun dc/toggle-global-auto-highlight-symbol-mode ()
+  "Toggle global-auto-highlight-symbol-mode"
+  (interactive)
+  (global-auto-highlight-symbol-mode 'toggle))
+
+(map! :leader
+      :prefix ("t" . "toggle")
+      :desc "Toggle Global Auto Highlight" "H" #'dc/toggle-global-auto-highlight-symbol-mode)
+
+;;*** Popups
+
+(set-popup-rules!
+  '(("^\\*Bufler" :side right :width 60
+     :vslot -5 :slot 3
+     :modeline nil :select t :quit t)
+
+    ;; NOTE this works, but the functionality in geiser/geiser-popup.el only covers *Geiser buffers
+    ;; - so =C-`= works to toggle, but all scheme-mode functionality will send repl buffers to other-window
+    ;; ("^\\* Guile REPL" :side bottom
+    ;;  :vslot 3 :slot 3
+    ;;  :modeline nil
+    ;;  :select t :quit t)
+    ))
+
+;;*** Burly
+
+(use-package! burly
+  :config (map! :leader
+                (:prefix ("w" . "workspaces/windows")
+                 (:prefix ("B" . "Burly bookmarks")
+                  :desc "Restore windows/frames" "o" #'burly-open-bookmark
+                  :desc "Open Burly URL" "O" #'burly-open-url
+                  :desc "Bookmark Windows" "w" #'burly-bookmark-windows
+                  :desc "Bookmark Frameset" "f" #'burly-bookmark-frames
+                  :desc "Copy Buffer URL" "B" #'burly-kill-buffer-url
+                  :desc "Copy Window URL" "F" #'burly-kill-frames-url
+                  :desc "Copy Frameset URL" "W" #'burly-kill-windows-url))))
+
+;;*** Bufler
+(use-package! bufler
+  :config (map! :map ctl-x-map
+                  :desc "Bufler List"
+                  "C-b" #'bufler-list))
+
+(add-hook 'doom-init-ui-hook
+          #'bufler-mode)
+
+;;*** Dogears
+(use-package! dogears
+  :config (map! :prefix "M-g"
+                "d" #'dogears-go
+                "M-b" #'dogears-back
+                "M-f" #'dogears-forward
+                "M-d" #'dogears-list
+                "M-D" #'dogears-sidebar))
+
+(add-hook 'doom-init-ui-hook
+          #'dogears-mode)
+
+;;*** Modeline
+(setq +modeline-height 31)
+
+;;*** Which Key
+;(after! which-key
+    (setq which-key-idle-delay 1.0)
+;   )
+
+;;*** Line Numbers
+;; For relative line numbers, set this to `relative'.
+(setq display-line-numbers-type nil)
+
+;;*** UI Alerts
+(setq visible-bell t)
+
+;;**** Beacon
+;; (use-package! beacon
+;;   :diminish beacon-mode
+;;   :init (beacon-mode)
+;;   :config (map! :leader
+;;                 "tB" :desc "Beacon Mode"))
+
+;;**** Dimmer
+(use-package! dimmer
+  :config (progn  (setq dimmer-adjustment-mode :background
+                        dimmer-fraction 0.05)
+                  (map! :leader
+                        "tD" :desc "Dimmer Mode"))
+
+  (dimmer-configure-company-box)
+  (dimmer-configure-magit)
+  (dimmer-configure-org)
+  (dimmer-configure-hydra)
+  (dimmer-configure-which-key)
+  (dimmer-configure-posframe))
+
+(add-hook 'doom-init-ui-hook
+          #'dimmer-mode)
 #+end_src
 
 *** Menu Bar
 
 [[https://www.emacswiki.org/emacs/MenuBar][Menu bar]] is for noobs. I am a noob.
 
-#+begin_src emacs-lisp
-
-;;*** Menu
-(menu-bar-mode +2)
-#+end_src
-
 i.e. CIDER alone has like 200 functions i need to learn
-
-*** Highlighting
-
-#+begin_src emacs-lisp
-;;*** Highlighting
-(use-package! auto-highlight-symbol
-  ;; should autoload on bind
-  :config (map! (:prefix "M-s h" :desc "auto-highlight-mode"
-                 "A" (lambda () (interactive) (auto-highlight-symbol-mode 'toggle)))))
-#+end_src
-
-*** Startup
 
 *** All The Icons
 
@@ -454,24 +556,6 @@ Popup Defaults (defined in =+popup-defaults=)
   - for popups with identitical =:side= value
   - defaults to zero. higher values: further away from the center
 
-#+begin_src emacs-lisp
-
-;;*** Popups
-
-(set-popup-rules!
-  '(("^\\*Bufler" :side right :width 60
-     :vslot -5 :slot 3
-     :modeline nil :select t :quit t)
-
-    ;; NOTE this works, but the functionality in geiser/geiser-popup.el only covers *Geiser buffers
-    ;; - so =C-`= works to toggle, but all scheme-mode functionality will send repl buffers to other-window
-    ;; ("^\\* Guile REPL" :side bottom
-    ;;  :vslot 3 :slot 3
-    ;;  :modeline nil
-    ;;  :select t :quit t)
-    ))
-#+end_src
-
 + Useful commands:
   + +popup/toggle :: =C-`= will toggle the popups
   + +popup/raise :: =C+~= will promote a popup into an actual window
@@ -479,158 +563,14 @@ Popup Defaults (defined in =+popup-defaults=)
   + +popup/restore :: will retrieve lost popups
   + +popup/diagnose :: will help you figure out why =bufler= closes all your windows.
 
-*** Bufler
-
-#+begin_src emacs-lisp :tangle ./packages.el
-;;*** Bufler
-(package! bufler :recipe (:host github
-                           :repo "alphapapa/bufler.el"
-                           :files (:defaults (:exclude "helm-bufler.el"))))
-#+end_src
-
-#+begin_src emacs-lisp
-
-;;*** Bufler
-(use-package bufler)
-
-(add-hook 'doom-init-ui-hook
-          (lambda () ;;(global-tab-line-mode +1)
-            (map! :map ctl-x-map
-                  :desc "Bufler List"
-                  "C-b" #'bufler-list)
-            (bufler-mode +1)
-            ;(bufler-tabs-mode +1)
-            ))
-#+end_src
-
-*** Dogears
-
-#+begin_src emacs-lisp :tangle ./packages.el
-;;*** Dogears
-(package! dogears :recipe (:host github
-                           :repo "alphapapa/dogears.el"
-                           :files (:defaults (:exclude "helm-dogears.el"))))
-#+end_src
-
-#+begin_src emacs-lisp
-
-;;*** Dogears
-(use-package! dogears
-  :config (map! :prefix "M-g"
-                "d" #'dogears-go
-                "M-b" #'dogears-back
-                "M-f" #'dogears-forward
-                "M-d" #'dogears-list
-                "M-D" #'dogears-sidebar))
-
-(add-hook 'doom-init-ui-hook
-          (lambda ()
-            (dogears-mode)))
-#+end_src
-
-*** Treemacs
-
-This is too much for me. Also I have a bug where editing a buffer name makes the
-UI element unclickable ... so you can never close it. IDK. The config is still
-here in case I change my mind.
-
-Set a default width for treemacs & disable filewatch unless needed
-
-#+begin_src emacs-lisp :tangle no
-
-;;*** Treemacs
-(after! treemacs
-  (setq treemacs-width 24)
-  (treemacs-filewatch-mode -1))
-#+end_src
-
-Key bindings ([[https://github.com/sei40kr/spacemacs.d/blob/master/treemacs-custom.el][treemacs example in spacemacs]])
-
-#+begin_src emacs-lisp :tangle no
-
-(map! :map treemacs-mode-map :after treemacs
-      (:prefix "o" :desc "Tags" "t" 'treemacs-toggle-node-prefer-tag-visit))
-#+end_src
-
-It is possible to make the Treemacs window draggable by default with ~(setq
-treemacs--width-is-locked nil)~ on startup, which i finally figured out
-(immediately before finally discovering ~(balance-windows)~ which maximizes the
-treemacs width if it's not fixed.....)
-
-**** All The Icons
-
-#+begin_src emacs-lisp :tangle no
-(package! treemacs-all-the-icons)
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-(use-package! treemacs-all-the-icons)
-
-(add-hook 'doom-init-ui-hook
-          (lambda () (treemacs-load-theme "Default")))
-#+End_src
-
-*** which-key
-
-shorten the delay (from luca)
-
-#+begin_src emacs-lisp
-
-;;*** Which Key
-(after! which-key
-    (setq which-key-idle-delay 1.0))
-#+end_src
-
 *** Modeline
 
-Customize [[https://github.com/seagle0128/doom-modeline][doom-modeline]]
-
-#+begin_src emacs-lisp
-(setq +modeline-height 31)
-#+end_src
-
-Configure Diminish
-
-#+begin_src emacs-lisp
-(use-package! diminish
- :ensure t)
-#+end_src
+**** TODO Customize [[https://github.com/seagle0128/doom-modeline][doom-modeline]]
 
 **** TODO configure :diminish on other modes/packages
 + [ ] how to do this on packages loaded by doom?
 
 *** UI Alerts
-
-UI Alerts
-
-#+begin_src emacs-lisp
-
-;;*** UI Alerts
-(setq visible-bell t)
-
-;;**** Beacon
-;; (use-package! beacon
-;;   :diminish beacon-mode
-;;   :init (beacon-mode)
-;;   :config (map! :leader
-;;                 "tB" :desc "Beacon Mode"))
-
-;;**** Dimmer
-(use-package! dimmer
-  :config (progn  (setq dimmer-adjustment-mode :background
-                        dimmer-fraction 0.05)
-                  (map! :leader
-                        "tD" :desc "Dimmer Mode"))
-
-  (dimmer-configure-company-box)
-  (dimmer-configure-magit)
-  (dimmer-configure-org)
-  (dimmer-configure-hydra)
-  (dimmer-configure-which-key)
-  (dimmer-configure-posframe))
-
-(add-hook 'doom-init-ui-hook (lambda () (dimmer-mode)))
-#+end_src
 
 **** Nav Flash
 
@@ -645,40 +585,22 @@ Use burly for bookmarking loaded window configurations.
 
 These are simply bookmarks and thus can be reached from the doom startup menu.
 
-#+begin_src emacs-lisp
-
-;;*** Window & Frames
-(use-package! burly
-  :config (map! :leader
-                (:prefix ("w" . "workspaces/windows")
-                 (:prefix ("B" . "Burly bookmarks")
-                  :desc "Restore windows/frames" "o" #'burly-open-bookmark
-                  :desc "Open Burly URL" "O" #'burly-open-url
-                  :desc "Bookmark Windows" "w" #'burly-bookmark-windows
-                  :desc "Bookmark Frameset" "f" #'burly-bookmark-frames
-                  :desc "Copy Buffer URL" "B" #'burly-kill-buffer-url
-                  :desc "Copy Window URL" "F" #'burly-kill-frames-url
-                  :desc "Copy Frameset URL" "W" #'burly-kill-windows-url))))
-#+end_src
-
-*** Line Numbers
-
-This determines the style of line numbers.
-
-#+begin_src emacs-lisp
-
-;;*** Line Numbers
-;; For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type nil)
-#+end_src
+**** TODO after ui load, ensure that the default configured burly bookmarks exist
 
 ** EDITOR
 
+Packages
+
 #+begin_src emacs-lisp :tangle ./packages.el
+
 ;;** EDITOR
+
 (package! origami)
 (package! centered-cursor-mode)
+
 #+end_src
+
+Configs
 
 #+begin_src emacs-lisp
 
@@ -693,18 +615,9 @@ This determines the style of line numbers.
 ;;*** Doom File Templates
 ;; TODO add new file templates to +file-template-alist where needed
 ;; - use set-file-template!
-#+end_src
 
-*** Auto Insert Mode
+;;*** Code Folding
 
-[[https://www.gnu.org/software/emacs/manual/html_mono/autotype.html#Autoinserting][Auto Insert Mode]] creates headers at the tops of files automatically. This can automatically insert =;; -*- file-local-variables: values -*-= in a header comment.
-
-- auto-insert-alist :: a mapping of file types to auto-insertion behavior
-- auto-insert-query :: controls whether to prompt user
-
-*** Origami Mode
-
-#+begin_src emacs-lisp
 (use-package! origami
   :config (map! :map origami-mode-map
                 :prefix "C-c C-f"
@@ -733,33 +646,33 @@ This determines the style of line numbers.
 
         )
 
-(add-hook 'doom-init-ui-hook (lambda () (global-origami-mode +1)))
-#+end_src
+(add-hook 'doom-init-ui-hook
+          #'global-origami-mode)
 
-*** Centered Cursor Mode
+;;*** centered-cursor-mode
 
-Scroll lock can emulate this.
+(use-package! centered-cursor-mode      ;: defer t
+  :config (map! :leader
+                :desc "Toggle Centered Cursor" "t-" #'dc/toggle-global-centered-cursor-mode
+                :desc "Toggle Centered Cursor" "t_" #'dc/toggle-centered-cursor-mode))
 
-#+begin_src emacs-lisp
-(use-package! centered-cursor-mode ;: defer t
-  :config (map! :leader :desc "Toggle Centered Cursor"
-                "t-" (λ! () (interactive) (centered-cursor-mode 'toggle))))
+(defun dc/toggle-centered-cursor-mode ()
+  "Toggle centered-cursor-mode"
+  (interactive)
+  (centered-cursor-mode 'toggle))
 
-;; NOTE now i have to remember how to turn it off everytime i start emacs
-(add-hook 'doom-init-ui-hook (lambda () (centered-cursor-mode)))
-#+end_src
+(defun dc/toggle-global-centered-cursor-mode ()
+  "Toggle centered-cursor-mode"
+  (interactive)
+  (global-centered-cursor-mode 'toggle))
 
-*** Snippets
+;; TODO try global-centered-cursor-mode by default
+;; (mostly to remind myself that it exists
+(add-hook 'doom-init-ui-hook
+          #'global-centered-cursor-mode)
 
-+ Yasnippets Docs
-  - [[https://joaotavora.github.io/yasnippet/snippet-development.html][Writing Snippets]]
-  - [[https://joaotavora.github.io/yasnippet/snippet-expansion.html][Explanding Snippets]]
+;;*** Snippets
 
-**** Yasnippet-snippets
-
-Use =yas/describe-tables= to list snippets that match a modeset.
-
-#+begin_src emacs-lisp
 (setq dc/snippets (expand-file-name (concat doom-private-dir "snippets")))
 
 (eval-after-load 'yasnippet
@@ -767,38 +680,65 @@ Use =yas/describe-tables= to list snippets that match a modeset.
     (add-to-list 'yas-snippet-dirs 'dc/snippets)
     (message "loading dc/snippets")
     (yas-load-directory dc/snippets t)))
+
 #+end_src
+
+*** Auto Insert Mode
+
+[[https://www.gnu.org/software/emacs/manual/html_mono/autotype.html#Autoinserting][Auto Insert Mode]] creates headers at the tops of files automatically. This can automatically insert =;; -*- file-local-variables: values -*-= in a header comment.
+
+- auto-insert-alist :: a mapping of file types to auto-insertion behavior
+- auto-insert-query :: controls whether to prompt user
+
+*** Snippets
+
++ Yasnippets Docs
+  - [[https://joaotavora.github.io/yasnippet/snippet-development.html][Writing Snippets]]
+  - [[https://joaotavora.github.io/yasnippet/snippet-expansion.html][Explanding Snippets]]
+
++ Use =yas/describe-tables= to list snippets that match a modeset.
 
 ** EMACS
 
+Packages
+
 #+begin_src emacs-lisp :tangle ./packages.el
+
 ;;** EMACS
+
+#+end_src
+
+Config
+
+#+begin_src emacs-lisp
+
+;;** EMACS
+
+;;*** GPG
+
+;; (setq auth-sources '("~/.authinfo" "~/.authinfo.gpg" "~/.netrc"))
+;; (setq auth-sources (append `(,(concat (file-name-as-directory (getenv "DF_")) ".ectorepo.gpg")) auth-sources))
+
+;;*** DIRED
+(setq dired-omit-files "^.DS_Store\\'\\|^.project\\(?:ile\\)?\\'\\|^.\\(svn\\)\\'\\|^.ccls-cache\\'\\|\\(?:\\.js\\)?\\.meta\\'\\|\\.\\(?:elc\\|o\\|pyo\\|swp\\|class\\)\\'")
+
+;; Remove `.` and `..` from list of omitted file patterns
+;; (so i can always run commands on the directory)
+(map! (:map dired-mode-map
+       ;; godammit don't close all the fucking dired buffers
+       "q" #'find-name-dired
+
+       ;; ... but potentially a good idea with TRAMP ... maybe?)
+       :leader :desc "Close all direds" "Q" #'+dired/quit-all))
+
 #+end_src
 
 *** AUTH
 
-#+BEGIN_SRC emacs-lisp
-;; (setq auth-sources '("~/.authinfo" "~/.authinfo.gpg" "~/.netrc"))
-;; (setq auth-sources (append `(,(concat (file-name-as-directory (getenv "DF_")) ".ectorepo.gpg")) auth-sources))
-#+END_SRC
-
 *** DIRED
 
-Remove `.` and `..` from list of omitted file patterns (so i can always run
-commands on the directory). Also `M-!` will run commands on the dir without
+ Also `M-!` will run commands on the dir without
 parameterizing a subdir.
-
-#+begin_src emacs-lisp
-(setq dired-omit-files "^.DS_Store\\'\\|^.project\\(?:ile\\)?\\'\\|^.\\(svn\\)\\'\\|^.ccls-cache\\'\\|\\(?:\\.js\\)?\\.meta\\'\\|\\.\\(?:elc\\|o\\|pyo\\|swp\\|class\\)\\'")
-#+end_src
-
-I'm transitioning to dired and consistently killing all my dired buffers with
-=q= ... I'm remapping this for now.
-
-#+begin_src emacs-lisp
-(map! (:map dired-mode-map
-       "q" #'find-name-dired))
-#+end_src
 
 This is default & I'd rather adjust to it. In the future, I may address this by:
 
@@ -809,19 +749,48 @@ This is default & I'd rather adjust to it. In the future, I may address this by:
 
 ** TERM
 
-#+begin_src emacs-lisp :tangle ./packages.el
-;;** TERM
-#+end_src
-** CHECKERS
+Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
+
+;;** TERM
+
+#+end_src
+
+Configs
+
+#+begin_src emacs-lisp
+
+;;** TERM
+
+#+end_src
+
+** CHECKERS
+
+Packages
+
+#+begin_src emacs-lisp :tangle ./packages.el
+
 ;;** CHECKERS
+
+#+end_src
+
+Configs
+
+#+begin_src emacs-lisp
+
+;;** CHECKERS
+
 #+end_src
 
 ** TOOLS
 
+Packages
+
 #+begin_src emacs-lisp :tangle ./packages.el
+
 ;;** TOOLS
+
 (package! info-colors)
 (package! tldr)
 (package! magit-tbdiff)
@@ -838,133 +807,101 @@ This is default & I'd rather adjust to it. In the future, I may address this by:
 ;; TODO ssh-agency
 ;; TODO ssh-tunnels
 (package! salt-mode)
+
 #+end_src
 
-*** Info
-
-test with emacs manual =C-h R=
+Configs
 
 #+begin_src emacs-lisp
+;;** TOOLS
+
+;;*** INFO
 (use-package! info-colors)
-#+end_src
 
-**** TODO test =info-colors= or modularize
-
-*** TLDR
-
-#+begin_src emacs-lisp
+;;*** TLDR
 (use-package! tldr
-  :config (map! :leader
-                "T" #'tldr))
-#+end_src
+  :config (map! :leader "T" #'tldr))
 
-*** Diff and Ediff
-
-*** Git
+;;*** EDIFF
 
 
-*** Magit
+;;*** GIT
 
-[[https://github.com/magit/magit-tbdiff][magit-tbdiff]] show diffs over ranges of commits
-
-#+begin_src emacs-lisp
+;;*** MAGIT
+;; magit-tbdiff: diff over ranges of commits
 (use-package! magit-tbdiff)
-#+end_src
 
-**** TODO: configure =magit-repository-directories=
-+ see =hlissner= config & others
+;;*** FORGE
 
 
-*** Github
+;;*** GITHUB
 
-*** Repo
 
-#+begin_src emacs-lisp
+;;*** REPO
 (use-package! repo)
-#+end_src
 
-*** Shell
 
-[[https://depp.brause.cc/firestarter][Firestarter]] enables =./.dir-local.el= variables and file-local declarations to
-config/control on-save shell tasks.[fn:haozeke]
-
-#+begin_src emacs-lisp
+;;*** SHELL
+;; enables =./.dir-local.el= variables and file-local declarations to
+;; config/control on-save shell tasks.[fn:haozeke]
 (use-package! firestarter
   :init (firestarter-mode)
   :config (setq firestarter-default-type t))
-#+end_src
 
-*** Tramp
 
-#+begin_src emacs-lisp
+;;*** TRAMP
 (after! tramp
   (appendq! tramp-remote-path
             '("~/.guix-profile/bin" "~/.guix-profile/sbin"
               "/run/current-system/profile/bin"
               "/run/current-system/profile/sbin")))
-#+end_src
 
-*** Guix
-
-#+begin_src emacs-lisp
+;;*** GUIX
 (use-package! guix
-  :config (map! :leader
-                "g" #'guix))
-#+end_src
+  :config (map! :leader "g" #'guix))
 
-*** SystemD
-
-*** Archlinux
-
-**** PKGBUILD Mode
-
-#+begin_src emacs-lisp
+;;*** PKGBUILD (arch)
 (use-package! pkgbuild-mode :mode "\\PKGBUILD")
-#+end_src
 
-**** Crontab Mode
-
-[[0    Link: https://github.com/emacs-pe/crontab-mode][crontab-mode]]
-
-#+begin_src emacs-lisp
+;;*** CRON
 (use-package! crontab-mode)
-#+end_src
 
-***** TODO test crontab-mode :testpackage:
+;;*** SSH
+;; For =ssh-config-mode= add this file-local variable to configs
+;; =# -*- mode: ssh-config -*-=
 
-*** Ken Kesey
-
-[[https://github.com/jhgorrell/ssh-config-mode-el][ssh-config-mode]] and [[https://github.com/jobbflykt/x509-mode][x509-mode]]
-
-For =ssh-config-mode= add this file-local variable to configs =# -*- mode:
-ssh-config -*-=
-
-#+begin_src emacs-lisp
 (use-package! ssh-config-mode)
+
+;; TODO ssh-agency
+;; TODO ssh-tunnels
+
+;;*** X.509 certs
 (use-package! x509-mode)
-#+end_src
 
-+ [ ] ssh-agency
-+ [ ] ssh-tunnels (hmmmm)
-
-*** Docker
-
-To use what the Doom module configures, install =docker=, =docker-compose= and =docker-machine=. for
-
-The [[file:~/.emacs.d/modules/tools/docker/config.el][doom config file]] looks a little sparse, so the config must be partially
-composed in and installed in other module config.el files. Actually, now that I
-checked, most of the =docker*= features are being loaded into emacs with some
-(e.g. docker-compose-*) being loaded as needed.
-
-#+begin_src emacs-lisp
+;;*** DOCKER
 (use-package! docker
   :config (setq docker-run-as-root t
                 docker-image-run-arguments '("-i" "-t" "--rm")))
 
-;; so the ## -*- docker-image-name: "image-name" -*- directive works with ~dockerfile-mode~
-;; TODO assess
-(put 'dockerfile-image-name 'safe-local-variable #'stringp)
+;; TODO assess autoloading -*- docker-image-name: "image-name" -*-
+;; (put 'dockerfile-image-name 'safe-local-variable #'stringp)
+
+;;**** LSP DOCKER
+;; this requires pulling emacslisp/lsp-docker-full
+
+;;*** SALTSTACK
+;; NOTE i'm not really using salt
+;; (use-package! salt-mode)
+
+;;*** AST
 #+end_src
+
+*** Guix
+
++ [[https://github.com/jhgorrell/ssh-config-mode-el][ssh-config-mode]]
++ [[https://github.com/jobbflykt/x509-mode][x509-mode]]
+
+*** Docker
 
 **** [[https://github.com/emacs-lsp/lsp-docker][LSP Docker]] (requires pulling =emacslsp/lsp-docker-full= image)
 
@@ -977,52 +914,30 @@ controlled configuration. e.g. when you want:
 
 (not really sure how this works with branching or git worktrees)
 
-***** TODO configure lsp-docker
-+ probably when i'm working on Krita
-
-**** TODO setup =C-c d= as a "devops" prefix, remap =C-c d d= to =docker=
-
-*** Kubernetes
-
-**** TODO setup kubernetes.el :doom:devops:packages:
-**** TODO evaluate ~kubectl~ package :doom:devops:packages:
-
 **** Kubernetes
 + [ ] kubernetes.el
 + [ ] [[https://github.com/gruggiero/kubernetes-tramp][kubernetes-tramp]]
 + [ ] [[https://github.com/TxGVNN/emacs-k8s-mode][k8s-mode]] (kubernetes file support + snippets)
 
-*** SaltStack
+** LSP
 
-From HaoZeke[fn:haozeke]
+Packages
 
-#+begin_src emacs-lisp
-(use-package salt-mode)
+#+begin_src emacs-lisp :tangle ./packages.el
+
+;;** LSP
+
 #+end_src
 
-**** TODO Need to check config
-
-
-*** AST & Metaprogramming
-
-+ [ ] [[https://github.com/ubolonton/emacs-tree-sitter][tree-sitter-mode]]
-  - install packages
-  - add config
-  - document setup
-  - consider setting up as a module
-+ [ ] [[https://github.com/countvajhula/symex.el][symex]]
-
-**** TODO configure bindings & control when these are activated
-
-*** LSP Mode
-
-**** TODO work out lsp/eldoc interactions
-
-**** TODO setup =lsp-origami=
-
-*** LSP UI
+Configs
 
 #+begin_src emacs-lisp
+
+;;** LSP
+
+;;*** LSP MODE
+
+;;*** LSP UI
 (setq lsp-ui-peek-list-width 25
       ;; lsp-ui-sideline--last-width
 
@@ -1031,7 +946,17 @@ From HaoZeke[fn:haozeke]
       ;; lsp-ui-doc--inline-width
 
       lsp-ui-imenu-window-width 25)
+
 #+end_src
+
+*** LSP Mode
+
+**** TODO work out lsp/eldoc interactions
+**** TODO setup =lsp-origami=
+**** TODO setup key prefix for LSP
++ something like =f5= through =f9=
+
+*** LSP UI
 
 **** TODO setup popup rules for LSP :lsp:
 + Left
@@ -1041,15 +966,22 @@ From HaoZeke[fn:haozeke]
 + Bottom
   + [ ] =lsp-performance*=
 
-**** TODO setup key prefix for LSP
-+ something like =f5= through =f9=
-
-*** Emacs Packages
-
 ** OS
 
+Packages
+
 #+begin_src emacs-lisp :tangle ./packages.el
+
 ;;** OS
+
+#+end_src
+
+Configs
+
+#+begin_src emacs-lisp
+
+;;** OS
+
 #+end_src
 
 *** Terminal
@@ -1066,10 +998,12 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
 
         )
 
-(add-hook 'xterm-mouse-mode)
+;; (add-hook 'xterm-mouse-mode)
 #+end_src
 
 ** ORG
+
+Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
 ;;** ORG
@@ -1082,6 +1016,8 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
 (package! org-ql)
 (package! org-sidebar)
 #+end_src
+
+Configs
 
 #+begin_src emacs-lisp
 ;;** ORG
@@ -1309,7 +1245,10 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
        :leader
        :prefix ("nr" . "org-roam")
        "T" #'dc/org-roam-toggle-open-buffer-on-find-file
+
+       ;; this is a nice way to explore a sparse space though
        "a" #'org-roam-node-random
+
        "D" #'org-roam-demote-entire-buffer
        "i" #'dw/org-roam-insert-immediate
        "I" #'org-roam-insert-node
@@ -1358,10 +1297,7 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
       :desc "Toggle Org Narrow" "T" #'org-toggle-narrow-to-subtree
       :desc "Toggle Org Treeusage" "U" #'org-treeusage-mode)
 
-
 #+end_src
-
-**** TODO configure =org-toggle-sidebar
 
 *** Mime types [fn:tecosaur]
 Org mode isn't recognised as it's own mime type by default, but that can easily
@@ -1393,8 +1329,12 @@ xdg-mime default emacs.desktop text/org
 
 ** LANG
 
+Packages
+
 #+begin_src emacs-lisp :tangle ./packages.el
+
 ;;** LANG
+
 (package! elisp-depmap
   :recipe (:host gitlab :repo "mtekman/elisp-depmap.el"))
 (package! zprint-mode)
@@ -1409,21 +1349,87 @@ xdg-mime default emacs.desktop text/org
 (package! ob-graphql)
 #+end_src
 
-*** ELISP :elisp:
-
-**** [[https://gitlab.com/mtekman/elisp-depmap.el][Elisp Depmap]]
-
-Can be babel'd to generate graphviz pdf's of elisp libraries
+Configs
 
 #+begin_src emacs-lisp
+
+;;** LANG
+
+;;*** ELISP
 (use-package! elisp-depmap
   :bind (("C-c M-d" . elisp-depmap-graphviz-digraph)
          ("C-c M-g" . elisp-depmap-graphviz)
          ("C-c M-s" . elisp-depmap-makesummarytable))
   :config (setq elisp-depmap-exec-file (getenv "GRAPHVIZ_DOT")))
+
+;;*** LATEX
+
+;;*** CLOJURE
+(add-hook 'clojure-mode-hook 'zprint-mode)
+(add-hook 'clojurescript-mode-hook 'zprint-mode)
+
+;;**** LSP (clojure)
+
+;;**** CIDER
+(add-hook 'cider-mode-hook #'clj-refactor-mode)
+(setq org-babel-clojure-backend 'cider)
+
+;;*** JULIA
+(let ((julia-depot-path
+       (car (split-string (getenv "JULIA_DEPOT_PATH") (path-separator)))))
+  (setq lsp-julia-package-dir nil
+        lsp-julia-default-environment
+        (concat (file-name-as-directory julia-depot-path)
+                "environments/v1.6")))
+
+;;**** LSP (julia)
+
+;;*** XML
+
+;;*** C++
+
+;;**** DOXYGEN
+(use-package! highlight-doxygen
+  :hook ((c-mode c++-mode) . highlight-doxygen-mode))
+
+;;**** FILES
+(setq auto-mode-alist (append '(
+                                ("\\.C$" . c++-mode)
+                                ("\\.cc$" . c++-mode)
+                                ("\\.cpp$" . c++-mode)
+                                ("\\.inl$" . c++-mode)
+                                ("\\.H$" . c++-mode)
+                                ("\\.hh$" . c++-mode)
+                                ("\\.hpp$" . c++-mode)
+                                )
+                              auto-mode-alist))
+
+;;*** ARDUINO
+;; (use-package! arduino-mode
+;;   :hook ((arduino-mode . flycheck-arduino-setup)))
+;; (add-hook 'arduino-mode-hook #'flycheck-arduino-setup)
+
+
+;;*** SPICE
+
+;;*** OPEN API
+(use-package! openapi-yaml-mode)
+
+;;*** RESTCLIENT
+
+
+;;*** GRAPHQL
+(use-package! graphql)
+(use-package! graphql-mode)
+(use-package! ob-graphql)
+
 #+end_src
 
-[[file:img/dot/eg-depmap.png]]
+*** ELISP :elisp:
+
+**** [[https://gitlab.com/mtekman/elisp-depmap.el][Elisp Depmap]]
+
+Can be babel'd to generate graphviz pdf's of elisp libraries
 
 *** LATEX :latex:
 
@@ -1431,26 +1437,9 @@ Apparently, [[https://mirror.aarnet.edu.au/pub/CTAN/systems/knuth/dist/tex/tex.w
 programming code written by Knuth in Pascal/TeX; via Hsin Haoyu[fn:hsinhaoyu]
 
 *** CLOJURE :clojure:
-
-+ [[https://github.com/pesterhazy/zprint-mode.el][zprint-mode]]
-
-#+begin_src emacs-lisp
-(add-hook 'clojure-mode-hook 'zprint-mode)
-(add-hook 'clojurescript-mode-hook 'zprint-mode)
-#+end_src
-
 **** LSP (Clojure)
 
-*** SCHEME :scheme:
-
-
-*** CIDER
-
-#+begin_src emacs-lisp
-(add-hook 'cider-mode-hook #'clj-refactor-mode)
-
-(setq org-babel-clojure-backend 'cider)
-#+end_src
+*** CIDER :cider:
 
 **** CIDER tips:
 + Discover cider commands with =C-c C-x x= from within CIDER.
@@ -1467,24 +1456,13 @@ programming code written by Knuth in Pascal/TeX; via Hsin Haoyu[fn:hsinhaoyu]
 + cider-repl-display-help-banner nil
 + [[file:~/.emacs.d/modules/lang/clojure/config.el][Doom Defaults]]
 
+*** SCHEME :scheme:
+
 *** XML :xml:
-
-
 
 *** JULIA :julia:
 
-Requires using a =:session= variable to track the results/evaluations of blocks
-
-
-**** LSP (julia)
-
-#+begin_src emacs-lisp
-(let ((julia-depot-path (car (split-string (getenv "JULIA_DEPOT_PATH") (path-separator)))))
-  (setq lsp-julia-package-dir nil
-        lsp-julia-default-environment
-        (concat (file-name-as-directory julia-depot-path)
-                "environments/v1.6")))
-#+end_src
+Requires using a =:session= variable to track the results/evaluations of blocks.
 
 *** PLANTUML :plantuml:
 
@@ -1509,7 +1487,6 @@ digraph {
         C ->    A;}
 #+end_src
 
-
 #+RESULTS:
 [[file:img/dot/dot_test.png]]
 
@@ -1519,46 +1496,13 @@ digraph {
 
 *** C++ :cpp:
 
-**** Doxygen Support
-
-Doxygen for c/cpp [fn:haozeke]
-
-#+begin_src emacs-lisp
-(use-package! highlight-doxygen
-  :hook ((c-mode c++-mode) . highlight-doxygen-mode))
-#+end_src
-
-**** More Files
-#+begin_src emacs-lisp
-;; from HaoZeke/dotdoom
-(setq auto-mode-alist (append '(
-                                ("\\.C$" . c++-mode)
-                                ("\\.cc$" . c++-mode)
-                                ("\\.cpp$" . c++-mode)
-                                ("\\.inl$" . c++-mode)
-                                ("\\.H$" . c++-mode)
-                                ("\\.hh$" . c++-mode)
-                                ("\\.hpp$" . c++-mode)
-                                )
-                              auto-mode-alist))
-#+end_src
-
 *** ARDUINO :arduino:
 
-+ [[https://github.com/stardiviner/arduino-mode/https://github.com/stardiviner/arduino-mode/][Arduino Mode]] offers flycheck & org-babel
 + [[https://github.com/motform/arduino-cli-mode][Arduino CLI Mode]] cli only
-
-#+begin_src emacs-lisp
-;; (use-package! arduino-mode
-;;   :hook ((arduino-mode . flycheck-arduino-setup)))
-;; (add-hook 'arduino-mode-hook #'flycheck-arduino-setup)
-#+end_src
++ [[https://github.com/stardiviner/arduino-mode/https://github.com/stardiviner/arduino-mode/][Arduino Mode]] offers flycheck & org-babel
+  - It's gone :(
 
 *** OPEN API :swagger:
-
-#+begin_src emacs-lisp
-(use-package! openapi-yaml-mode)
-#+end_src
 
 **** TODO test openapi-yaml-mode (should apply to files starting with =openapi-yaml-*.yaml=) :testpackage:
 
@@ -1578,14 +1522,6 @@ GET https://google.com/robots.txt
 + [[https://github.com/vermiculus/graphql.el][graphql]]
 + [[https://github.com/davazp/graphql-mode][graphql-mode]]
 + [[https://github.com/jdormit/ob-graphql][ob-graphql]]
-
-#+begin_src emacs-lisp
-(use-package! graphql)
-(use-package! graphql-mode)
-(use-package! ob-graphql)
-#+end_src
-
-**** Test =ob-graphql=:
 
 #+begin_src graphql :tangle no :url https://countries.trevorblades.com
 query GetContinents {
@@ -1614,6 +1550,7 @@ working first, then have a look at the [[http://ngspice.sourceforge.net/docs/ngs
 + Emacs Packages
   - [[https://github.com/stardiviner/spice-mode][spice-mode]]
   - [[https://github.com/stardiviner/ob-spice][ob-spice]]
+    - upstream is also gone :(
 
 **** Setup for =spice-mode=
 
@@ -1667,19 +1604,20 @@ gnuplot img/spice/spice-example v(in) v(out) v(inn)
 
 ** BABEL
 
+Packages
+
 #+begin_src emacs-lisp :tangle ./packages.el
+
 ;;** BABEL
+
 #+end_src
 
-+ doom handles most of this stuff in [[file:~/.emacs.d/modules/lang/org/config.el::defun +org-init-babel-lazy-loader-h (][+org-init-babel-lazy-loader-h]]
-  - =org-src-lang-modes= maps org-babel keys to modes (=-mode= suffix)
-  - =org-babel-load-languages= describes language blocks types permitted to run
-  - is the var =org-confirm-babel-evaluate= still in tact?
-
-*** org-babel
-Load general org-babel config after defining languages
+Configs
 
 #+begin_src emacs-lisp
+
+;;** BABEL
+
 (after! org
   (setq org-babel-load-languages
         (append org-babel-load-languages
@@ -1691,15 +1629,29 @@ Load general org-babel config after defining languages
    org-babel-load-languages))
 (org-babel-make-language-alias "julia" "julia-vterm")
 
+#+end_src
+
++ doom handles most of this stuff in [[file:~/.emacs.d/modules/lang/org/config.el::defun +org-init-babel-lazy-loader-h (][+org-init-babel-lazy-loader-h]]
+  - =org-src-lang-modes= maps org-babel keys to modes (=-mode= suffix)
+  - =org-babel-load-languages= describes language blocks types permitted to run
+  - is the var =org-confirm-babel-evaluate= still in tact?
+
+*** org-babel
+Load general org-babel config after defining languages
+
+#+begin_example emacs-lisp
+
 ;; this is insufficient as make-language-alias remaps a few other symbols
 ;; (defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
-#+end_src
+
+#+end_example
 
 **** TODO ensure the above is necessary with =+org-init-babel-lazy-loader-h=
 
 *** ob-async
 
 doesn't support session (see tecosaur's notes)
+
 *** [[https://github.com/krisajenkins/ob-translate][ob-translate]]
 
 For someone who owns a ton of original langauge and interlinear/bilingual books,
@@ -1710,13 +1662,18 @@ collections or my italian copy of Foucault's Pendulum -- both of which are far
 superior when the etymological connections are left in tact.
 
 #+begin_src emacs-lisp :tangle ./packages.el
+
+;;*** ob-translate
 (package! google-translate)
 (package! ob-translate)
+
 #+end_src
 
 Config google-translate.el ([[https://github.com/atykhonov/google-translate/issues/137][fix for TKK errors]])
 
 #+begin_src emacs-lisp
+
+;;*** ob-translate
 (use-package! google-translate :demand t
   :init (require 'google-translate)
   :functions (my-google-translate-at-point google-translate--search-tkk)
@@ -1765,21 +1722,56 @@ Extra Sensory Perception
 After finding that a package was fetching unicorns with http requests (and
 failing), i'd like to know a little more about what is going on here.
 
+Package
+
 #+begin_src emacs-lisp :tangle ./packages.el
+
 ;;** FIREWALL
+
 #+end_src
 
+Configs
+
+#+begin_src emacs-lisp
+
+;;** FIREWALL
+
+#+end_src
 
 ** EMAIL
 
+Packages
+
 #+begin_src emacs-lisp :tangle ./packages.el
+
 ;;** EMAIL
+
+#+end_src
+
+Configs
+
+#+begin_src emacs-lisp
+
+;;** EMAIL
+
 #+end_src
 
 ** APP
 
+Packages
+
 #+begin_src emacs-lisp :tangle ./packages.el
+
 ;;** APP
+
+#+end_src
+
+Configs
+
+#+begin_src emacs-lisp
+
+;;** APP
+
 #+end_src
 
 *** Packages to Evaluate (App)
@@ -1789,49 +1781,68 @@ failing), i'd like to know a little more about what is going on here.
 
 ** CONFIG
 
-Misc config goes here
+Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
+
 ;;** CONFIG
 (package! prism)
+
 #+end_src
 
-*** Prism.el
-
-Use doom colors for theme and toggle with =:leader tP=
+Configs
 
 #+begin_src emacs-lisp
+
+;;** CONFIG
+
+;;*** Prism
+(defun dc/prism-get-modus-colors ()
+  "get modus colors for prism"
+  (-map (lambda (c) (cdr (assq c modus-themes-vivendi-colors)))
+        '(red blue-alt-other-faint green magenta cyan-alt-other blue orange-intense
+              green-alt-other-faint purple-intense yellow-intense)))
+
+(defun dc/prism-get-doom-colors ()
+  "get doom colors which will return nil and result in the 'emacs config from hell',
+   which prevents lispy-mode (and many moooore) and ALSO deletes the results of the
+   C-c ' blocks"
+  (-map #'doom-color '(red teal green magenta cyan blue orange
+                           dark-cyan violet yellow)))
+
 (use-package! prism
   :hook ((emacs-lisp-mode . prism-mode)
          (clojure-mode . prism-mode)
          (clojurescript-mode . prism-mode)
          (common-lisp-mode . prism-mode)
          (scheme-mode . prism-mode))
-  :config (map! :leader :desc "Toggle Prism"
-                "tP" (lambda () (interactive) (prism-mode 'toggle)))
+  :config (map! :leader :desc "Toggle Prism" "tP"
+                (lambda () (interactive) (prism-mode 'toggle)))
 
-  (prism-set-colors :lightens '(0 5 10) :desaturations '(-2.5 0 2.5)
-    :colors (-map #'doom-color
-                  '(red teal green magenta cyan blue orange dark-cyan violet yellow)))
-                  ;; options: red orange green teal yellow blue dark blue magenta violet cyan dark cyan
-  )
+  (prism-set-colors
+   :lightens '(0 5 10)
+   :desaturations '(-2.5 0 2.5)
+   :colors (dc/prism-get-modus-colors)))
+
+;;*** Rainbow Mode
+
+(map! :leader :desc "Toggle Rainbow Mode" "tR"
+      (lambda () (interactive) (rainbow-mode 'toggle)))
+
+;; TODO fix to autoload rainbow-mode in doom theme files (setq
+;; auto-minor-mode-alist (append '(("theme\\.el$" . rainbow-mode))
+;; auto-minor-mode-alist))
 #+end_src
+
+*** Prism.el
 
 *** Rainbow Mode
-
-#+begin_src emacs-lisp
-(map! :leader :desc "Toggle Rainbow Mode"
-      "tR" (lambda () (interactive) (rainbow-mode 'toggle)))
-
-
-;; TODO fix to autoload rainbow-mode in doom theme files
-;; (setq auto-minor-mode-alist (append '(("theme\\.el$" . rainbow-mode))
-                                    ;; auto-minor-mode-alist))
-#+end_src
 
 **** TODO customize doom [[file:~/.emacs.d/modules/tools/rgb/README.org::*Features][rainbow module]]
 
 ** HYDRAS
+
+Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
 
@@ -1839,12 +1850,15 @@ Use doom colors for theme and toggle with =:leader tP=
 
 #+end_src
 
+Configs
+
 #+begin_src emacs-lisp
 
 ;;** HYDRAS
 
-(load-file (expand-file-name (concat (file-name-as-directory (getenv "DOOMDIR"))
-                                     "scripts/hydras.el")))
+;; (load-file (expand-file-name
+;;             (concat (file-name-as-directory (getenv "DOOMDIR"))
+;;                     "scripts/hydras.el")))
 #+end_src
 
 

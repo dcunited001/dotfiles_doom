@@ -11,6 +11,7 @@
 
 ;; [[file:config.org::*UI][UI:1]]
 ;;** UI
+
 (package! diminish)
 (package! auto-highlight-symbol)
 (package! bufler :recipe (:host github
@@ -22,25 +23,24 @@
 
 (package! dimmer)
 ;; (package! beacon)
+
+
+
+;;*** Alphapapa
 (package! burly)
+(package! bufler
+  :recipe (:host github
+           :repo "alphapapa/bufler.el"
+           :files (:defaults (:exclude "helm-bufler.el"))))
+(package! dogears
+  :recipe (:host github
+           :repo "alphapapa/dogears.el"
+           :files (:defaults (:exclude "helm-dogears.el"))))
 ;; UI:1 ends here
-
-;; [[file:config.org::*Bufler][Bufler:1]]
-;;*** Bufler
-(package! bufler :recipe (:host github
-                           :repo "alphapapa/bufler.el"
-                           :files (:defaults (:exclude "helm-bufler.el"))))
-;; Bufler:1 ends here
-
-;; [[file:config.org::*Dogears][Dogears:1]]
-;;*** Dogears
-(package! dogears :recipe (:host github
-                           :repo "alphapapa/dogears.el"
-                           :files (:defaults (:exclude "helm-dogears.el"))))
-;; Dogears:1 ends here
 
 ;; [[file:config.org::*EDITOR][EDITOR:1]]
 ;;** EDITOR
+
 (package! origami)
 (package! centered-cursor-mode)
 ;; EDITOR:1 ends here
@@ -59,6 +59,7 @@
 
 ;; [[file:config.org::*TOOLS][TOOLS:1]]
 ;;** TOOLS
+
 (package! info-colors)
 (package! tldr)
 (package! magit-tbdiff)
@@ -76,6 +77,10 @@
 ;; TODO ssh-tunnels
 (package! salt-mode)
 ;; TOOLS:1 ends here
+
+;; [[file:config.org::*LSP][LSP:1]]
+;;** LSP
+;; LSP:1 ends here
 
 ;; [[file:config.org::*OS][OS:1]]
 ;;** OS
@@ -95,6 +100,7 @@
 
 ;; [[file:config.org::*LANG][LANG:1]]
 ;;** LANG
+
 (package! elisp-depmap
   :recipe (:host gitlab :repo "mtekman/elisp-depmap.el"))
 (package! zprint-mode)
@@ -114,6 +120,7 @@
 ;; BABEL:1 ends here
 
 ;; [[file:config.org::*\[\[https:/github.com/krisajenkins/ob-translate\]\[ob-translate\]\]][[[https://github.com/krisajenkins/ob-translate][ob-translate]]:1]]
+;;*** ob-translate
 (package! google-translate)
 (package! ob-translate)
 ;; [[https://github.com/krisajenkins/ob-translate][ob-translate]]:1 ends here
