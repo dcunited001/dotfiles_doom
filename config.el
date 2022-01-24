@@ -1,29 +1,30 @@
 ;; -*- no-byte-compile: t; lexical-binding: t; -*-
-;; ~/.doom.d/config.el
+;;* ~/.doom.d/config.el
 (setq user-full-name "David Conner"
       user-mail-address "noreply@te.xel.io")
 
-;; [[file:config.org::*Key Maps][Key Maps:1]]
+;; [[file:config.org::*INPUT][INPUT:2]]
+;;** INPUT
+
 ;; Fixes problems with dead keys
 (require 'iso-transl)
-;; Key Maps:1 ends here
 
-;; [[file:config.org::*Lispy][Lispy:1]]
-;; TODO clojurescript hook
-;; TODO this may need to be set before lispy loads....
+;;*** Point Movements
+
+;;*** Lispy
 (setq lispy-compat '(cider edebug))
-;; Lispy:1 ends here
 
-;; [[file:config.org::*Misc Mouse Configs][Misc Mouse Configs:1]]
+;;*** Mouse
+
 (setq mouse-wheel-progressive-speed nil
       mouse-wheel-scroll-amount '(8)
       mouse-drag-and-drop-region t)
-;; Misc Mouse Configs:1 ends here
 
-;; [[file:config.org::*Mouse 8 and 9][Mouse 8 and 9:1]]
-;; TODO: misc subdir & project-level shortcuts (died,project)
+;;*** Experimental Mouse
 
-;; for now, simply back/forward buffer ;; TODO: change =forward= to bufler or emacs-tab bar?
+;;**** Razor (previous/next)
+;; for now, simply back/forward buffer
+;; TODO: change =forward= to bufler or emacs-tab bar?
 (map! "S-<mouse-8>" 'previous-buffer)
 ;; TODO something else: (map! "S-<mouse-9>" 'next-buffer)
 
@@ -45,9 +46,9 @@
 ;; (map! "M-<mouse-8>" 'better-jumper-jump-backward)
 
 ;; TODO: something else (map! "M-<mouse-9>" 'better-jumper-jump-backward)
-;; Mouse 8 and 9:1 ends here
 
-;; [[file:config.org::*Origami (Mouse 12)][Origami (Mouse 12):1]]
+;;**** Origami
+
 (map! "<mouse-12>" 'origami-toggle-node)
 (map! "C-<mouse-12>" 'origami-open-node-recursively)
 (map! "C-S-<mouse-12>" 'origami-close-node-recursively)
@@ -60,14 +61,15 @@
 (map! "C-M-S-<mouse-12>" 'origami-open-all-nodes)
 
 ;; (map! "M-S-<mouse-12>" 'origami-show-only-node)
-;; Origami (Mouse 12):1 ends here
 
-;; [[file:config.org::*Mode Hints (Mouse 14)][Mode Hints (Mouse 14):1]]
+;;**** Hydras
+
 (map! "M-<mouse-14>" 'which-key-show-major-mode)
-;; Mode Hints (Mouse 14):1 ends here
+;; INPUT:2 ends here
 
 ;; [[file:config.org::*Doom Theme][Doom Theme:1]]
 ;;** UI
+
 ;;*** Doom Theme
 (let* ((themes-ilike '(doom-one doom-dark+ doom-acario-dark doom-molokai modus-vivendi))
        (random-theme (nth (random (length themes-ilike)) themes-ilike)))
@@ -241,6 +243,7 @@
 
 ;; [[file:config.org::*Line Numbers][Line Numbers:1]]
 ;;*** Line Numbers
+;; For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type nil)
 ;; Line Numbers:1 ends here
 
@@ -399,34 +402,70 @@
       lsp-ui-imenu-window-width 25)
 ;; LSP UI:1 ends here
 
-;; [[file:config.org::*Org Directory][Org Directory:1]]
-(setq org-directory (getenv "ORG_DIRECTORY")
-      +org-capture-journal-file (concat (file-name-as-directory org-directory) "journal.org")
-      org-calendars-directory (concat  (file-name-as-directory org-directory) "calendars"))
-;; Org Directory:1 ends here
+;; [[file:config.org::*ORG][ORG:2]]
+;;** ORG
 
-;; [[file:config.org::*Org Literate][Org Literate:1]]
+;;*** org-agenda packages
+
+
+;;*** org-mode main config
+
+(setq org-directory (getenv "ORG_DIRECTORY")
+      org-calendars-directory (concat  (file-name-as-directory org-directory) "calendars")
+
+      ;; Don't indent content in source blocks
+      org-edit-src-content-indentation 0
+
+      ;; org-clock-idle-time 3
+        )
+
+
+;; doom-specific: Prevent over-eager dotfiles recompilation
 (after! org
   (remove-hook 'org-mode-hook #'+literate-enable-recompile-h))
-;; Org Literate:1 ends here
 
-;; [[file:config.org::*Keys][Keys:1]]
-(map! :map org-mode-map
-      :leader
-      :prefix ("t" . "toggle")
-      :desc "Toggle Org Narrow" "T" #'org-toggle-narrow-to-subtree)
-;; Keys:1 ends here
-
-;; [[file:config.org::*Roam][Roam:1]]
 (after! org
   (setq org-log-done 'time
         org-support-shift-select t
-        org-agenda-files (list  (concat (file-name-as-directory (concat  org-directory "/roam/dailies" ))))
+        org-agenda-files (list
+                          (file-name-as-directory
+                           (concat  org-directory "/roam/dailies" )))
         ;; TODO include content from Adam James
         ))
-;; Roam:1 ends here
 
-;; [[file:config.org::*Roam][Roam:2]]
+;;*** org-agenda config
+
+(use-package! org-super-agenda
+  :init (setq org-super-agenda-groups
+                '((:name "Today"
+                   :time-grid t
+                   :todo "Today")
+                  (:habit t)
+                  (:name "Due today"
+                   :deadline today)
+                  (:name "Overdue"
+                   :deadline past)
+                  (:name "Due soon"
+                   :deadline future)
+                  (:name "Important"
+                   :priority "A")
+                  (:priority<= "B"
+                   :order 1)
+                  ))
+  :config (org-super-agenda-mode))
+
+;;**** org-clock
+
+;; Set auto-clockout to keep time tracking accurate.
+(setq org-clock-auto-clockout-timer 300)
+(org-clock-auto-clockout-insinuate)
+
+;; Insinuate means that, unless a new clocking entry occurs
+;; you will auto-clockout (for inactivity)
+;; Refer to [[https://orgmode.org/manual/Clocking-Work-Time.html#Clocking-Work-Time][Orgmode Manual entry]] for details.
+
+;;*** org-roam
+
 ;; encapsulate org-roam-directory within (file-truename ___) if using links
 (setq org-roam-directory (concat (file-name-as-directory org-directory) "roam")
       org-roam-db-location (concat (file-name-as-directory org-roam-directory) "org-roam.db")
@@ -457,23 +496,60 @@
   (interactive)
   (setq +org-roam-open-buffer-on-find-file
         (not +org-roam-open-buffer-on-find-file)))
-;; Roam:2 ends here
 
-;; [[file:config.org::*Roam][Roam:3]]
-;;* Daviwil org-roam
+(setq org-roam-capture-templates
+      (append
+       ;; org-roam-capture-templates
+       '(
+         ("p" "projects" plain "%?" :unnarrowed t
+          :target (file+head "projects/${slug}.org"
+                             "#+title: ${title}\n\n"))
+         ("t" "topics" plain "%?" :unnarrowed t
+          :target (file+head "topics/${slug}.org"
+                             "#+title: ${title}\n\n"))
+         ("c" "code" plain "%?" :unnarrowed t
+          :target (file+head "code/${slug}.org"
+                             "#+title: ${title}\n\n"))
+         ("D" "drills" plain "%?" :unnarrowed t
+          :target (file+head "drills/${slug}.org"
+                             "#+title: ${title}\n\n"))
+         ;; TODO: validate whether this should be changed
+         ;; - for org-roam-bibtex or org-ref
+         ;; NOTE: slug needs to be a DOI in form:
+         ;; - ${indicator}.${registrant}/${suffix}
+         ("n" "noter (DOI)" plain "%?" :unnarrowed t
+          :target (file+head "noter/${slug}.org"
+                             "#+title: ${title}\n\n"))
 
-;;**  Project Templates
+         ("s" "slips" plain "%?" :unnarrowed t
+          :target (file+head "slips/%<%Y%m%d%H%M%S>-${slug}.org"
+                             "#+title: ${title}"))
+
+         ) org-roam-capture-templates))
+
+;; DEFAULTS:
+;; (setq org-roam-capture-templates '(("d" "default" plain "%?" :unnarrowed t
+;;                                      :target (file+head "slips/%<%Y%m%d%H%M%S>-${slug}.org"
+;;                                                         "#+title: ${title}"))))
+
+;;**** org-roam-protocol
+(use-package! org-roam-protocol
+  :after org-protocol)
+
+;;*** org-roam: daviwil
+
+;;****  Project Templates
 (defvar dw/org-roam-project-template
   '("p" "project" plain "** TODO %?"
     :if-new (file+head+olp "%<%Y%m%d%H%M%S>-${slug}.org"
                            "#+title: ${title}\n#+category: ${title}\n$+filetags: Projects\n"
                            ("Tasks"))))
 
-;;*** decide whether these functions are going to work for me (problems with roam subdirectories)
+;; decide whether these functions are going to work for me (problems with roam subdirectories)
 ;; TODO (defun my/org-roam-filter-by-tag ...)
 ;; TODO (defun my/org-list-notes-by-tag ...)
 
-;;** Roam Node Insert
+;;**** Roam Node Insert
 ;; NOTE: (interactive "P") version of org-roam-node-insert
 (defun dw/org-roam-insert-immediate (arg &rest args)
   (interactive "P")
@@ -483,17 +559,71 @@
     (apply #'org-roam-node-insert args)))
 
 
-;;** Roam Capture Task (project captures)
+;;**** Roam Capture Task: project captures
 (defun dw/org-roam-capture-task ()
   (interactive)
   ;; TODO
   ;(add-hook 'org-capture-after-finalize-hook #'my/org-roam-project-finalize-hook)
-
-
   )
-;; Roam:3 ends here
 
-;; [[file:config.org::*Roam][Roam:4]]
+;;*** org-capture
+;; TODO ... actually use capture templates
+;;
+;; (now that i have enough experience to know what data/files are worth generating)
+
+;;**** org-capture protocols
+;; TODO see ./reorg.org for protocol capture templates
+
+;;*** org-refile
+(setq org-refile-targets
+      '((org-agenda-files . (:maxlevel . 2))
+        (("./todo.org" "./notes.org") . (:maxlevel . 3))
+        (nil . (:maxlevel . 2)))
+
+      org-refile-use-outline-path t
+      org-refile-allow-creating-parent-nodes 'confirm
+      org-refile-use-cache t)
+
+(unless (boundp 'org-refile-cache-timer)
+  (run-with-idle-timer 300 t (lambda ()
+                               (org-refile-cache-clear)
+                               (org-refile-get-targets)))
+  (setq org-refile-cache-timer t))
+
+;; TODO consider using =org-refile-target-verify-function
+;; to filter subtrees marked "done" from being org-refile-targets
+;; (source: mwfogleman/englehorn)
+
+;;*** org-mode misc
+;;**** org-drill
+
+;; Config and flashcard info can be found at
+;; https://gitlab.com//phillord/org-drill
+
+(use-package! org-drill
+  :after org
+  :config (progn
+            (setq org-drill-add-random-noise-to-intervals-p t)
+            (setq org-drill-hint-separator "||")
+            (setq org-drill-left-cloze-separator "<[")
+            (setq org-drill-left-cloze-separator "]>")
+            (setq org-drill-learn-fraction 0.25)))
+
+;;**** org-treeusage
+;;
+;; this package helps analyze org headlines for cyclomatic complexity
+;;
+;; Can be customized according to:
+;; https://github.com/mtekman/org-treeusage.el#customisation
+
+(use-package! org-treeusage
+  ;; :bind ("C-c d" . org-treeusage-mode)
+  :config (setq org-treescope-overlay-header nil
+                org-treeusage-overlay-usecolorbands nil))
+
+;;*** org-mode keys
+
+;; doom-specific: add keys to doom defaults
 (map! (:map org-mode-map
        :leader
        :prefix ("nr" . "org-roam")
@@ -516,7 +646,8 @@
         "r" #'org-roam-ref-add
         "R" #'org-roam-ref-remove)))
 
-;; Doom is mapping these twice
+;; doom-specific: doom maps these keys in two places, fix them both
+
 (map! (:map org-mode-map
        :localleader
        :prefix ("m" . "org-roam")
@@ -538,96 +669,14 @@
         "T" #'org-roam-tag-remove
         "r" #'org-roam-ref-add
         "R" #'org-roam-ref-remove)))
-;; Roam:4 ends here
 
-;; [[file:config.org::*setup =org-roam-protocol= and mime types for org roam][setup =org-roam-protocol= and mime types for org roam:1]]
-(use-package! org-roam-protocol
-  :after org-protocol)
-;; setup =org-roam-protocol= and mime types for org roam:1 ends here
-
-;; [[file:config.org::*configure \[\[https:/github.com/jkitchin/org-ref\]\[org-ref\]\] v3][configure [[https://github.com/jkitchin/org-ref][org-ref]] v3:1]]
-;(use-package! :org-ref)
-;; configure [[https://github.com/jkitchin/org-ref][org-ref]] v3:1 ends here
-
-;; [[file:config.org::*Clock][Clock:1]]
-(setq org-clock-auto-clockout-timer 300
-      ;; org-clock-idle-time 3
-        )
-(org-clock-auto-clockout-insinuate)
-;; Clock:1 ends here
-
-;; [[file:config.org::*Super Agenda][Super Agenda:1]]
-(use-package! org-super-agenda
-  :init (setq org-super-agenda-groups
-                '((:name "Today"
-                   :time-grid t
-                   :todo "Today")
-                  (:habit t)
-                  (:name "Due today"
-                   :deadline today)
-                  (:name "Overdue"
-                   :deadline past)
-                  (:name "Due soon"
-                   :deadline future)
-                  (:name "Important"
-                   :priority "A")
-                  (:priority<= "B"
-                   :order 1)
-                  ))
-  :config (org-super-agenda-mode))
-;; Super Agenda:1 ends here
-
-;; [[file:config.org::*org-ql][org-ql:1]]
-
-;; org-ql:1 ends here
-
-;; [[file:config.org::*org-sidebar][org-sidebar:1]]
-
-;; org-sidebar:1 ends here
-
-;; [[file:config.org::*Source Blocks][Source Blocks:1]]
-(setq org-edit-src-content-indentation 0)
-;; Source Blocks:1 ends here
-
-;; [[file:config.org::*Org Treeusage][Org Treeusage:1]]
-(use-package! org-treeusage
-  :bind ("C-c d" . org-treeusage-mode)
-  :config (setq org-treescope-overlay-header nil
-                org-treeusage-overlay-usecolorbands nil))
-;; Org Treeusage:1 ends here
-
-;; [[file:config.org::*Org Drill][Org Drill:1]]
-(use-package! org-drill
-  :after org
-  :config (progn
-            (setq org-drill-add-random-noise-to-intervals-p t)
-            (setq org-drill-hint-separator "||")
-            (setq org-drill-left-cloze-separator "<[")
-            (setq org-drill-left-cloze-separator "]>")
-            (setq org-drill-learn-fraction 0.25))
-  )
-;; Org Drill:1 ends here
-
-;; [[file:config.org::*Refile][Refile:1]]
-(setq org-refile-targets
-      '((org-agenda-files . (:maxlevel . 2))
-        (("./todo.org" "./notes.org") . (:maxlevel . 3))
-        (nil . (:maxlevel . 2)))
-
-      org-refile-use-outline-path t
-      org-refile-allow-creating-parent-nodes 'confirm
-      org-refile-use-cache t)
-
-(unless (boundp 'org-refile-cache-timer)
-  (run-with-idle-timer 300 t (lambda ()
-                               (org-refile-cache-clear)
-                               (org-refile-get-targets)))
-  (setq org-refile-cache-timer t))
-
-;; TODO consider using =org-refile-target-verify-function
-;; to filter subtrees marked "done" from being org-refile-targets
-;; (source: mwfogleman/englehorn)
-;; Refile:1 ends here
+;; doom-specific: toggle narrow to subtree
+(map! :map org-mode-map
+      :leader
+      :prefix ("t" . "toggle")
+      :desc "Toggle Org Narrow" "T" #'org-toggle-narrow-to-subtree
+      :desc "Toggle Org Treeusage" "U" #'org-treeusage-mode)
+;; ORG:2 ends here
 
 ;; [[file:config.org::*\[\[https:/gitlab.com/mtekman/elisp-depmap.el\]\[Elisp Depmap\]\]][[[https://gitlab.com/mtekman/elisp-depmap.el][Elisp Depmap]]:1]]
 (use-package! elisp-depmap
@@ -753,3 +802,10 @@
 ;; (setq auto-minor-mode-alist (append '(("theme\\.el$" . rainbow-mode))
                                     ;; auto-minor-mode-alist))
 ;; Rainbow Mode:1 ends here
+
+;; [[file:config.org::*HYDRAS][HYDRAS:2]]
+;;** HYDRAS
+
+(load-file (expand-file-name (concat (file-name-as-directory (getenv "DOOMDIR"))
+                                     "scripts/hydras.el")))
+;; HYDRAS:2 ends here

@@ -44,7 +44,7 @@ Add the ~doom-emacs~ metadata comments to tangle exports:
 
 #+BEGIN_SRC emacs-lisp :tangle ./config.el
 ;; -*- no-byte-compile: t; lexical-binding: t; -*-
-;; ~/.doom.d/config.el
+;;* ~/.doom.d/config.el
 (setq user-full-name "David Conner"
       user-mail-address "noreply@te.xel.io")
 #+END_SRC
@@ -53,7 +53,7 @@ When specified by =:tangle=, export the =(package! ...)= declarations to =packag
 
 #+BEGIN_SRC emacs-lisp :tangle ./packages.el
 ;; -*- no-byte-compile: t; lexical-binding: t; -*-
-;; ~/.doom.d/packages.el
+;;* ~/.doom.d/packages.el
 #+END_SRC
 
 There may be other babel source blocks. Eventually, I would like include some
@@ -115,56 +115,35 @@ bin/doom (upgrade|sync|build)
 ** INPUT
 
 #+begin_src emacs-lisp :tangle ./packages.el
+
 ;;** INPUT
+
 #+end_src
 
-[[file:~/.emacs.d/core/core-keybinds.el][.emacs.d/core/core-keybinds.el]] makes for a very useful key & map! reference
-
-*** Key Maps :kbd:
-
-Most of these configs should be in their individual ~*-mode~ sections or under the *:kbd:* tag
 
 #+begin_src emacs-lisp
+
+;;** INPUT
+
 ;; Fixes problems with dead keys
 (require 'iso-transl)
-#+end_src
 
-**** TODO remap ~org-forward-heading-same-level~
-+ ~C-c C-b~ maps to ~org-backward-heading-same-level~
-+ ~C-c C-f~ conflicts with code folding (which does nothing in org/babel)
+;;*** Point Movements
 
-*** Point Movement
-
-*** Lispy
-
-[[https://oremacs.com/lispy/][Keymap reference]] for [[https://github.com/abo-abo/lispy][Lispy]]. "[[https://mitpress.mit.edu/sites/default/files/sicp/full-text/book/book-Z-H-10.html#%25_sec_1.1.5][Always be evaling]]"
-
-#+begin_src emacs-lisp
-;; TODO clojurescript hook
-;; TODO this may need to be set before lispy loads....
+;;*** Lispy
 (setq lispy-compat '(cider edebug))
-#+end_src
 
-**** TODO setup lispy to run automatically in cider-mode
+;;*** Mouse
 
-*** Mouse :mouse:
-
-see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse Config]] for more info on the how & why
-
-**** Misc Mouse Configs
-
-#+begin_src emacs-lisp
 (setq mouse-wheel-progressive-speed nil
       mouse-wheel-scroll-amount '(8)
       mouse-drag-and-drop-region t)
-#+end_src
 
-**** Mouse 8 and 9
+;;*** Experimental Mouse
 
-#+begin_src emacs-lisp
-;; TODO: misc subdir & project-level shortcuts (died,project)
-
-;; for now, simply back/forward buffer ;; TODO: change =forward= to bufler or emacs-tab bar?
+;;**** Razor (previous/next)
+;; for now, simply back/forward buffer
+;; TODO: change =forward= to bufler or emacs-tab bar?
 (map! "S-<mouse-8>" 'previous-buffer)
 ;; TODO something else: (map! "S-<mouse-9>" 'next-buffer)
 
@@ -186,8 +165,43 @@ see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse
 ;; (map! "M-<mouse-8>" 'better-jumper-jump-backward)
 
 ;; TODO: something else (map! "M-<mouse-9>" 'better-jumper-jump-backward)
+
+;;**** Origami
+
+(map! "<mouse-12>" 'origami-toggle-node)
+(map! "C-<mouse-12>" 'origami-open-node-recursively)
+(map! "C-S-<mouse-12>" 'origami-close-node-recursively)
+
+(map! "M-<mouse-12>" 'origami-forward-fold)
+(map! "S-<mouse-12>" 'origami-backward-fold-same-level)
+(map! "M-S-<mouse-12>" 'origami-forward-fold-same-level)
+
+(map! "C-M-<mouse-12>" 'origami-close-all-nodes)
+(map! "C-M-S-<mouse-12>" 'origami-open-all-nodes)
+
+;; (map! "M-S-<mouse-12>" 'origami-show-only-node)
+
+;;**** Hydras
+
+(map! "M-<mouse-14>" 'which-key-show-major-mode)
+
 #+end_src
 
+[[file:~/.emacs.d/core/core-keybinds.el][.emacs.d/core/core-keybinds.el]] makes for a very useful key & map! reference
+
+*** Point Movement
+
+*** Lispy
+
+[[https://oremacs.com/lispy/][Keymap reference]] for [[https://github.com/abo-abo/lispy][Lispy]]. "[[https://mitpress.mit.edu/sites/default/files/sicp/full-text/book/book-Z-H-10.html#%25_sec_1.1.5][Always be evaling]]"
+
+**** TODO setup lispy to run automatically in cider-mode
+
+*** Mouse :mouse:
+
+see [[ergoemacs.org/emacs/emacs_mouse_wheel_config.html][Xah Lee's post on Mouse Config]] for more info on the how & why
+
+**** Mouse 8 and 9
 
 **** TODO other mouse maps
 + and navigating =describe-= and other docs
@@ -241,21 +255,6 @@ Combinations with Control are a little more difficult with one hand.
 
 **** Origami (Mouse 12)
 
-#+begin_src emacs-lisp
-(map! "<mouse-12>" 'origami-toggle-node)
-(map! "C-<mouse-12>" 'origami-open-node-recursively)
-(map! "C-S-<mouse-12>" 'origami-close-node-recursively)
-
-(map! "M-<mouse-12>" 'origami-forward-fold)
-(map! "S-<mouse-12>" 'origami-backward-fold-same-level)
-(map! "M-S-<mouse-12>" 'origami-forward-fold-same-level)
-
-(map! "C-M-<mouse-12>" 'origami-close-all-nodes)
-(map! "C-M-S-<mouse-12>" 'origami-open-all-nodes)
-
-;; (map! "M-S-<mouse-12>" 'origami-show-only-node)
-#+end_src
-
 **** Mode Hints (Mouse 14)
 
 Mouse 14 is intended to give hints for keybindings.
@@ -264,10 +263,6 @@ Mouse 14 is intended to give hints for keybindings.
   specific =config.el= behavior to be defined.
 - =C-<mouse-14>= is intended to evoke mode-specific hydras, but requires these
   hydras to have been defined (see [[*HYDRAS][HYDRAS]])
-
-#+begin_src emacs-lisp
-(map! "M-<mouse-14>" 'which-key-show-major-mode)
-#+end_src
 
 *** Artist Mode :artist_mode:
 
@@ -511,7 +506,6 @@ Popup Defaults (defined in =+popup-defaults=)
 *** Dogears
 
 #+begin_src emacs-lisp :tangle ./packages.el
-
 ;;*** Dogears
 (package! dogears :recipe (:host github
                            :repo "alphapapa/dogears.el"
@@ -669,16 +663,14 @@ These are simply bookmarks and thus can be reached from the doom startup menu.
 
 *** Line Numbers
 
-This determines the style of line numbers. For relative line numbers, set this
-to `relative'.
+This determines the style of line numbers.
 
 #+begin_src emacs-lisp
 
 ;;*** Line Numbers
+;; For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type nil)
 #+end_src
-
-*** Misc
 
 ** EDITOR
 
@@ -1091,123 +1083,70 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
 (package! org-sidebar)
 #+end_src
 
-General Org Mode configs:
-
-*** Org Directory
-
 #+begin_src emacs-lisp
+;;** ORG
+
+;;*** org-agenda packages
+
+
+;;*** org-mode main config
+
 (setq org-directory (getenv "ORG_DIRECTORY")
-      +org-capture-journal-file (concat (file-name-as-directory org-directory) "journal.org")
-      org-calendars-directory (concat  (file-name-as-directory org-directory) "calendars"))
-#+end_src
+      org-calendars-directory (concat  (file-name-as-directory org-directory) "calendars")
 
-*** Org Literate
+      ;; Don't indent content in source blocks
+      org-edit-src-content-indentation 0
 
-Prevent over-eager dotfiles recompilation =from HaoZeke=
+      ;; org-clock-idle-time 3
+        )
 
-#+BEGIN_SRC emacs-lisp
+
+;; doom-specific: Prevent over-eager dotfiles recompilation
 (after! org
   (remove-hook 'org-mode-hook #'+literate-enable-recompile-h))
-#+END_SRC
 
-*** Workflow
-
-*** Keys
-
-#+begin_src emacs-lisp
-(map! :map org-mode-map
-      :leader
-      :prefix ("t" . "toggle")
-      :desc "Toggle Org Narrow" "T" #'org-toggle-narrow-to-subtree)
-#+end_src
-
-#+begin_example org
-#+begin_src emacs-lisp :tangle no
-(defun dc/util--paths-from-alist (paths-alist)
-  "reduce an alist of paths, where the keys are directories and the
-values are lists of files, to produce a list of files with
-absolute paths  "
-  (let* ((path-keys (mapcar 'car paths-alist))
-        (root-paths (mapcar 'file-name-as-directory path-keys))
-        ;; (root-paths (map 'file-name-as-directory path-keys))
-                                        ;        (absolute-paths )
-                                        ;       (mapcar (lambda (file) (concat (filename-as-directory ))))
-        )
-
-    root-paths
-    ;; path-keys
-
-))
-
-
-
-
-;; map-values-apply concat
-
-(let ((agenda-map '((org-directory . '("todo.org" "notes.org" "habits.org" "projects.org"))
-                    (doom-private-dir . '("todo.org" "notes.org"))))
-
-
-      )
-(dc/util--paths-from-alist agenda-map)
-        )
-
-
-
-;; (setq org-agenda-files  )
-
-
-        ;;      (let ((agenda-root ) ) ) (mapcar (lambda (f) (concat (filename-as-directory (or (getenv "ORG_AGENDA_ROOT")
-        ;; (getenv "ORG_DIRECTORY"))) f)))
-#+end_src
-#+end_example
-
-**** TODO configure =org-toggle-sidebar
-
-
-
-*** Mime types [fn:tecosaur]
-Org mode isn't recognised as it's own mime type by default, but that can easily
-be changed with the following file. For system-wide changes try
-~/usr/share/mime/packages/org.xml~.
-
-#+begin_src xml :tangle ~/.local/share/mime/packages/org.xml :mkdirp yes :comments no
-<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
-  <mime-type type="text/org">
-    <comment>Emacs Org-mode File</comment>
-    <glob pattern="*.org"/>
-    <alias type="text/org"/>
-  </mime-type>
-</mime-info>
-#+end_src
-
-What's nice is that Papirus [[https://github.com/PapirusDevelopmentTeam/papirus-icon-theme/commit/a10fb7f2423d5e30b9c4477416ccdc93c4f3849d][now]] has an icon for =text/org=.
-One simply needs to refresh their mime database
-
-#+begin_src shell :tangle (if (string= (shell-command-to-string "xdg-mime query default text/org") "") "setup.sh" "no")
-update-mime-database ~/.local/share/mime
-#+end_src
-
-Then set Emacs as the default editor
-
-#+begin_src shell :tangle (if (string= (shell-command-to-string "xdg-mime query default text/org") "emacs-client.desktop\n") "no" "setup.sh")
-xdg-mime default emacs.desktop text/org
-#+end_src
-
-*** Roam
-
-#+begin_src emacs-lisp
 (after! org
   (setq org-log-done 'time
         org-support-shift-select t
-        org-agenda-files (list  (concat (file-name-as-directory (concat  org-directory "/roam/dailies" ))))
+        org-agenda-files (list
+                          (file-name-as-directory
+                           (concat  org-directory "/roam/dailies" )))
         ;; TODO include content from Adam James
         ))
-#+end_src
 
-This configures org-roam v2 and is not compatible with doom's org-roa module. See the updated Hitchiker's Guide for more info. As long as one bears in mind the differences between v1 and v2, then these links are also useful
+;;*** org-agenda config
 
-#+begin_src emacs-lisp
+(use-package! org-super-agenda
+  :init (setq org-super-agenda-groups
+                '((:name "Today"
+                   :time-grid t
+                   :todo "Today")
+                  (:habit t)
+                  (:name "Due today"
+                   :deadline today)
+                  (:name "Overdue"
+                   :deadline past)
+                  (:name "Due soon"
+                   :deadline future)
+                  (:name "Important"
+                   :priority "A")
+                  (:priority<= "B"
+                   :order 1)
+                  ))
+  :config (org-super-agenda-mode))
+
+;;**** org-clock
+
+;; Set auto-clockout to keep time tracking accurate.
+(setq org-clock-auto-clockout-timer 300)
+(org-clock-auto-clockout-insinuate)
+
+;; Insinuate means that, unless a new clocking entry occurs
+;; you will auto-clockout (for inactivity)
+;; Refer to [[https://orgmode.org/manual/Clocking-Work-Time.html#Clocking-Work-Time][Orgmode Manual entry]] for details.
+
+;;*** org-roam
+
 ;; encapsulate org-roam-directory within (file-truename ___) if using links
 (setq org-roam-directory (concat (file-name-as-directory org-directory) "roam")
       org-roam-db-location (concat (file-name-as-directory org-roam-directory) "org-roam.db")
@@ -1239,25 +1178,59 @@ This configures org-roam v2 and is not compatible with doom's org-roa module. Se
   (setq +org-roam-open-buffer-on-find-file
         (not +org-roam-open-buffer-on-find-file)))
 
-#+end_src
+(setq org-roam-capture-templates
+      (append
+       ;; org-roam-capture-templates
+       '(
+         ("p" "projects" plain "%?" :unnarrowed t
+          :target (file+head "projects/${slug}.org"
+                             "#+title: ${title}\n\n"))
+         ("t" "topics" plain "%?" :unnarrowed t
+          :target (file+head "topics/${slug}.org"
+                             "#+title: ${title}\n\n"))
+         ("c" "code" plain "%?" :unnarrowed t
+          :target (file+head "code/${slug}.org"
+                             "#+title: ${title}\n\n"))
+         ("D" "drills" plain "%?" :unnarrowed t
+          :target (file+head "drills/${slug}.org"
+                             "#+title: ${title}\n\n"))
+         ;; TODO: validate whether this should be changed
+         ;; - for org-roam-bibtex or org-ref
+         ;; NOTE: slug needs to be a DOI in form:
+         ;; - ${indicator}.${registrant}/${suffix}
+         ("n" "noter (DOI)" plain "%?" :unnarrowed t
+          :target (file+head "noter/${slug}.org"
+                             "#+title: ${title}\n\n"))
 
-Add Content from [[github:daviwil/dotfiles][daviwil/dotfiles]]
+         ("s" "slips" plain "%?" :unnarrowed t
+          :target (file+head "slips/%<%Y%m%d%H%M%S>-${slug}.org"
+                             "#+title: ${title}"))
 
-#+begin_src emacs-lisp
-;;* Daviwil org-roam
+         ) org-roam-capture-templates))
 
-;;**  Project Templates
+;; DEFAULTS:
+;; (setq org-roam-capture-templates '(("d" "default" plain "%?" :unnarrowed t
+;;                                      :target (file+head "slips/%<%Y%m%d%H%M%S>-${slug}.org"
+;;                                                         "#+title: ${title}"))))
+
+;;**** org-roam-protocol
+(use-package! org-roam-protocol
+  :after org-protocol)
+
+;;*** org-roam: daviwil
+
+;;****  Project Templates
 (defvar dw/org-roam-project-template
   '("p" "project" plain "** TODO %?"
     :if-new (file+head+olp "%<%Y%m%d%H%M%S>-${slug}.org"
                            "#+title: ${title}\n#+category: ${title}\n$+filetags: Projects\n"
                            ("Tasks"))))
 
-;;*** decide whether these functions are going to work for me (problems with roam subdirectories)
+;; decide whether these functions are going to work for me (problems with roam subdirectories)
 ;; TODO (defun my/org-roam-filter-by-tag ...)
 ;; TODO (defun my/org-list-notes-by-tag ...)
 
-;;** Roam Node Insert
+;;**** Roam Node Insert
 ;; NOTE: (interactive "P") version of org-roam-node-insert
 (defun dw/org-roam-insert-immediate (arg &rest args)
   (interactive "P")
@@ -1267,19 +1240,71 @@ Add Content from [[github:daviwil/dotfiles][daviwil/dotfiles]]
     (apply #'org-roam-node-insert args)))
 
 
-;;** Roam Capture Task (project captures)
+;;**** Roam Capture Task: project captures
 (defun dw/org-roam-capture-task ()
   (interactive)
   ;; TODO
   ;(add-hook 'org-capture-after-finalize-hook #'my/org-roam-project-finalize-hook)
-
-
   )
-#+end_src
 
-Fix the Org Roam keymaps that doom provides
+;;*** org-capture
+;; TODO ... actually use capture templates
+;;
+;; (now that i have enough experience to know what data/files are worth generating)
 
-#+begin_src emacs-lisp
+;;**** org-capture protocols
+;; TODO see ./reorg.org for protocol capture templates
+
+;;*** org-refile
+(setq org-refile-targets
+      '((org-agenda-files . (:maxlevel . 2))
+        (("./todo.org" "./notes.org") . (:maxlevel . 3))
+        (nil . (:maxlevel . 2)))
+
+      org-refile-use-outline-path t
+      org-refile-allow-creating-parent-nodes 'confirm
+      org-refile-use-cache t)
+
+(unless (boundp 'org-refile-cache-timer)
+  (run-with-idle-timer 300 t (lambda ()
+                               (org-refile-cache-clear)
+                               (org-refile-get-targets)))
+  (setq org-refile-cache-timer t))
+
+;; TODO consider using =org-refile-target-verify-function
+;; to filter subtrees marked "done" from being org-refile-targets
+;; (source: mwfogleman/englehorn)
+
+;;*** org-mode misc
+;;**** org-drill
+
+;; Config and flashcard info can be found at
+;; https://gitlab.com//phillord/org-drill
+
+(use-package! org-drill
+  :after org
+  :config (progn
+            (setq org-drill-add-random-noise-to-intervals-p t)
+            (setq org-drill-hint-separator "||")
+            (setq org-drill-left-cloze-separator "<[")
+            (setq org-drill-left-cloze-separator "]>")
+            (setq org-drill-learn-fraction 0.25)))
+
+;;**** org-treeusage
+;;
+;; this package helps analyze org headlines for cyclomatic complexity
+;;
+;; Can be customized according to:
+;; https://github.com/mtekman/org-treeusage.el#customisation
+
+(use-package! org-treeusage
+  ;; :bind ("C-c d" . org-treeusage-mode)
+  :config (setq org-treescope-overlay-header nil
+                org-treeusage-overlay-usecolorbands nil))
+
+;;*** org-mode keys
+
+;; doom-specific: add keys to doom defaults
 (map! (:map org-mode-map
        :leader
        :prefix ("nr" . "org-roam")
@@ -1302,7 +1327,8 @@ Fix the Org Roam keymaps that doom provides
         "r" #'org-roam-ref-add
         "R" #'org-roam-ref-remove)))
 
-;; Doom is mapping these twice
+;; doom-specific: doom maps these keys in two places, fix them both
+
 (map! (:map org-mode-map
        :localleader
        :prefix ("m" . "org-roam")
@@ -1324,180 +1350,46 @@ Fix the Org Roam keymaps that doom provides
         "T" #'org-roam-tag-remove
         "r" #'org-roam-ref-add
         "R" #'org-roam-ref-remove)))
-#+end_src
 
-**** TODO implement some functionality from [[display-buffer-alist][davilwil/dotfiles]] :orgroam:
+;; doom-specific: toggle narrow to subtree
+(map! :map org-mode-map
+      :leader
+      :prefix ("t" . "toggle")
+      :desc "Toggle Org Narrow" "T" #'org-toggle-narrow-to-subtree
+      :desc "Toggle Org Treeusage" "U" #'org-treeusage-mode)
 
-
-**** TODO setup =org-roam-protocol= and mime types for org roam
-
-#+begin_src emacs-lisp
-(use-package! org-roam-protocol
-  :after org-protocol)
-#+end_src
-
-
-*** Org-Ref
-
-**** TODO configure [[https://github.com/jkitchin/org-ref][org-ref]] v3
-+ via =org-ref-to-org-cite=
-
-#+begin_src emacs-lisp
-;(use-package! :org-ref)
-#+end_src
-
-*** Agenda
-
-+ protesilaos & hsinhaoyu have pretty comprehensive configs
-
-Current =org-journal= mappings
-
-+ C-c n j j :: =org-journal-new-entry=
-+ C-c n j s :: =org-journal-search-forever=
-+ C-c n j j :: =org-journal-new-scheduled-entry=
-
-*** Clock
-
-Set auto-clockout to keep time tracking accurate. Refer to [[https://orgmode.org/manual/Clocking-Work-Time.html#Clocking-Work-Time][Orgmode Manual entry]] for details.
-
-#+begin_src emacs-lisp
-(setq org-clock-auto-clockout-timer 300
-      ;; org-clock-idle-time 3
-        )
-(org-clock-auto-clockout-insinuate)
-#+end_src
-
-*** Super Agenda
-
-+ review mwfogleman's config
-
-#+begin_src emacs-lisp
-(use-package! org-super-agenda
-  :init (setq org-super-agenda-groups
-                '((:name "Today"
-                   :time-grid t
-                   :todo "Today")
-                  (:habit t)
-                  (:name "Due today"
-                   :deadline today)
-                  (:name "Overdue"
-                   :deadline past)
-                  (:name "Due soon"
-                   :deadline future)
-                  (:name "Important"
-                   :priority "A")
-                  (:priority<= "B"
-                   :order 1)
-                  ))
-  :config (org-super-agenda-mode))
-#+end_src
-
-*** org-ql
-
-#+begin_src emacs-lisp
 
 #+end_src
 
-*** org-sidebar
+**** TODO configure =org-toggle-sidebar
 
-#+begin_src emacs-lisp
+*** Mime types [fn:tecosaur]
+Org mode isn't recognised as it's own mime type by default, but that can easily
+be changed with the following file. For system-wide changes try
+=/usr/share/mime/packages/org.xml=.
 
+#+begin_src xml :tangle ~/.local/share/mime/packages/org.xml :mkdirp yes :comments no
+<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+  <mime-type type="text/org">
+    <comment>Emacs Org-mode File</comment>
+    <glob pattern="*.org"/>
+    <alias type="text/org"/>
+  </mime-type>
+</mime-info>
 #+end_src
 
-*** Source Blocks
+What's nice is that Papirus [[https://github.com/PapirusDevelopmentTeam/papirus-icon-theme/commit/a10fb7f2423d5e30b9c4477416ccdc93c4f3849d][now]] has an icon for =text/org=.
+One simply needs to refresh their mime database
 
-Don't indent content in source blocks
-
-#+begin_src emacs-lisp
-(setq org-edit-src-content-indentation 0)
+#+begin_src shell :tangle (if (string= (shell-command-to-string "xdg-mime query default text/org") "") "setup.sh" "no")
+update-mime-database ~/.local/share/mime
 #+end_src
 
-*** Org Treeusage
+Then set Emacs as the default editor
 
-#+begin_src emacs-lisp
-(use-package! org-treeusage
-  :bind ("C-c d" . org-treeusage-mode)
-  :config (setq org-treescope-overlay-header nil
-                org-treeusage-overlay-usecolorbands nil))
+#+begin_src shell :tangle (if (string= (shell-command-to-string "xdg-mime query default text/org") "emacs-client.desktop\n") "no" "setup.sh")
+xdg-mime default emacs.desktop text/org
 #+end_src
-
-Can be customized according to the info at the [[https://github.com/mtekman/org-treeusage.el#customisation][Org Treeusage github]].
-
-*** Org Drill
-
-Config and flashcard info can be found at [[https://gitlab.com//phillord/org-drill    ][phillord/org-drill]]
-
-#+begin_src emacs-lisp
-(use-package! org-drill
-  :after org
-  :config (progn
-            (setq org-drill-add-random-noise-to-intervals-p t)
-            (setq org-drill-hint-separator "||")
-            (setq org-drill-left-cloze-separator "<[")
-            (setq org-drill-left-cloze-separator "]>")
-            (setq org-drill-learn-fraction 0.25))
-  )
-#+end_src
-
-
-
-*** Capture
-
-+ Workflow for adding capture templates
-  - Experiment with snippets
-    - and in some cases, file templates
-  - For snippets needing the flexibility of =org-capture= and =org-refile=
-    (mainly refiling) gradually reimplement these as capture templates
-
-#+begin_example emacs-lisp
-(setq org-capture-templates
-      (append org-capture-templates
-              '(())
-
-        ))
-#+end_example
-
-
-**** TODO capture template for code examples
-+ [ ] HaoZeke [[file:/data/ecto/x.files/HaoZeke/doom/config.org::*Templates][protocol links]]
-
-*** Refile
-
-#+begin_src emacs-lisp
-(setq org-refile-targets
-      '((org-agenda-files . (:maxlevel . 2))
-        (("./todo.org" "./notes.org") . (:maxlevel . 3))
-        (nil . (:maxlevel . 2)))
-
-      org-refile-use-outline-path t
-      org-refile-allow-creating-parent-nodes 'confirm
-      org-refile-use-cache t)
-
-(unless (boundp 'org-refile-cache-timer)
-  (run-with-idle-timer 300 t (lambda ()
-                               (org-refile-cache-clear)
-                               (org-refile-get-targets)))
-  (setq org-refile-cache-timer t))
-
-;; TODO consider using =org-refile-target-verify-function
-;; to filter subtrees marked "done" from being org-refile-targets
-;; (source: mwfogleman/englehorn)
-#+end_src
-
-Notes:
-
-**** TODO configure =org-refile-targets= in the projectile template for =.dir-locals.el=
-
-+ The following works for /refiling out of projects with todo.org/ or for
-  cleaning up projects with messy todo lists mixed into org notes
-  - =(("./todo.org" "./notes.org") . (:maxlevel . 3))=
-  - it's convenient because you can initialize =org-agenda-files= to something
-    sparse when emacs starts, but still manage to process errant TODO's in org
-    files ... without adding/removing files to =org-agenda-files=
-    - it keeps your =org-refile-targets= slim while generally adding what you
-      want when you want it... ?
-  - however, it needs to be set up in =.dir-locals.el= and it needs to be
-    configured like =(locate-dominating-file default-directory "todo.org")=
 
 ** LANG
 
@@ -1942,8 +1834,19 @@ Use doom colors for theme and toggle with =:leader tP=
 ** HYDRAS
 
 #+begin_src emacs-lisp :tangle ./packages.el
+
 ;;** HYDRAS
+
 #+end_src
+
+#+begin_src emacs-lisp
+
+;;** HYDRAS
+
+(load-file (expand-file-name (concat (file-name-as-directory (getenv "DOOMDIR"))
+                                     "scripts/hydras.el")))
+#+end_src
+
 
 * Footnotes
 
