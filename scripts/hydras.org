@@ -1,0 +1,256 @@
+#+TITLE:     Hydras
+#+AUTHOR:    David Conner
+#+EMAIL:     noreply@te.xel.io
+#+DESCRIPTION: notes
+
+* HYDRAS
+:PROPERTIES:
+:header-args: :tangle ./config.el :comments no
+:END:
+
+These were made using pretty awesome snippet on creating hydras from an org
+table (via [[https://sachachua.com/blog/2021/04/emacs-making-a-hydra-cheatsheet-for-lispy/][sacha chua]])[fn:sachac]
+
+**** TODO hydra for commands of the week & day (+ random commands)
+
++ auto-journal the hydra-source
++ commands (in hydra) to move around random commands suggested by the hydra
+
+**** TODO map this to =C-x C-d= instead of
+
+*** prefix-keys
+
+**** TODO implement prefix-key hydra (handle differences in mode-specific prefix keys)
+
+*** edebug
+
+These options control printing in edebug-mode:
++ edebug-print-lengt10h
++ edebug-print-level
+
+These functions are mostly grouped according to the order they are introduced in
+the emacs manual, except for the modes.
+
+#+name: hydra-edebug-bindings
+| key     | function                          | column  |
+|---------+-----------------------------------+---------|
+| g       | edebug-go-mode                    | Modes   |
+| SPC     | edebug-step-mode                  | Modes   |
+| t       | edebug-trace-mode                 | Modes   |
+| c       | edebug-continue-mode              | Modes   |
+| G       | edebug-Go-nonstop-mode            | Modes   |
+| T       | edebug-Trace-fast-mode            | Modes   |
+| C       | edebug-Continue-fast-mode         | Modes   |
+| n       | edebug-next-mode                  | Modes   |
+| I       | edebug-set-initial-mode           | Modes   |
+| S       | edebug-stop                       | Jumping |
+| h       | edebug-goto-here                  | Jumping |
+| f       | edebug-forward-sexp               | Jumping |
+| o       | edebug-step-out                   | Jumping |
+| i       | edebug-step-in                    | Jumping |
+| ?       | edebug-help                       | Misc    |
+| Q       | edebug-top-level-nonstop          | Misc    |
+| r       | edebug-previous-result            | Misc    |
+| d       | edebug-pop-to-backtrace           | Misc    |
+| =       | edebug-display-freq-count         | Misc    |
+| b       | edebug-set-breakpoint             | Breaks  |
+| B       | edebug-next-breakpoint            | Breaks  |
+| u       | edebug-unset-breakpoint           | Breaks  |
+| U       | edebug-unset-breakpoints          | Breaks  |
+| D       | edebug-toggle-disable-breakpoint  | Breaks  |
+| x       | edebug-set-conditional-breakpoint | Breaks  |
+| X       | edebug-set-global-break-condition | Breaks  |
+| v       | edebug-view-outside               | Views   |
+| P       | edebug-bounce-point               | Views   |
+| w       | edebug-where                      | Views   |
+| W       | edebug-toggle-save-windows        | Views   |
+| e       | edebug-eval-expression            | Eval    |
+| C-x C-e | edebug-eval-last-sexp             | Eval    |
+| E       | edebug-visit-eval-list            | Eval    |
+| C-j     | edebug-eval-print-last-sexp       | Eval    |
+| C-c C-u | edebug-update-eval-list           | Eval    |
+| C-c C-d | edebug-delete-eval-item           | Eval    |
+| C-c C-w | edebug-where                      | Eval    |
+|---------+-----------------------------------+---------|
+
+These functions are mentioned in the emacs manual, but not mapped in the hydra
+(for simplicity).
+
+#+name: hydra-edebug-other-bindings
+| key     | function                          | column  |
+|---------+-----------------------------------+---------|
+| a       | abort-recursive-edit              | Misc    |
+| q       | top-level                         | Misc    |
+| M-:     | eval-expression                   | Eval    |
+|---------+-----------------------------------+---------|
+
++ TODO something's not right here...
+
+#+BEGIN_SRC emacs-lisp :tangle hydras.el :var bindings=hydra-edebug-bindings :colnames yes :results silent :comments no
+(eval
+ (append
+  '(defhydra dchydra/edebug-cheat-sheet (:hint nil :foreign-keys run)
+     ("C-<mouse-14>" nil "Exit" :exit t))
+  (cl-loop for x in bindings
+           unless (string= "" (elt x 2))
+           collect
+           (list (car x)
+                 (intern (elt x 1))
+                 ;; edebug-(?:eval-)?\(.+)
+                 (when (string-match "edebug-\\(.+\\)"
+                                     (elt x 1))
+                   (match-string 1 (elt x 1)))
+                 :column
+                 (elt x 2)))))
+
+(with-eval-after-load "edebug"
+  (define-key edebug-mode-map (kbd "C-<mouse-14>") 'dchydra/edebug-cheat-sheet/body))
+(with-eval-after-load "debugger"
+  (define-key debugger-mode-map (kbd "C-<mouse-14>") 'dchydra/edebug-cheat-sheet/body))
+
+#+END_SRC
+
+*** lispy
+
+Lispy functions of note.
+
+#+name: hydra-lispy-bindings
+   | key | function                      | column   |
+   |-----+-------------------------------+----------|
+   | <   | lispy-barf                    |          |
+   | >   | lispy-slurp                   |          |
+   | A   | lispy-beginning-of-defun      |          |
+   | j   | lispy-down                    |          |
+   | B   | lispy-ediff-regions           |          |
+   | G   | lispy-goto-local              |          |
+   | h   | lispy-left                    |          |
+   | o   | lispy-other-mode              |          |
+   | l   | lispy-right                   |          |
+   | SPC | lispy-space                   |          |
+   | xB  | lispy-store-region-and-buffer |          |
+   | k   | lispy-up                      |          |
+   | v   | lispy-view                    |          |
+   | V   | lispy-visit                   |          |
+   | D   | pop-tag-mark                  |          |
+   | x   | see                           |          |
+   | L   | unbound                       |          |
+   | U   | unbound                       |          |
+   | X   | unbound                       |          |
+   | Y   | unbound                       |          |
+   | H   | lispy-ace-symbol-replace      | Edit     |
+   | c   | lispy-clone                   | Edit     |
+   | C   | lispy-convolute               | Edit     |
+   | n   | lispy-new-copy                | Edit     |
+   | O   | lispy-oneline                 | Edit     |
+   | P   | lispy-paste                   | Edit     |
+   | r   | lispy-raise                   | Edit     |
+   | R   | lispy-raise-some              | Edit     |
+   | \   | lispy-splice                  | Edit     |
+   | Z   | lispy-edebug-stop             | Eval     |
+   | S   | lispy-stringify               | Edit     |
+   | xj  | lispy-debug-step-in           | Eval     |
+   | xe  | lispy-edebug                  | Eval     |
+   | xT  | lispy-ert                     | Eval     |
+   | e   | lispy-eval                    | Eval     |
+   | E   | lispy-eval-and-insert         | Eval     |
+   | xr  | lispy-eval-and-replace        | Eval     |
+   | p   | lispy-eval-other-window       | Eval     |
+   | q   | lispy-ace-paren               | Move     |
+   | z   | lispy-knight                  | Move     |
+   | s   | lispy-move-down               | Move     |
+   | w   | lispy-move-up                 | Move     |
+   | t   | lispy-teleport                | Move     |
+   | Q   | lispy-ace-char                | Nav      |
+   | -   | lispy-ace-subword             | Nav      |
+   | a   | lispy-ace-symbol              | Nav      |
+   | b   | lispy-back                    | Nav      |
+   | d   | lispy-different               | Nav      |
+   | f   | lispy-flow                    | Nav      |
+   | F   | lispy-follow                  | Nav      |
+   | g   | lispy-goto                    | Nav      |
+   | xb  | lispy-bind-variable           | Refactor |
+   | xf  | lispy-flatten                 | Refactor |
+   | xc  | lispy-to-cond                 | Refactor |
+   | xd  | lispy-to-defun                | Refactor |
+   | xi  | lispy-to-ifs                  | Refactor |
+   | xl  | lispy-to-lambda               | Refactor |
+   | xu  | lispy-unbind-variable         | Refactor |
+   | i   | lispy-tab                     | Outline  |
+   | I   | lispy-shifttab                | Outline  |
+   | J   | lispy-outline-next            | Outline  |
+   | K   | lispy-outline-prev            | Outline  |
+   | l   | lispy-outline-promote         | Outline  |
+   | h   | lispy-outline-demote          | Outline  |
+   | M   | lispy-multiline               | Other    |
+   | xh  | lispy-describe                | Other    |
+   | m   | lispy-mark-list               | Other    |
+   | u   | lispy-undo                    | Other    |
+   | N   | lispy-narrow                  | Other    |
+   | y   | lispy-occur                   | Other    |
+   | W   | lispy-widen                   | Other    |
+   |-----+-------------------------------+----------|
+
+#+BEGIN_SRC emacs-lisp :tangle hydras.el :var bindings=hydra-lispy-bindings :colnames yes :results silent :comments no
+(eval
+ (append
+  '(defhydra dchydra/lispy-cheat-sheet (:hint nil :foreign-keys run)
+     ("C-<mouse-14>" nil "Exit" :exit t))
+  (cl-loop for x in bindings
+           unless (string= "" (elt x 2))
+           collect
+           (list (car x)
+                 (intern (elt x 1))
+                 (when (string-match "lispy-\\(?:eval-\\)?\\(.+\\)"
+                                     (elt x 1))
+                   (match-string 1 (elt x 1)))
+                 :column
+                 (elt x 2)))))
+
+(with-eval-after-load "lispy"
+  (define-key lispy-mode-map (kbd "C-<mouse-14>") 'dchydra/lispy-cheat-sheet/body))
+
+#+END_SRC
+
+*** Org Agenda
+
+Commands to focus on learning for Org Agenda
+
+#+name: hydra-agenda-bindings
+|-----------+------------------------------------+---------|
+| key       | function                           | column  |
+|-----------+------------------------------------+---------|
+| TAB       | org-agenda-goto                    | View    |
+| L         | org-agenda-recenter                | View    |
+| F         | org-agenda-follow-mode             | View    |
+| C-c C-x b | org-agenda-tree-to-indirect-buffer | View    |
+| //        | org-agenda-filter                  | Display |
+| v         | org-agenda-view-mode-dispatch      | Display |
+| /$        | org-agenda-archive                 | Edit    |
+| e         | org-agenda-set-effort              | Edit    |
+| C-k       | org-agenda-kill                    | Edit    |
+| t         | org-agenda-todo                    | Edit    |
+| :         | org-agenda-set-tags                | Edit    |
+|-----------+------------------------------------+---------|
+
+#+BEGIN_SRC emacs-lisp :tangle hydras.el :var bindings=hydra-agenda-bindings :colnames yes :results silent :comments no
+(eval
+ (append
+  '(defhydra dchydra/agenda-cheat-sheet (:hint nil :foreign-keys run)
+     ("C-<mouse-14>" nil "Exit" :exit t))
+  (cl-loop for x in bindings
+           unless (string= "" (elt x 2))
+           collect
+           (list (car x)
+                 (intern (elt x 1))
+                 (when (string-match "org-agenda-\\(?:eval-\\)?\\(.+\\)"
+                                     (elt x 1))
+                   (match-string 1 (elt x 1)))
+                 :column
+                 (elt x 2)))))
+
+(with-eval-after-load "agenda"
+  (define-key agenda-mode-map (kbd "C-<mouse-14>") 'dchydra/agenda-cheat-sheet/body))
+
+#+END_SRC
+
+*** Org Mode

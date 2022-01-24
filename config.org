@@ -312,7 +312,7 @@ Removed =-childframe= for now, as these are actual frames, kinda.
                            :files (:defaults (:exclude "helm-dogears.el"))))
 
 (package! dimmer)
-(package! beacon)
+;; (package! beacon)
 (package! burly)
 #+end_src
 
@@ -487,7 +487,6 @@ Popup Defaults (defined in =+popup-defaults=)
 *** Bufler
 
 #+begin_src emacs-lisp :tangle ./packages.el
-
 ;;*** Bufler
 (package! bufler :recipe (:host github
                            :repo "alphapapa/bufler.el"
@@ -616,11 +615,12 @@ UI Alerts
 (setq visible-bell t)
 
 ;;**** Beacon
-(use-package! beacon
-  :diminish beacon-mode
-  :init (beacon-mode)
-  :config (map! :leader
-                "tB" :desc "Beacon Mode"))
+;; (use-package! beacon
+;;   :diminish beacon-mode
+;;   :init (beacon-mode)
+;;   :config (map! :leader
+;;                 "tB" :desc "Beacon Mode"))
+
 ;;**** Dimmer
 (use-package! dimmer
   :config (progn  (setq dimmer-adjustment-mode :background

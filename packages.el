@@ -1,5 +1,5 @@
 ;; -*- no-byte-compile: t; lexical-binding: t; -*-
-;; ~/.doom.d/packages.el
+;;* ~/.doom.d/packages.el
 
 ;; [[file:config.org::*INPUT][INPUT:1]]
 ;;** INPUT
@@ -21,7 +21,7 @@
                            :files (:defaults (:exclude "helm-dogears.el"))))
 
 (package! dimmer)
-(package! beacon)
+;; (package! beacon)
 (package! burly)
 ;; UI:1 ends here
 

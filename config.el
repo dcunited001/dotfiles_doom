@@ -201,11 +201,12 @@
 (setq visible-bell t)
 
 ;;**** Beacon
-(use-package! beacon
-  :diminish beacon-mode
-  :init (beacon-mode)
-  :config (map! :leader
-                "tB" :desc "Beacon Mode"))
+;; (use-package! beacon
+;;   :diminish beacon-mode
+;;   :init (beacon-mode)
+;;   :config (map! :leader
+;;                 "tB" :desc "Beacon Mode"))
+
 ;;**** Dimmer
 (use-package! dimmer
   :config (progn  (setq dimmer-adjustment-mode :background
