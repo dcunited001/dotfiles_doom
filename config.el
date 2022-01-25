@@ -241,9 +241,9 @@
 
 ;;**** Dimmer
 (use-package! dimmer
-  :config (progn  (setq dimmer-adjustment-mode :background
-                        dimmer-fraction 0.05)
-                  (map! :leader
+  :config (progn (setq dimmer-adjustment-mode :background
+                       dimmer-fraction 0.05)
+                 (map! :leader
                         "tD" :desc "Dimmer Mode"))
 
   (dimmer-configure-company-box)
@@ -466,7 +466,9 @@
 ;; LSP:2 ends here
 
 ;; [[file:config.org::*OS][OS:2]]
+;;
 ;;** OS
+;;
 ;; OS:2 ends here
 
 ;; [[file:config.org::*ORG][ORG:2]]
@@ -695,7 +697,10 @@
        :leader
        :prefix ("nr" . "org-roam")
        "T" #'dc/org-roam-toggle-open-buffer-on-find-file
+
+       ;; this is a nice way to explore a sparse space though
        "a" #'org-roam-node-random
+
        "D" #'org-roam-demote-entire-buffer
        "i" #'dw/org-roam-insert-immediate
        "I" #'org-roam-insert-node
@@ -909,7 +914,7 @@
 ;; [[file:config.org::*HYDRAS][HYDRAS:2]]
 ;;** HYDRAS
 
-;; (load-file (expand-file-name
-;;             (concat (file-name-as-directory (getenv "DOOMDIR"))
-;;                     "scripts/hydras.el")))
+(load-file (expand-file-name
+             (concat (file-name-as-directory (getenv "DOOMDIR"))
+                     "scripts/hydras.el")))
 ;; HYDRAS:2 ends here

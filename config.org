@@ -40,7 +40,7 @@ are generated with =toc-org= by specifying a heading including the tag:
 
 ** Tangle Output
 
-Add the ~doom-emacs~ metadata comments to tangle exports:
+Add the =doom-emacs= metadata comments to tangle exports:
 
 #+BEGIN_SRC emacs-lisp :tangle ./config.el
 ;; -*- no-byte-compile: t; lexical-binding: t; -*-
@@ -118,15 +118,12 @@ bin/doom (upgrade|sync|build)
 Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
-
 ;;** INPUT
-
 #+end_src
 
 Configs
 
 #+begin_src emacs-lisp
-
 ;;** INPUT
 
 ;; Fixes problems with dead keys
@@ -188,7 +185,6 @@ Configs
 ;;**** Hydras
 
 (map! "M-<mouse-14>" 'which-key-show-major-mode)
-
 #+end_src
 
 [[file:~/.emacs.d/core/core-keybinds.el][.emacs.d/core/core-keybinds.el]] makes for a very useful key & map! reference
@@ -277,17 +273,13 @@ Mouse 14 is intended to give hints for keybindings.
 Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
-
 ;;** COMPLETION
-
 #+end_src
 
 Configs
 
 #+begin_src emacs-lisp
-
 ;;** COMPLETION
-
 #+end_src
 
 *** Completion prompts
@@ -315,7 +307,7 @@ Packages
                            :files (:defaults (:exclude "helm-bufler.el"))))
 (package! dogears :recipe (:host github
                            :repo "alphapapa/dogears.el"
-                           :files (:defaults (:exclude "helm-dogears.el"))))[][][][][][]
+                           :files (:defaults (:exclude "helm-dogears.el"))))
 
 (package! dimmer)
 ;; (package! beacon)
@@ -337,7 +329,6 @@ Packages
 Configs
 
 #+begin_src emacs-lisp
-
 ;;** UI
 
 ;;*** Diminish
@@ -507,9 +498,9 @@ Configs
 
 ;;**** Dimmer
 (use-package! dimmer
-  :config (progn  (setq dimmer-adjustment-mode :background
-                        dimmer-fraction 0.05)
-                  (map! :leader
+  :config (progn (setq dimmer-adjustment-mode :background
+                       dimmer-fraction 0.05)
+                 (map! :leader
                         "tD" :desc "Dimmer Mode"))
 
   (dimmer-configure-company-box)
@@ -592,18 +583,15 @@ These are simply bookmarks and thus can be reached from the doom startup menu.
 Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
-
 ;;** EDITOR
 
 (package! origami)
 (package! centered-cursor-mode)
-
 #+end_src
 
 Configs
 
 #+begin_src emacs-lisp
-
 ;;** EDITOR
 
 ;;*** Auto Insert
@@ -680,7 +668,6 @@ Configs
     (add-to-list 'yas-snippet-dirs 'dc/snippets)
     (message "loading dc/snippets")
     (yas-load-directory dc/snippets t)))
-
 #+end_src
 
 *** Auto Insert Mode
@@ -703,15 +690,12 @@ Configs
 Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
-
 ;;** EMACS
-
 #+end_src
 
 Config
 
 #+begin_src emacs-lisp
-
 ;;** EMACS
 
 ;;*** GPG
@@ -730,7 +714,6 @@ Config
 
        ;; ... but potentially a good idea with TRAMP ... maybe?)
        :leader :desc "Close all direds" "Q" #'+dired/quit-all))
-
 #+end_src
 
 *** AUTH
@@ -752,17 +735,13 @@ This is default & I'd rather adjust to it. In the future, I may address this by:
 Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
-
 ;;** TERM
-
 #+end_src
 
 Configs
 
 #+begin_src emacs-lisp
-
 ;;** TERM
-
 #+end_src
 
 ** CHECKERS
@@ -770,17 +749,13 @@ Configs
 Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
-
 ;;** CHECKERS
-
 #+end_src
 
 Configs
 
 #+begin_src emacs-lisp
-
 ;;** CHECKERS
-
 #+end_src
 
 ** TOOLS
@@ -788,7 +763,6 @@ Configs
 Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
-
 ;;** TOOLS
 
 (package! info-colors)
@@ -807,7 +781,6 @@ Packages
 ;; TODO ssh-agency
 ;; TODO ssh-tunnels
 (package! salt-mode)
-
 #+end_src
 
 Configs
@@ -924,15 +897,12 @@ controlled configuration. e.g. when you want:
 Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
-
 ;;** LSP
-
 #+end_src
 
 Configs
 
 #+begin_src emacs-lisp
-
 ;;** LSP
 
 ;;*** LSP MODE
@@ -946,7 +916,6 @@ Configs
       ;; lsp-ui-doc--inline-width
 
       lsp-ui-imenu-window-width 25)
-
 #+end_src
 
 *** LSP Mode
@@ -966,22 +935,21 @@ Configs
 + Bottom
   + [ ] =lsp-performance*=
 
+
 ** OS
 
 Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
-
 ;;** OS
-
 #+end_src
 
 Configs
 
 #+begin_src emacs-lisp
-
+;;
 ;;** OS
-
+;;
 #+end_src
 
 *** Terminal
@@ -1332,7 +1300,6 @@ xdg-mime default emacs.desktop text/org
 Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
-
 ;;** LANG
 
 (package! elisp-depmap
@@ -1607,9 +1574,7 @@ gnuplot img/spice/spice-example v(in) v(out) v(inn)
 Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
-
 ;;** BABEL
-
 #+end_src
 
 Configs
@@ -1725,9 +1690,7 @@ failing), i'd like to know a little more about what is going on here.
 Package
 
 #+begin_src emacs-lisp :tangle ./packages.el
-
 ;;** FIREWALL
-
 #+end_src
 
 Configs
@@ -1743,9 +1706,7 @@ Configs
 Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
-
 ;;** EMAIL
-
 #+end_src
 
 Configs
@@ -1761,9 +1722,7 @@ Configs
 Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
-
 ;;** APP
-
 #+end_src
 
 Configs
@@ -1784,10 +1743,8 @@ Configs
 Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
-
 ;;** CONFIG
 (package! prism)
-
 #+end_src
 
 Configs
@@ -1845,9 +1802,7 @@ Configs
 Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
-
 ;;** HYDRAS
-
 #+end_src
 
 Configs
@@ -1856,9 +1811,9 @@ Configs
 
 ;;** HYDRAS
 
-;; (load-file (expand-file-name
-;;             (concat (file-name-as-directory (getenv "DOOMDIR"))
-;;                     "scripts/hydras.el")))
+(load-file (expand-file-name
+             (concat (file-name-as-directory (getenv "DOOMDIR"))
+                     "scripts/hydras.el")))
 #+end_src
 
 
