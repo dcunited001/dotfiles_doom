@@ -13,6 +13,10 @@
 
 ;;*** Lispy
 (setq lispy-compat '(cider edebug))
+(after! lispy
+  (map! (:map lispy-mode-map
+         "M-." #'+lookup/definition
+         "M-," #'better-jumper-jump-backward)))
 
 ;;*** Mouse
 
