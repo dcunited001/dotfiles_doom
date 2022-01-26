@@ -838,7 +838,11 @@
    org-babel-load-languages))
 (org-babel-make-language-alias "julia" "julia-vterm")
 
-;; [[file:config.org::*\[\[https:/github.com/krisajenkins/ob-translate\]\[ob-translate\]\]][[[https://github.com/krisajenkins/ob-translate][ob-translate]]:2]]
+;; this is insufficient as make-language-alias remaps a few other symbols
+;; (defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
+;; Babel Configs:1 ends here
+
+;; [[file:config.org::*ob-translate Configs][ob-translate Configs:1]]
 ;;*** ob-translate
 (use-package! google-translate :demand t
   :init (require 'google-translate)

@@ -1269,33 +1269,6 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
 
 #+end_src
 
-*** Mime types [fn:tecosaur]
-Org mode isn't recognised as it's own mime type by default, but that can easily
-be changed with the following file. For system-wide changes try
-=/usr/share/mime/packages/org.xml=.
-
-#+begin_src xml :tangle ~/.local/share/mime/packages/org.xml :mkdirp yes :comments no
-<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
-  <mime-type type="text/org">
-    <comment>Emacs Org-mode File</comment>
-    <glob pattern="*.org"/>
-    <alias type="text/org"/>
-  </mime-type>
-</mime-info>
-#+end_src
-
-What's nice is that Papirus [[https://github.com/PapirusDevelopmentTeam/papirus-icon-theme/commit/a10fb7f2423d5e30b9c4477416ccdc93c4f3849d][now]] has an icon for =text/org=.
-One simply needs to refresh their mime database
-
-#+begin_src shell :tangle (if (string= (shell-command-to-string "xdg-mime query default text/org") "") "setup.sh" "no")
-update-mime-database ~/.local/share/mime
-#+end_src
-
-Then set Emacs as the default editor
-
-#+begin_src shell :tangle (if (string= (shell-command-to-string "xdg-mime query default text/org") "emacs-client.desktop\n") "no" "setup.sh")
-xdg-mime default emacs.desktop text/org
-#+end_src
 
 ** LANG
 
@@ -1596,6 +1569,9 @@ gnuplot img/spice/spice-example v(in) v(out) v(inn)
    org-babel-load-languages))
 (org-babel-make-language-alias "julia" "julia-vterm")
 
+;; this is insufficient as make-language-alias remaps a few other symbols
+;; (defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
+
 #+end_src
 
 + doom handles most of this stuff in [[file:~/.emacs.d/modules/lang/org/config.el::defun +org-init-babel-lazy-loader-h (][+org-init-babel-lazy-loader-h]]
@@ -1604,16 +1580,6 @@ gnuplot img/spice/spice-example v(in) v(out) v(inn)
   - is the var =org-confirm-babel-evaluate= still in tact?
 
 *** org-babel
-Load general org-babel config after defining languages
-
-#+begin_example emacs-lisp
-
-;; this is insufficient as make-language-alias remaps a few other symbols
-;; (defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
-
-#+end_example
-
-**** TODO ensure the above is necessary with =+org-init-babel-lazy-loader-h=
 
 *** ob-async
 
