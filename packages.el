@@ -1,15 +1,15 @@
 ;; -*- no-byte-compile: t; lexical-binding: t; -*-
 ;;* ~/.doom.d/packages.el
 
-;; [[file:config.org::*INPUT][INPUT:1]]
+;; [[file:config.org::*Input Packages][Input Packages:1]]
 ;;** INPUT
-;; INPUT:1 ends here
+;; Input Packages:1 ends here
 
-;; [[file:config.org::*COMPLETION][COMPLETION:1]]
+;; [[file:config.org::*Completion Packages][Completion Packages:1]]
 ;;** COMPLETION
-;; COMPLETION:1 ends here
+;; Completion Packages:1 ends here
 
-;; [[file:config.org::*UI][UI:1]]
+;; [[file:config.org::*UI Packages][UI Packages:1]]
 ;;** UI
 
 (package! diminish)
@@ -36,28 +36,28 @@
   :recipe (:host github
            :repo "alphapapa/dogears.el"
            :files (:defaults (:exclude "helm-dogears.el"))))
-;; UI:1 ends here
+;; UI Packages:1 ends here
 
-;; [[file:config.org::*EDITOR][EDITOR:1]]
+;; [[file:config.org::*Editor Packages][Editor Packages:1]]
 ;;** EDITOR
 
 (package! origami)
 (package! centered-cursor-mode)
-;; EDITOR:1 ends here
+;; Editor Packages:1 ends here
 
-;; [[file:config.org::*EMACS][EMACS:1]]
+;; [[file:config.org::*Emacs Packages][Emacs Packages:1]]
 ;;** EMACS
-;; EMACS:1 ends here
+;; Emacs Packages:1 ends here
 
-;; [[file:config.org::*TERM][TERM:1]]
+;; [[file:config.org::*Term Packages][Term Packages:1]]
 ;;** TERM
-;; TERM:1 ends here
+;; Term Packages:1 ends here
 
-;; [[file:config.org::*CHECKERS][CHECKERS:1]]
+;; [[file:config.org::*Checkers Packages][Checkers Packages:1]]
 ;;** CHECKERS
-;; CHECKERS:1 ends here
+;; Checkers Packages:1 ends here
 
-;; [[file:config.org::*TOOLS][TOOLS:1]]
+;; [[file:config.org::*Tools Packages][Tools Packages:1]]
 ;;** TOOLS
 
 (package! info-colors)
@@ -76,17 +76,17 @@
 ;; TODO ssh-agency
 ;; TODO ssh-tunnels
 (package! salt-mode)
-;; TOOLS:1 ends here
+;; Tools Packages:1 ends here
 
-;; [[file:config.org::*LSP][LSP:1]]
+;; [[file:config.org::*Lsp Packages][Lsp Packages:1]]
 ;;** LSP
-;; LSP:1 ends here
+;; Lsp Packages:1 ends here
 
-;; [[file:config.org::*OS][OS:1]]
+;; [[file:config.org::*OS Packages][OS Packages:1]]
 ;;** OS
-;; OS:1 ends here
+;; OS Packages:1 ends here
 
-;; [[file:config.org::*ORG][ORG:1]]
+;; [[file:config.org::*Org Packages][Org Packages:1]]
 ;;** ORG
 (package! org-treeusage)
 (package! org-drill)
@@ -96,9 +96,9 @@
 (package! org-super-agenda)
 (package! org-ql)
 (package! org-sidebar)
-;; ORG:1 ends here
+;; Org Packages:1 ends here
 
-;; [[file:config.org::*LANG][LANG:1]]
+;; [[file:config.org::*Lang Packages][Lang Packages:1]]
 ;;** LANG
 
 (package! elisp-depmap
@@ -113,35 +113,35 @@
 (package! graphql)
 (package! graphql-mode)
 (package! ob-graphql)
-;; LANG:1 ends here
+;; Lang Packages:1 ends here
 
-;; [[file:config.org::*BABEL][BABEL:1]]
+;; [[file:config.org::*Babel Packages][Babel Packages:1]]
 ;;** BABEL
-;; BABEL:1 ends here
+;; Babel Packages:1 ends here
 
-;; [[file:config.org::*\[\[https:/github.com/krisajenkins/ob-translate\]\[ob-translate\]\]][[[https://github.com/krisajenkins/ob-translate][ob-translate]]:1]]
+;; [[file:config.org::*ob-translate Packages][ob-translate Packages:1]]
 ;;*** ob-translate
 (package! google-translate)
 (package! ob-translate)
-;; [[https://github.com/krisajenkins/ob-translate][ob-translate]]:1 ends here
+;; ob-translate Packages:1 ends here
 
-;; [[file:config.org::*FIREWALL][FIREWALL:1]]
+;; [[file:config.org::*Firewall Package][Firewall Package:1]]
 ;;** FIREWALL
-;; FIREWALL:1 ends here
+;; Firewall Package:1 ends here
 
-;; [[file:config.org::*EMAIL][EMAIL:1]]
+;; [[file:config.org::*Email Packages][Email Packages:1]]
 ;;** EMAIL
-;; EMAIL:1 ends here
+;; Email Packages:1 ends here
 
-;; [[file:config.org::*APP][APP:1]]
+;; [[file:config.org::*App Packages][App Packages:1]]
 ;;** APP
-;; APP:1 ends here
+;; App Packages:1 ends here
 
-;; [[file:config.org::*CONFIG][CONFIG:1]]
+;; [[file:config.org::*Config Packages][Config Packages:1]]
 ;;** CONFIG
 (package! prism)
-;; CONFIG:1 ends here
+;; Config Packages:1 ends here
 
-;; [[file:config.org::*HYDRAS][HYDRAS:1]]
+;; [[file:config.org::*Hydras Packages][Hydras Packages:1]]
 ;;** HYDRAS
-;; HYDRAS:1 ends here
+;; Hydras Packages:1 ends here

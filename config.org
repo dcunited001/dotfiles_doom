@@ -115,13 +115,13 @@ bin/doom (upgrade|sync|build)
 
 ** INPUT
 
-Packages
+*** Input Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
 ;;** INPUT
 #+end_src
 
-Configs
+*** Input Configs
 
 #+begin_src emacs-lisp
 ;;** INPUT
@@ -274,13 +274,13 @@ Mouse 14 is intended to give hints for keybindings.
 
 ** COMPLETION
 
-Packages
+*** Completion Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
 ;;** COMPLETION
 #+end_src
 
-Configs
+*** Completion Configs
 
 #+begin_src emacs-lisp
 ;;** COMPLETION
@@ -299,7 +299,7 @@ Removed =-childframe= for now, as these are actual frames, kinda.
 
 ** UI
 
-Packages
+*** UI Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
 ;;** UI
@@ -330,7 +330,7 @@ Packages
            :files (:defaults (:exclude "helm-dogears.el"))))
 #+end_src
 
-Configs
+*** UI Configs
 
 #+begin_src emacs-lisp
 ;;** UI
@@ -584,7 +584,7 @@ These are simply bookmarks and thus can be reached from the doom startup menu.
 
 ** EDITOR
 
-Packages
+*** Editor Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
 ;;** EDITOR
@@ -593,7 +593,7 @@ Packages
 (package! centered-cursor-mode)
 #+end_src
 
-Configs
+*** Editor Configs
 
 #+begin_src emacs-lisp
 ;;** EDITOR
@@ -691,13 +691,13 @@ Configs
 
 ** EMACS
 
-Packages
+*** Emacs Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
 ;;** EMACS
 #+end_src
 
-Config
+*** Emacs Config
 
 #+begin_src emacs-lisp
 ;;** EMACS
@@ -736,13 +736,13 @@ This is default & I'd rather adjust to it. In the future, I may address this by:
 
 ** TERM
 
-Packages
+*** Term Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
 ;;** TERM
 #+end_src
 
-Configs
+*** Term Configs
 
 #+begin_src emacs-lisp
 ;;** TERM
@@ -750,13 +750,13 @@ Configs
 
 ** CHECKERS
 
-Packages
+*** Checkers Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
 ;;** CHECKERS
 #+end_src
 
-Configs
+*** Checkers Configs
 
 #+begin_src emacs-lisp
 ;;** CHECKERS
@@ -764,7 +764,7 @@ Configs
 
 ** TOOLS
 
-Packages
+*** Tools Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
 ;;** TOOLS
@@ -787,7 +787,7 @@ Packages
 (package! salt-mode)
 #+end_src
 
-Configs
+*** Tools Configs
 
 #+begin_src emacs-lisp
 ;;** TOOLS
@@ -898,13 +898,13 @@ controlled configuration. e.g. when you want:
 
 ** LSP
 
-Packages
+*** Lsp Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
 ;;** LSP
 #+end_src
 
-Configs
+*** Lsp Configs
 
 #+begin_src emacs-lisp
 ;;** LSP
@@ -942,18 +942,16 @@ Configs
 
 ** OS
 
-Packages
+*** OS Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
 ;;** OS
 #+end_src
 
-Configs
+*** OS Configs
 
 #+begin_src emacs-lisp
-;;
 ;;** OS
-;;
 #+end_src
 
 *** Terminal
@@ -975,7 +973,7 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
 
 ** ORG
 
-Packages
+*** Org Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
 ;;** ORG
@@ -989,7 +987,7 @@ Packages
 (package! org-sidebar)
 #+end_src
 
-Configs
+*** Org Configs
 
 #+begin_src emacs-lisp
 ;;** ORG
@@ -1301,7 +1299,7 @@ xdg-mime default emacs.desktop text/org
 
 ** LANG
 
-Packages
+*** Lang Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
 ;;** LANG
@@ -1320,7 +1318,7 @@ Packages
 (package! ob-graphql)
 #+end_src
 
-Configs
+*** Lang Configs
 
 #+begin_src emacs-lisp
 
@@ -1575,13 +1573,13 @@ gnuplot img/spice/spice-example v(in) v(out) v(inn)
 
 ** BABEL
 
-Packages
+*** Babel Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
 ;;** BABEL
 #+end_src
 
-Configs
+*** Babel Configs
 
 #+begin_src emacs-lisp
 
@@ -1621,7 +1619,9 @@ Load general org-babel config after defining languages
 
 doesn't support session (see tecosaur's notes)
 
-*** [[https://github.com/krisajenkins/ob-translate][ob-translate]]
+*** ob-translate
+
+[[https://github.com/krisajenkins/ob-translate][ob-translate]]
 
 For someone who owns a ton of original langauge and interlinear/bilingual books,
 getting this into org-mode would be super helpfu. It's way more efficient than
@@ -1630,6 +1630,8 @@ perhaps I can make meaningfull progress on that Español copy of Borges'
 collections or my italian copy of Foucault's Pendulum -- both of which are far
 superior when the etymological connections are left in tact.
 
+**** ob-translate Packages
+
 #+begin_src emacs-lisp :tangle ./packages.el
 
 ;;*** ob-translate
@@ -1637,6 +1639,8 @@ superior when the etymological connections are left in tact.
 (package! ob-translate)
 
 #+end_src
+
+**** ob-translate Configs
 
 Config google-translate.el ([[https://github.com/atykhonov/google-translate/issues/137][fix for TKK errors]])
 
@@ -1691,13 +1695,13 @@ Extra Sensory Perception
 After finding that a package was fetching unicorns with http requests (and
 failing), i'd like to know a little more about what is going on here.
 
-Package
+*** Firewall Package
 
 #+begin_src emacs-lisp :tangle ./packages.el
 ;;** FIREWALL
 #+end_src
 
-Configs
+*** Firewall Configs
 
 #+begin_src emacs-lisp
 
@@ -1707,13 +1711,13 @@ Configs
 
 ** EMAIL
 
-Packages
+*** Email Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
 ;;** EMAIL
 #+end_src
 
-Configs
+*** Email Configs
 
 #+begin_src emacs-lisp
 
@@ -1723,13 +1727,13 @@ Configs
 
 ** APP
 
-Packages
+*** App Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
 ;;** APP
 #+end_src
 
-Configs
+*** App Configs
 
 #+begin_src emacs-lisp
 
@@ -1744,14 +1748,14 @@ Configs
 
 ** CONFIG
 
-Packages
+*** Config Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
 ;;** CONFIG
 (package! prism)
 #+end_src
 
-Configs
+*** Config Configs
 
 #+begin_src emacs-lisp
 
@@ -1803,13 +1807,13 @@ Configs
 
 ** HYDRAS
 
-Packages
+*** Hydras Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
 ;;** HYDRAS
 #+end_src
 
-Configs
+*** Hydras Configs
 
 #+begin_src emacs-lisp
 

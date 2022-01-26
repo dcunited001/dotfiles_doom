@@ -3,7 +3,7 @@
 (setq user-full-name "David Conner"
       user-mail-address "noreply@te.xel.io")
 
-;; [[file:config.org::*INPUT][INPUT:2]]
+;; [[file:config.org::*Input Configs][Input Configs:1]]
 ;;** INPUT
 
 ;; Fixes problems with dead keys
@@ -69,13 +69,13 @@
 ;;**** Hydras
 
 (map! "M-<mouse-14>" 'which-key-show-major-mode)
-;; INPUT:2 ends here
+;; Input Configs:1 ends here
 
-;; [[file:config.org::*COMPLETION][COMPLETION:2]]
+;; [[file:config.org::*Completion Configs][Completion Configs:1]]
 ;;** COMPLETION
-;; COMPLETION:2 ends here
+;; Completion Configs:1 ends here
 
-;; [[file:config.org::*UI][UI:2]]
+;; [[file:config.org::*UI Configs][UI Configs:1]]
 ;;** UI
 
 ;;*** Diminish
@@ -259,9 +259,9 @@
 
 (add-hook 'doom-init-ui-hook
           #'dimmer-mode)
-;; UI:2 ends here
+;; UI Configs:1 ends here
 
-;; [[file:config.org::*EDITOR][EDITOR:2]]
+;; [[file:config.org::*Editor Configs][Editor Configs:1]]
 ;;** EDITOR
 
 ;;*** Auto Insert
@@ -338,9 +338,9 @@
     (add-to-list 'yas-snippet-dirs 'dc/snippets)
     (message "loading dc/snippets")
     (yas-load-directory dc/snippets t)))
-;; EDITOR:2 ends here
+;; Editor Configs:1 ends here
 
-;; [[file:config.org::*EMACS][EMACS:2]]
+;; [[file:config.org::*Emacs Config][Emacs Config:1]]
 ;;** EMACS
 
 ;;*** GPG
@@ -359,17 +359,17 @@
 
        ;; ... but potentially a good idea with TRAMP ... maybe?)
        :leader :desc "Close all direds" "Q" #'+dired/quit-all))
-;; EMACS:2 ends here
+;; Emacs Config:1 ends here
 
-;; [[file:config.org::*TERM][TERM:2]]
+;; [[file:config.org::*Term Configs][Term Configs:1]]
 ;;** TERM
-;; TERM:2 ends here
+;; Term Configs:1 ends here
 
-;; [[file:config.org::*CHECKERS][CHECKERS:2]]
+;; [[file:config.org::*Checkers Configs][Checkers Configs:1]]
 ;;** CHECKERS
-;; CHECKERS:2 ends here
+;; Checkers Configs:1 ends here
 
-;; [[file:config.org::*TOOLS][TOOLS:2]]
+;; [[file:config.org::*Tools Configs][Tools Configs:1]]
 ;;** TOOLS
 
 ;;*** INFO
@@ -451,9 +451,9 @@
 ;; (use-package! salt-mode)
 
 ;;*** AST
-;; TOOLS:2 ends here
+;; Tools Configs:1 ends here
 
-;; [[file:config.org::*LSP][LSP:2]]
+;; [[file:config.org::*Lsp Configs][Lsp Configs:1]]
 ;;** LSP
 
 ;;*** LSP MODE
@@ -467,15 +467,13 @@
       ;; lsp-ui-doc--inline-width
 
       lsp-ui-imenu-window-width 25)
-;; LSP:2 ends here
+;; Lsp Configs:1 ends here
 
-;; [[file:config.org::*OS][OS:2]]
-;;
+;; [[file:config.org::*OS Configs][OS Configs:1]]
 ;;** OS
-;;
-;; OS:2 ends here
+;; OS Configs:1 ends here
 
-;; [[file:config.org::*ORG][ORG:2]]
+;; [[file:config.org::*Org Configs][Org Configs:1]]
 ;;** ORG
 
 ;;*** org-agenda packages
@@ -752,9 +750,9 @@
       :prefix ("t" . "toggle")
       :desc "Toggle Org Narrow" "T" #'org-toggle-narrow-to-subtree
       :desc "Toggle Org Treeusage" "U" #'org-treeusage-mode)
-;; ORG:2 ends here
+;; Org Configs:1 ends here
 
-;; [[file:config.org::*LANG][LANG:2]]
+;; [[file:config.org::*Lang Configs][Lang Configs:1]]
 ;;** LANG
 
 ;;*** ELISP
@@ -824,9 +822,9 @@
 (use-package! graphql)
 (use-package! graphql-mode)
 (use-package! ob-graphql)
-;; LANG:2 ends here
+;; Lang Configs:1 ends here
 
-;; [[file:config.org::*BABEL][BABEL:2]]
+;; [[file:config.org::*Babel Configs][Babel Configs:1]]
 ;;** BABEL
 
 (after! org
@@ -839,7 +837,6 @@
    'org-babel-load-languages
    org-babel-load-languages))
 (org-babel-make-language-alias "julia" "julia-vterm")
-;; BABEL:2 ends here
 
 ;; [[file:config.org::*\[\[https:/github.com/krisajenkins/ob-translate\]\[ob-translate\]\]][[[https://github.com/krisajenkins/ob-translate][ob-translate]]:2]]
 ;;*** ob-translate
@@ -860,21 +857,21 @@
   :bind
   ;;("C-T". my-google-translate-at-point)
 )
-;; [[https://github.com/krisajenkins/ob-translate][ob-translate]]:2 ends here
+;; ob-translate Configs:1 ends here
 
-;; [[file:config.org::*FIREWALL][FIREWALL:2]]
+;; [[file:config.org::*Firewall Configs][Firewall Configs:1]]
 ;;** FIREWALL
-;; FIREWALL:2 ends here
+;; Firewall Configs:1 ends here
 
-;; [[file:config.org::*EMAIL][EMAIL:2]]
+;; [[file:config.org::*Email Configs][Email Configs:1]]
 ;;** EMAIL
-;; EMAIL:2 ends here
+;; Email Configs:1 ends here
 
-;; [[file:config.org::*APP][APP:2]]
+;; [[file:config.org::*App Configs][App Configs:1]]
 ;;** APP
-;; APP:2 ends here
+;; App Configs:1 ends here
 
-;; [[file:config.org::*CONFIG][CONFIG:2]]
+;; [[file:config.org::*Config Configs][Config Configs:1]]
 ;;** CONFIG
 
 ;;*** Prism
@@ -913,12 +910,12 @@
 ;; TODO fix to autoload rainbow-mode in doom theme files (setq
 ;; auto-minor-mode-alist (append '(("theme\\.el$" . rainbow-mode))
 ;; auto-minor-mode-alist))
-;; CONFIG:2 ends here
+;; Config Configs:1 ends here
 
-;; [[file:config.org::*HYDRAS][HYDRAS:2]]
+;; [[file:config.org::*Hydras Configs][Hydras Configs:1]]
 ;;** HYDRAS
 
 (load-file (expand-file-name
              (concat (file-name-as-directory (getenv "DOOMDIR"))
                      "scripts/hydras.el")))
-;; HYDRAS:2 ends here
+;; Hydras Configs:1 ends here
