@@ -112,7 +112,6 @@ bin/doom clean
 bin/doom (upgrade|sync|build)
 #+end_src
 
-
 ** INPUT
 
 *** Input Packages
@@ -433,15 +432,7 @@ Removed =-childframe= for now, as these are actual frames, kinda.
 (set-popup-rules!
   '(("^\\*Bufler" :side right :width 60
      :vslot -5 :slot 3
-     :modeline nil :select t :quit t)
-
-    ;; NOTE this works, but the functionality in geiser/geiser-popup.el only covers *Geiser buffers
-    ;; - so =C-`= works to toggle, but all scheme-mode functionality will send repl buffers to other-window
-    ;; ("^\\* Guile REPL" :side bottom
-    ;;  :vslot 3 :slot 3
-    ;;  :modeline nil
-    ;;  :select t :quit t)
-    ))
+     :modeline nil :select t :quit t)))
 
 ;;*** Burly
 
@@ -482,9 +473,7 @@ Removed =-childframe= for now, as these are actual frames, kinda.
 (setq +modeline-height 31)
 
 ;;*** Which Key
-;(after! which-key
-    (setq which-key-idle-delay 1.0)
-;   )
+(setq which-key-idle-delay 1.0)
 
 ;;*** Line Numbers
 ;; For relative line numbers, set this to `relative'.
@@ -1279,6 +1268,8 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
 
 (package! elisp-depmap
   :recipe (:host gitlab :repo "mtekman/elisp-depmap.el"))
+(package! graphviz-dot-mode)
+(package! dynamic-graphs)
 (package! zprint-mode)
 (package! julia-vterm)
 (package! ob-julia-vterm)
@@ -1315,6 +1306,14 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
 ;;**** CIDER
 (add-hook 'cider-mode-hook #'clj-refactor-mode)
 (setq org-babel-clojure-backend 'cider)
+
+;;*** SCHEME
+
+;;**** GEISER
+
+;;**** GUILE
+
+;;*** GUIX
 
 ;;*** JULIA
 (let ((julia-depot-path
@@ -1364,6 +1363,14 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
 (use-package! graphql)
 (use-package! graphql-mode)
 (use-package! ob-graphql)
+
+;;*** GRAPHVIZ
+
+;;**** graphviz-dot-mode
+(use-package! graphviz-dot-mode)
+
+;;**** dynamic-graphviz
+(use-package! dynamic-graphs)
 
 #+end_src
 

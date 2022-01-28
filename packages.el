@@ -103,6 +103,8 @@
 
 (package! elisp-depmap
   :recipe (:host gitlab :repo "mtekman/elisp-depmap.el"))
+(package! graphviz-dot-mode)
+(package! dynamic-graphs)
 (package! zprint-mode)
 (package! julia-vterm)
 (package! ob-julia-vterm)

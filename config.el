@@ -176,15 +176,7 @@
 (set-popup-rules!
   '(("^\\*Bufler" :side right :width 60
      :vslot -5 :slot 3
-     :modeline nil :select t :quit t)
-
-    ;; NOTE this works, but the functionality in geiser/geiser-popup.el only covers *Geiser buffers
-    ;; - so =C-`= works to toggle, but all scheme-mode functionality will send repl buffers to other-window
-    ;; ("^\\* Guile REPL" :side bottom
-    ;;  :vslot 3 :slot 3
-    ;;  :modeline nil
-    ;;  :select t :quit t)
-    ))
+     :modeline nil :select t :quit t)))
 
 ;;*** Burly
 
@@ -225,9 +217,7 @@
 (setq +modeline-height 31)
 
 ;;*** Which Key
-;(after! which-key
-    (setq which-key-idle-delay 1.0)
-;   )
+(setq which-key-idle-delay 1.0)
 
 ;;*** Line Numbers
 ;; For relative line numbers, set this to `relative'.
@@ -774,6 +764,14 @@
 (add-hook 'cider-mode-hook #'clj-refactor-mode)
 (setq org-babel-clojure-backend 'cider)
 
+;;*** SCHEME
+
+;;**** GEISER
+
+;;**** GUILE
+
+;;*** GUIX
+
 ;;*** JULIA
 (let ((julia-depot-path
        (car (split-string (getenv "JULIA_DEPOT_PATH") (path-separator)))))
@@ -822,6 +820,14 @@
 (use-package! graphql)
 (use-package! graphql-mode)
 (use-package! ob-graphql)
+
+;;*** GRAPHVIZ
+
+;;**** graphviz-dot-mode
+(use-package! graphviz-dot-mode)
+
+;;**** dynamic-graphviz
+(use-package! dynamic-graphs)
 ;; Lang Configs:1 ends here
 
 ;; [[file:config.org::*Babel Configs][Babel Configs:1]]
