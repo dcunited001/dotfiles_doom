@@ -600,6 +600,14 @@
 
          ) org-roam-capture-templates))
 
+(defun dc/org-roam-insert-slug ()
+  (interactive)
+  (insert (org-roam-node-slug (org-roam-node-at-point))))
+
+(defun dc/org-roam-get-slug ()
+  (interactive)
+  (org-roam-node-slug (org-roam-node-at-point)))
+
 ;; DEFAULTS:
 ;; (setq org-roam-capture-templates '(("d" "default" plain "%?" :unnarrowed t
 ;;                                      :target (file+head "slips/%<%Y%m%d%H%M%S>-${slug}.org"
@@ -709,6 +717,8 @@
        "i" #'dw/org-roam-insert-immediate
        "I" #'org-roam-insert-node
        "#" #'org-id-get-create
+       "4" #'dc/org-roam-get-slug
+       "$" #'dc/org-roam-insert-slug
        "r" #'org-roam-refile
        "R" #'org-roam-link-replace-all
        "m" #'org-roam-buffer-toggle
@@ -732,7 +742,11 @@
        "D" #'org-roam-demote-entire-buffer
        "i" #'dw/org-roam-insert-immediate
        "I" #'org-roam-insert-node
+       
        "#" #'org-id-get-create
+       "4" #'dc/org-roam-get-slug
+       "$" #'dc/org-roam-insert-slug
+       
        "r" #'org-roam-refile
        "R" #'org-roam-link-replace-all
        "m" #'org-roam-buffer-toggle
