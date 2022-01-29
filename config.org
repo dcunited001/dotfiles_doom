@@ -1584,6 +1584,8 @@ gnuplot img/spice/spice-example v(in) v(out) v(inn)
 
 #+begin_src emacs-lisp :tangle ./packages.el
 ;;** BABEL
+
+(package! ob-dot)
 #+end_src
 
 *** Babel Configs
@@ -1592,16 +1594,25 @@ gnuplot img/spice/spice-example v(in) v(out) v(inn)
 
 ;;** BABEL
 
-(after! org
-  (setq org-babel-load-languages
-        (append org-babel-load-languages
-                '((julia-vterm . t)
-                  (clojure . t)
-                  (dot . t))))
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   org-babel-load-languages))
+(use-package! ob-dot)
+
+;; NOTE: this is no longer needed
+;; (after! org
+;;   (setq org-babel-load-languages
+;;         (append org-babel-load-languages
+;;                 '((julia-vterm . t)
+;;                   (clojure . t)
+;;                   ;; dot no longer functions here
+;;                   (dot . t))))
+;;   (org-babel-do-load-languages
+;;    'org-babel-load-languages
+;;    org-babel-load-languages))
+
+;; To check if =run-
+
 (org-babel-make-language-alias "julia" "julia-vterm")
+
+
 
 ;; this is insufficient as make-language-alias remaps a few other symbols
 ;; (defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
@@ -1614,6 +1625,8 @@ gnuplot img/spice/spice-example v(in) v(out) v(inn)
   - is the var =org-confirm-babel-evaluate= still in tact?
 
 *** org-babel
+
+*** ob-dot
 
 *** ob-async
 

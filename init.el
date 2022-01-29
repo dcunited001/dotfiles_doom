@@ -50,7 +50,7 @@
        ;;tabs              ; a tab bar for Emacs
        ;;treemacs          ; a project drawer, like neotree but cooler
        unicode          ; extended unicode support for various languages
-       ;vc-gutter        ; vcs diff in the fringe
+                                        ;vc-gutter        ; vcs diff in the fringe
        vi-tilde-fringe                  ; fringe tildes to mark beyond EOB
        window-select                    ; visually switch windows
        workspaces       ; tab emulation, persistence & separate workspaces
@@ -158,8 +158,9 @@
        ;;nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
 
-       (org +pomodoro +pretty +present +gnuplot +pandoc +dragndrop +noter +roam2)
-       ;; TODO decide on : +jupyter
+       (org +pomodoro +present +gnuplot +pandoc +dragndrop +noter +roam2)
+       ;; TODO decide on +jupyter
+       ;; TODO try removing +pretty
 
        ;;php               ; perl's insecure younger brother
        plantuml
