@@ -92,6 +92,13 @@
 ;; NOTE just set modus-vivendi for now
 (setq doom-theme 'modus-vivendi)
 
+(defun dc/modus-themes-custom-faces ()
+  (set-face-attribute 'cursor nil :background (modus-themes-color 'blue))
+  ;; meshes well with prism-mode
+  (set-face-attribute 'font-lock-type-face nil :foreground (modus-themes-color 'fg-special-warm)))
+
+(add-hook 'modus-themes-after-load-theme-hook #'dc/modus-themes-custom-faces)
+
 ;; (setq doom-theme 'doom-acario-dark
 ;;   doom-acario-dark-brighter-comments nil
 ;;   doom-acario-dark-brighter-modeline t
@@ -373,6 +380,11 @@
 
 
 ;;*** GIT
+
+;; control-f8, like facebook's conference
+(map! "C-<f8>"
+      :desc "Toggle Global Auto Highlight"
+      #'git-timemachine-toggle)
 
 ;;*** MAGIT
 ;; magit-tbdiff: diff over ranges of commits
@@ -911,6 +923,18 @@
    :lightens '(0 5 10)
    :desaturations '(-2.5 0 2.5)
    :colors (dc/prism-get-modus-colors)))
+
+;; (dc/prism-get-modus-colors)
+;; ("#ff8059"
+;;  "#80b2f0"
+;;  "#44bc44"
+;;  "#feacd0"
+;;  "#6ae4b9"
+;;  "#2fafff"
+;;  "#fba849"
+;;  "#88bf99"
+;;  "#9f80ff"
+;;  "#f0dd60")
 
 ;;*** Rainbow Mode
 
