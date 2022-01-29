@@ -860,24 +860,7 @@
 ;;** BABEL
 
 (use-package! ob-dot)
-
-;; NOTE: this is no longer needed
-;; (after! org
-;;   (setq org-babel-load-languages
-;;         (append org-babel-load-languages
-;;                 '((julia-vterm . t)
-;;                   (clojure . t)
-;;                   ;; dot no longer functions here
-;;                   (dot . t))))
-;;   (org-babel-do-load-languages
-;;    'org-babel-load-languages
-;;    org-babel-load-languages))
-
-;; To check if =run-
-
 (org-babel-make-language-alias "julia" "julia-vterm")
-
-
 
 ;; this is insufficient as make-language-alias remaps a few other symbols
 ;; (defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
