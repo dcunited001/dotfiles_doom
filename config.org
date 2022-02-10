@@ -441,6 +441,15 @@ Removed =-childframe= for now, as these are actual frames, kinda.
      :vslot -5 :slot 3
      :modeline nil :select t :quit t)))
 
+;;*** Projectile
+
+(setq projectile-project-search-path '(("/data/repo/" . 1)
+                                       ;; ("/data/dev/" . 2) ;; trigger project depth
+                                       ("/data/ecto/" . 3)))
+
+;; projectile-auto-discover is nil
+;; trigger project auto-discovery with projectile-discover-projects-in-search-path
+
 ;;*** Burly
 
 (use-package! burly
