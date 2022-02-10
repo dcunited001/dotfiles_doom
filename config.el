@@ -583,6 +583,14 @@
          ("c" "code" plain "%?" :unnarrowed t
           :target (file+head "code/${slug}.org"
                              "#+title: ${title}\n\n"))
+
+         ;; for Anki/Editor format examples
+         ;; - see https://github.com/louietan/anki-editor/examples.org
+         ;; only notes that already exist in Anki should have ANKI_NOTE_ID
+         ;; - see https://github.com/louietan/anki-editor/blob/master/anki-editor.el#161
+         ("a" "anki" plain "%?" :unnarrowed t
+          :target (file+head "anki/${slug}.org"
+                             "#+title: ${title}\n\n* About\n\n* Topic, the first :tags:\n:properties:\n:anki_deck: Topic\n:anki_note_type: LaTeX\n:end:\n* Front\n* Back"))
          ("D" "drills" plain "%?" :unnarrowed t
           :target (file+head "drills/${slug}.org"
                              "#+title: ${title}\n\n"))
@@ -897,6 +905,19 @@
 
 ;; [[file:config.org::*App Configs][App Configs:1]]
 ;;** APP
+(use-package anki-editor
+  :after org-noter
+  :config (setq anki-editor-create-decks))
+
+(map! (:map org-mode-map
+       :leader
+       :prefix ("n@" . "Anki")
+       :desc "Push Anki Notes" "p" 'anki-editor-push-notes
+       :desc "Retry Anki Notes" "r" 'anki-editor-retry-failure-notes
+       :desc "Insert Note" "n" 'anki-editor-insert-note
+       (:prefix ("c" . "Cloze")
+        :desc "Dwim" "d" 'anki-editor-cloze-dwim
+        :desc "Region" "r" 'anki-editor-cloze-region)))
 ;; App Configs:1 ends here
 
 ;; [[file:config.org::*Config Configs][Config Configs:1]]

@@ -136,7 +136,8 @@
 ;; Email Packages:1 ends here
 
 ;; [[file:config.org::*App Packages][App Packages:1]]
-;;** APP
+;** APP
+(package! anki-editor)
 ;; App Packages:1 ends here
 
 ;; [[file:config.org::*Config Packages][Config Packages:1]]
