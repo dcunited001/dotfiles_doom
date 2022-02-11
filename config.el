@@ -916,7 +916,7 @@
 ;;** APP
 (use-package anki-editor
   :after org-noter
-  :config (setq anki-editor-create-decks))
+  :config (setq anki-editor-create-decks 't))
 
 (map! (:map org-mode-map
        :leader
