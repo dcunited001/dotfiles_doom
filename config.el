@@ -98,6 +98,7 @@
   (set-face-attribute 'font-lock-type-face nil :foreground (modus-themes-color 'fg-special-warm)))
 
 (add-hook 'modus-themes-after-load-theme-hook #'dc/modus-themes-custom-faces)
+(add-hook 'server-after-make-frame-hook #'dc/modus-themes-custom-faces)
 
 ;; (setq doom-theme 'doom-acario-dark
 ;;   doom-acario-dark-brighter-comments nil
@@ -272,13 +273,9 @@
 
 ;;*** Auto Insert
 
-;; TODO determine whether auto-insert-mode is necessary
-;; - esp. with doom's +file-templates module
 ;(auto-insert-mode)
 
 ;;*** Doom File Templates
-;; TODO add new file templates to +file-template-alist where needed
-;; - use set-file-template!
 
 ;;*** Code Folding
 
@@ -673,6 +670,10 @@
 ;; TODO see ./reorg.org for protocol capture templates
 
 ;;*** org-refile
+;; TODO: remove org-agenda-files and replace with:
+;; - roam/topics & roam/projects
+;; TODO: filter org roam dailies by filename's parsed dates
+;; - filter to two months
 (setq org-refile-targets
       '((org-agenda-files . (:maxlevel . 2))
         (("./todo.org" "./notes.org") . (:maxlevel . 3))
