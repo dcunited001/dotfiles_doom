@@ -73,6 +73,7 @@
 
 ;; [[file:config.org::*Completion Configs][Completion Configs:1]]
 ;;** COMPLETION
+(setq tab-always-indent 'complete)
 ;; Completion Configs:1 ends here
 
 ;; [[file:config.org::*UI Configs][UI Configs:1]]
@@ -493,6 +494,10 @@
       ;; Don't indent content in source blocks
       org-edit-src-content-indentation 0
 
+      ;; org-src buffers replace current-window
+      ;; NOTE: popup config is overriding this variableœ
+      org-src-window-setup 'current-window
+
       ;; org-clock-idle-time 3
         )
 
@@ -768,11 +773,11 @@
        "D" #'org-roam-demote-entire-buffer
        "i" #'dw/org-roam-insert-immediate
        "I" #'org-roam-insert-node
-       
+
        "#" #'org-id-get-create
        "4" #'dc/org-roam-get-slug
        "$" #'dc/org-roam-insert-slug
-       
+
        "r" #'org-roam-refile
        "R" #'org-roam-link-replace-all
        "m" #'org-roam-buffer-toggle
@@ -861,6 +866,10 @@
 
 
 ;;*** SPICE
+
+;;*** SMILES
+(use-package! smiles-mode)
+(use-package! ob-smiles)
 
 ;;*** OPEN API
 (use-package! openapi-yaml-mode)

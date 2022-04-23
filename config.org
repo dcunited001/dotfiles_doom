@@ -101,7 +101,7 @@ added by Doom modules).
 
 * Config.el :doom:config:
 :PROPERTIES:
-:header-args: :tangle ./config.el :comments link :results none
+:header-args: :tangle ./config.el :comments link
 :END:
 
 Packages will remain installed until you:
@@ -283,6 +283,8 @@ Mouse 14 is intended to give hints for keybindings.
 
 #+begin_src emacs-lisp
 ;;** COMPLETION
+(setq tab-always-indent 'complete)
+
 #+end_src
 
 *** Completion prompts
@@ -994,6 +996,10 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
       ;; Don't indent content in source blocks
       org-edit-src-content-indentation 0
 
+      ;; org-src buffers replace current-window
+      ;; NOTE: popup config is overriding this variableœ
+      org-src-window-setup 'current-window
+
       ;; org-clock-idle-time 3
         )
 
@@ -1269,11 +1275,11 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
        "D" #'org-roam-demote-entire-buffer
        "i" #'dw/org-roam-insert-immediate
        "I" #'org-roam-insert-node
-       
+
        "#" #'org-id-get-create
        "4" #'dc/org-roam-get-slug
        "$" #'dc/org-roam-insert-slug
-       
+
        "r" #'org-roam-refile
        "R" #'org-roam-link-replace-all
        "m" #'org-roam-buffer-toggle
@@ -1318,6 +1324,8 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
 (package! graphql)
 (package! graphql-mode)
 (package! ob-graphql)
+(package! smiles-mode)
+(package! ob-smiles)
 #+end_src
 
 *** Lang Configs
@@ -1390,6 +1398,10 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
 
 
 ;;*** SPICE
+
+;;*** SMILES
+(use-package! smiles-mode)
+(use-package! ob-smiles)
 
 ;;*** OPEN API
 (use-package! openapi-yaml-mode)
@@ -1589,6 +1601,17 @@ gnuplot img/spice/spice-example v(in) v(out) v(inn)
 #+END_SRC
 
 **** TODO ob-spice: fix 'functions definition is void =org-babel-get-header='
+
+*** SMILES :smiles:
+
+this consists of =smiles-mode= and =ob-smiles= for rendering inline images of chemical structures
+
+#+BEGIN_SRC smiles :tangle no :file img/smiles/lsd.svg :results file
+CCN(CC)C(=O)[C@H]1CN(C)[C@@H]2Cc3c[nH]c4cccc(C2=C1)c34
+#+END_SRC
+
+#+RESULTS:
+[[file:img/smiles/lsd.svg]]
 
 ** BABEL
 

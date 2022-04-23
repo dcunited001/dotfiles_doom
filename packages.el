@@ -106,6 +106,8 @@
 (package! graphql)
 (package! graphql-mode)
 (package! ob-graphql)
+(package! smiles-mode)
+(package! ob-smiles)
 ;; Lang Packages:1 ends here
 
 ;; [[file:config.org::*Babel Packages][Babel Packages:1]]
