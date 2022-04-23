@@ -14,24 +14,15 @@
 
 (package! diminish)
 (package! auto-highlight-symbol)
-(package! bufler :recipe (:host github
-                           :repo "alphapapa/bufler.el"
-                           :files (:defaults (:exclude "helm-bufler.el"))))
-(package! dogears :recipe (:host github
-                           :repo "alphapapa/dogears.el"
-                           :files (:defaults (:exclude "helm-dogears.el"))))
-
 (package! dimmer)
 ;; (package! beacon)
 
-
-
 ;;*** Alphapapa
 (package! burly)
-(package! bufler
-  :recipe (:host github
-           :repo "alphapapa/bufler.el"
-           :files (:defaults (:exclude "helm-bufler.el"))))
+;; (package! bufler
+;;   :recipe (:host github
+;;            :repo "alphapapa/bufler.el"
+;;            :files (:defaults (:exclude "helm-bufler.el"))))
 (package! dogears
   :recipe (:host github
            :repo "alphapapa/dogears.el"

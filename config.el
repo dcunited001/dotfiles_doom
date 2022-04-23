@@ -138,7 +138,8 @@
 ;;NOTE don't use them (they're taxing)
 
 ;;*** Window UI
-(tooltip-mode)
+;; NOTE: 2022-04-23 disable to determine if it's associated with (pgtk?) lag
+(tooltip-mode -1)
 
 (setq tooltip-delay 2
       tooltip-short-delay 0.5)
@@ -162,8 +163,7 @@
 
 ;; TODO try global-auto-highlight-symbol-mode
 ;; doom-specific
-(add-hook 'doom-init-ui-hook
-          #'global-auto-highlight-symbol-mode)
+;; (add-hook 'doom-init-ui-hook #'global-auto-highlight-symbol-mode)
 
 (defun dc/toggle-auto-highlight-symbol-mode ()
   "Toggle auto-highlight-symbol-mode"
@@ -210,13 +210,12 @@
                   :desc "Copy Frameset URL" "W" #'burly-kill-windows-url))))
 
 ;;*** Bufler
-(use-package! bufler
-  :config (map! :map ctl-x-map
-                  :desc "Bufler List"
-                  "C-b" #'bufler-list))
+;; (use-package! bufler
+;;   :config (map! :map ctl-x-map
+;;                   :desc "Bufler List"
+;;                   "C-b" #'bufler-list))
 
-(add-hook 'doom-init-ui-hook
-          #'bufler-mode)
+;; (add-hook 'doom-init-ui-hook #'bufler-mode)
 
 ;;*** Dogears
 (use-package! dogears
@@ -227,8 +226,7 @@
                 "M-d" #'dogears-list
                 "M-D" #'dogears-sidebar))
 
-(add-hook 'doom-init-ui-hook
-          #'dogears-mode)
+(add-hook 'doom-init-ui-hook #'dogears-mode)
 
 ;;*** Modeline
 (setq +modeline-height 31)
@@ -257,7 +255,7 @@
                  (map! :leader
                         "tD" :desc "Dimmer Mode"))
 
-  (dimmer-configure-company-box)
+  ;;(dimmer-configure-company-box)
   (dimmer-configure-magit)
   (dimmer-configure-org)
   (dimmer-configure-hydra)
@@ -503,14 +501,23 @@
 (after! org
   (remove-hook 'org-mode-hook #'+literate-enable-recompile-h))
 
+
+(defun dc/org-agenda-add-roam-dailies ()
+  "add org-roam-dailies to org-agenda-files if it's not already contained"
+  (let ((my-roam-dailies (file-name-as-directory
+                          (concat org-directory "/roam/dailies"))))
+    (unless (member my-roam-dailies org-agenda-files)
+      (progn (message "appending org-roam-dailies to org-agenda-files")
+             (append my-roam-dailies org-agenda-files)))))
+
+;; (list
+;;  (file-name-as-directory
+;;   (concat  org-directory "/roam/dailies" )))
+
 (after! org
   (setq org-log-done 'time
         org-support-shift-select t
-        org-agenda-files (list
-                          (file-name-as-directory
-                           (concat  org-directory "/roam/dailies" )))
-        ;; TODO include content from Adam James
-        ))
+        org-agenda-files '()))
 
 ;;*** org-agenda config
 
@@ -552,8 +559,9 @@
 
       ;; Doom Defaults
       ;; org-roam-v2-ack t
-      ;; org-roam-completion-everywhere t
       ;; org-roam-node-display-template "${doom-hierarchy:*} ${doom-tags:45}"
+
+      org-roam-completion-everywhere nil
 
       ;; org-roam-extract-new-file-path doesn't work with a "slips/" path prepended to it
       org-roam-extract-new-file-path "${slug}-%<%Y%m%d%H%M%S>-.org"
@@ -947,19 +955,26 @@
   (-map #'doom-color '(red teal green magenta cyan blue orange
                            dark-cyan violet yellow)))
 
-(use-package! prism
-  :hook ((emacs-lisp-mode . prism-mode)
-         (clojure-mode . prism-mode)
-         (clojurescript-mode . prism-mode)
-         (common-lisp-mode . prism-mode)
-         (scheme-mode . prism-mode))
-  :config (map! :leader :desc "Toggle Prism" "tP"
-                (lambda () (interactive) (prism-mode 'toggle)))
+;; i'm not sure whether this will help with performance
+;; but it took forever to find
+(defun dc/unless-org-src-fontification-activate (mode)
+  "enable mode unless in an org-mode block"
+  (unless (string-match (regexp-quote "*org-src-fontification:") (buffer-name))
+    (apply mode '(+1))))
 
-  (prism-set-colors
-   :lightens '(0 5 10)
-   :desaturations '(-2.5 0 2.5)
-   :colors (dc/prism-get-modus-colors)))
+(use-package! prism
+  :config (map! :leader :desc "Toggle Prism" "tP"
+                (lambda () (interactive) (prism-mode 'toggle))))
+
+(add-hook! (emacs-lisp-mode clojure-mode clojurescript-mode common-lisp-mode scheme-mode)
+           #'(lambda () (dc/unless-org-src-fontification-activate 'prism-mode)))
+
+(add-hook! 'doom-init-ui-hook
+           :append
+           #'(lambda () (prism-set-colors
+              :lightens '(0 5 10)
+              :desaturations '(-2.5 0 2.5)
+              :colors (dc/prism-get-modus-colors))))
 
 ;; (dc/prism-get-modus-colors)
 ;; ("#ff8059"
