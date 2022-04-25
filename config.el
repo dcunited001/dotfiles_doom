@@ -499,7 +499,7 @@
       org-src-window-setup 'current-window
 
       ;; org-clock-idle-time 3
-        )
+      )
 
 
 ;; doom-specific: Prevent over-eager dotfiles recompilation
@@ -564,7 +564,15 @@
 
       ;; Doom Defaults
       ;; org-roam-v2-ack t
-      ;; org-roam-node-display-template "${doom-hierarchy:*} ${doom-tags:45}"
+
+      ;; the default gives titles that are too narrow (12)
+      ;; org-roam-node--* sends the width of the then-current buffer
+      ;; and the completing-read functionality is adjusted for ~80 chars
+      ;;
+      org-roam-node-display-template
+       (format "${doom-hierarchy:36} %s %s"
+               (propertize "${doom-type:*}" 'face 'font-lock-keyword-face)
+               (propertize "${doom-tags:18}" 'face 'org-tag))
 
       org-roam-completion-everywhere nil
 
