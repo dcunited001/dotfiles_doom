@@ -1,9 +1,9 @@
-;; -*- no-byte-compile: t; lexical-binding: t; -*-
+;; -*- lexical-binding: t; -*-
 ;;* ~/.doom.d/config.el
 (setq user-full-name "David Conner"
       user-mail-address "noreply@te.xel.io")
 
-;; [[file:config.org::*Input Configs][Input Configs:1]]
+;; [[file:~/.doom.d/config.org::*Input Configs][Input Configs:1]]
 ;;** INPUT
 
 ;; Fixes problems with dead keys

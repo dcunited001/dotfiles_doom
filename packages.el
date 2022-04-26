@@ -1,15 +1,15 @@
-;; -*- no-byte-compile: t; lexical-binding: t; -*-
+;; -*- no-byte-compile: t; 
 ;;* ~/.doom.d/packages.el
 
-;; [[file:config.org::*Input Packages][Input Packages:1]]
+;; [[file:~/.doom.d/config.org::*Input Packages][Input Packages:1]]
 ;;** INPUT
 ;; Input Packages:1 ends here
 
-;; [[file:config.org::*Completion Packages][Completion Packages:1]]
+;; [[file:~/.doom.d/config.org::*Completion Packages][Completion Packages:1]]
 ;;** COMPLETION
 ;; Completion Packages:1 ends here
 
-;; [[file:config.org::*UI Packages][UI Packages:1]]
+;; [[file:~/.doom.d/config.org::*UI Packages][UI Packages:1]]
 ;;** UI
 
 (package! diminish)

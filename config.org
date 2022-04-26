@@ -42,8 +42,10 @@ are generated with =toc-org= by specifying a heading including the tag:
 
 Add the =doom-emacs= metadata comments to tangle exports:
 
-#+BEGIN_SRC emacs-lisp :tangle ./config.el
-;; -*- no-byte-compile: t; lexical-binding: t; -*-
++ [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Using-Lexical-Binding.html][lexical binding in emacs]]
+
+#+BEGIN_SRC  emacs-lisp :tangle ./config.el
+;; -*- lexical-binding: t; -*-
 ;;* ~/.doom.d/config.el
 (setq user-full-name "David Conner"
       user-mail-address "noreply@te.xel.io")
@@ -52,7 +54,7 @@ Add the =doom-emacs= metadata comments to tangle exports:
 When specified by =:tangle=, export the =(package! ...)= declarations to =packages.el=.
 
 #+BEGIN_SRC emacs-lisp :tangle ./packages.el
-;; -*- no-byte-compile: t; lexical-binding: t; -*-
+;; -*- no-byte-compile: t; 
 ;;* ~/.doom.d/packages.el
 #+END_SRC
 
