@@ -3,7 +3,7 @@
 (setq user-full-name "David Conner"
       user-mail-address "noreply@te.xel.io")
 
-;; [[file:~/.doom.d/config.org::*Input Configs][Input Configs:1]]
+;; [[file:config.org::*Input Configs][Input Configs:1]]
 ;;** INPUT
 
 ;; Fixes problems with dead keys
@@ -81,8 +81,7 @@
 
 ;;*** Diminish
 ;; should probably be loaded before :diminish directives
-(use-package! diminish
- :ensure t)
+(use-package! diminish :ensure t)
 
 ;;*** Doom Theme
 ;; Pick a random theme from the ones I like.
@@ -198,6 +197,7 @@
 
 ;;*** Burly
 
+(use-package! dash)
 (use-package! burly
   :config (map! :leader
                 (:prefix ("w" . "workspaces/windows")
@@ -211,10 +211,10 @@
                   :desc "Copy Frameset URL" "W" #'burly-kill-windows-url))))
 
 ;;*** Bufler
-;; (use-package! bufler
-;;   :config (map! :map ctl-x-map
-;;                   :desc "Bufler List"
-;;                   "C-b" #'bufler-list))
+(use-package! bufler
+  :config (map! :map ctl-x-map
+                :desc "Bufler List"
+                "C-b" #'bufler-list))
 
 ;; (add-hook 'doom-init-ui-hook #'bufler-mode)
 
@@ -839,7 +839,7 @@
 
 ;;*** JULIA
 (let ((julia-depot-path
-       (car (split-string (getenv "JULIA_DEPOT_PATH") (path-separator)))))
+       (car (split-string (getenv "JULIA_DEPOT_PATH") path-separator))))
   (setq lsp-julia-package-dir nil
         lsp-julia-default-environment
         (concat (file-name-as-directory julia-depot-path)
@@ -961,9 +961,9 @@
 ;;*** Prism
 (defun dc/prism-get-modus-colors ()
   "get modus colors for prism"
-  (-map (lambda (c) (cdr (assq c modus-themes-vivendi-colors)))
-        '(red blue-alt-other-faint green magenta cyan-alt-other blue orange-intense
-              green-alt-other-faint purple-intense yellow-intense)))
+  (-map (lambda (c) (cdr (assoc (symbol-name c) modus-vivendi-theme-default-colors-alist)))
+        '(red-fringe-bg blue green magenta cyan-alt-other blue red-alt
+                        green-intense  blue-refine-bg yellow-intense)))
 
 (defun dc/prism-get-doom-colors ()
   "get doom colors which will return nil and result in the 'emacs config from hell',

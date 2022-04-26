@@ -1,15 +1,15 @@
 ;; -*- no-byte-compile: t; 
 ;;* ~/.doom.d/packages.el
 
-;; [[file:~/.doom.d/config.org::*Input Packages][Input Packages:1]]
+;; [[file:config.org::*Input Packages][Input Packages:1]]
 ;;** INPUT
 ;; Input Packages:1 ends here
 
-;; [[file:~/.doom.d/config.org::*Completion Packages][Completion Packages:1]]
+;; [[file:config.org::*Completion Packages][Completion Packages:1]]
 ;;** COMPLETION
 ;; Completion Packages:1 ends here
 
-;; [[file:~/.doom.d/config.org::*UI Packages][UI Packages:1]]
+;; [[file:config.org::*UI Packages][UI Packages:1]]
 ;;** UI
 
 (package! diminish)
@@ -19,10 +19,11 @@
 
 ;;*** Alphapapa
 (package! burly)
-;; (package! bufler
-;;   :recipe (:host github
-;;            :repo "alphapapa/bufler.el"
-;;            :files (:defaults (:exclude "helm-bufler.el"))))
+(package! bufler
+  :recipe (:host github
+           :repo "alphapapa/bufler.el"
+           :files (:defaults (:exclude "helm-bufler.el" "bufler-workspace.el" "bufler-workspace-tabs.el"))))
+
 (package! dogears
   :recipe (:host github
            :repo "alphapapa/dogears.el"
