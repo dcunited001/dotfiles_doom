@@ -74,6 +74,13 @@
 ;; [[file:config.org::*Completion Configs][Completion Configs:1]]
 ;;** COMPLETION
 (setq tab-always-indent 'complete)
+
+;;*** Ivy
+
+
+;;*** Counsel
+;; hopefully mindfuck myself into actually remembering 'counsel-imenu and 'counsel-swiper
+(map! "C-s" 'counsel-imenu)
 ;; Completion Configs:1 ends here
 
 ;; [[file:config.org::*UI Configs][UI Configs:1]]
@@ -174,8 +181,11 @@
 ;;*** Popups
 
 (set-popup-rules!
-  '(("^\\*Bufler" :side right :width 60
+  '(("^\\*lsp-ui-imenu" :side left :width 60
      :vslot -5 :slot 3
+     :modeline nil :select t :quit t)
+    ("^\\*Bufler" :side bottom :width 60
+     :vslot -5 :slot -5
      :modeline nil :select t :quit t)))
 
 ;;*** Projectile
@@ -462,7 +472,7 @@
       ;; lsp-ui-sideline--last-width
 
       ;; TODO ensure these are necessary/useful
-      lsp-ui-doc-max-width 35 ;; 35 is default
+      lsp-ui-doc-max-width 40 ;; 35 is default
       ;; lsp-ui-doc--inline-width
 
       lsp-ui-imenu-window-width 25)
