@@ -1059,7 +1059,7 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
 
 ;; Insinuate means that, unless a new clocking entry occurs
 ;; you will auto-clockout (for inactivity)
-;; Refer to [[https://orgmode.org/manual/Clocking-Work-Time.html#Clocking-Work-Time][Orgmode Manual entry]] for details.
+;; Refer to Orgmode Manual entry for details: https://orgmode.org/manual/Clocking-Work-Time.html#Clocking-Work-Time
 
 ;;*** org-roam
 
@@ -1311,7 +1311,6 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
       :prefix ("t" . "toggle")
       :desc "Toggle Org Narrow" "T" #'org-toggle-narrow-to-subtree
       :desc "Toggle Org Treeusage" "U" #'org-treeusage-mode)
-
 #+end_src
 
 
@@ -1343,7 +1342,6 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
 *** Lang Configs
 
 #+begin_src emacs-lisp
-
 ;;** LANG
 
 ;;*** ELISP
@@ -1433,7 +1431,6 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
 
 ;;**** dynamic-graphviz
 (use-package! dynamic-graphs)
-
 #+end_src
 
 *** ELISP :elisp:
@@ -1646,7 +1643,6 @@ NCCc1ccc(O)c(O)c1
 *** Babel Configs
 
 #+begin_src emacs-lisp
-
 ;;** BABEL
 
 (use-package! ob-dot)
@@ -1654,7 +1650,6 @@ NCCc1ccc(O)c(O)c1
 
 ;; this is insufficient as make-language-alias remaps a few other symbols
 ;; (defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
-
 #+end_src
 
 + doom handles most of this stuff in [[file:~/.emacs.d/modules/lang/org/config.el::defun +org-init-babel-lazy-loader-h (][+org-init-babel-lazy-loader-h]]
@@ -1684,11 +1679,9 @@ superior when the etymological connections are left in tact.
 **** ob-translate Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
-
 ;;*** ob-translate
 (package! google-translate)
 (package! ob-translate)
-
 #+end_src
 
 **** ob-translate Configs
@@ -1696,7 +1689,6 @@ superior when the etymological connections are left in tact.
 Config google-translate.el ([[https://github.com/atykhonov/google-translate/issues/137][fix for TKK errors]])
 
 #+begin_src emacs-lisp
-
 ;;*** ob-translate
 (use-package! google-translate :demand t
   :init (require 'google-translate)
@@ -1755,9 +1747,7 @@ failing), i'd like to know a little more about what is going on here.
 *** Firewall Configs
 
 #+begin_src emacs-lisp
-
 ;;** FIREWALL
-
 #+end_src
 
 ** EMAIL
@@ -1771,9 +1761,7 @@ failing), i'd like to know a little more about what is going on here.
 *** Email Configs
 
 #+begin_src emacs-lisp
-
 ;;** EMAIL
-
 #+end_src
 
 ** APP
@@ -1781,16 +1769,13 @@ failing), i'd like to know a little more about what is going on here.
 *** App Packages
 
 #+begin_src emacs-lisp :tangle ./packages.el
-
 ;** APP
 (package! anki-editor)
-
 #+end_src
 
 *** App Configs
 
 #+begin_src emacs-lisp
-
 ;;** APP
 (use-package anki-editor
   :after org-noter
@@ -1824,7 +1809,6 @@ failing), i'd like to know a little more about what is going on here.
 *** Config Configs
 
 #+begin_src emacs-lisp
-
 ;;** CONFIG
 
 ;;*** Prism
@@ -1901,14 +1885,12 @@ failing), i'd like to know a little more about what is going on here.
 *** Hydras Configs
 
 #+begin_src emacs-lisp
-
 ;;** HYDRAS
 
 (load-file (expand-file-name
              (concat (file-name-as-directory (getenv "DOOMDIR"))
                      "scripts/hydras.el")))
 #+end_src
-
 
 * Footnotes
 

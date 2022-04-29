@@ -555,7 +555,7 @@
 
 ;; Insinuate means that, unless a new clocking entry occurs
 ;; you will auto-clockout (for inactivity)
-;; Refer to [[https://orgmode.org/manual/Clocking-Work-Time.html#Clocking-Work-Time][Orgmode Manual entry]] for details.
+;; Refer to Orgmode Manual entry for details: https://orgmode.org/manual/Clocking-Work-Time.html#Clocking-Work-Time
 
 ;;*** org-roam
 
