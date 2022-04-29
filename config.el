@@ -476,6 +476,21 @@
       ;; lsp-ui-doc--inline-width
 
       lsp-ui-imenu-window-width 25)
+
+(defun dc/toggle-lsp-ui-menu ()
+  "If within lsp-ui-mode major, toggle the buffer closed and return to the originating buffer. if not
+then toggle to the lsp-ui-menu buffer & activate mode if necessary. "
+  (interactive)
+
+  ;; TODO: fix && fully implement
+  (if (string-match (regexp-quote "*lsp-ui-imenu") (buffer-name))
+   (lsp-ui-imenu--kill)
+   (progn (unless (bound-and-true-p lsp-ui-mode) (lsp-ui-mode))
+           (lsp-ui-imenu))))
+
+(map! "<f9>"
+      :desc "Toggle LSP UI Menu"
+      #'dc/toggle-lsp-ui-menu)
 ;; Lsp Configs:1 ends here
 
 ;; [[file:config.org::*OS Configs][OS Configs:1]]
