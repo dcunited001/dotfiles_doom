@@ -59,9 +59,6 @@
 (package! firestarter)
 (package! guix)
 (package! journalctl-mode)
-(package! pkgbuild-mode
-  :recipe (:host github
-           :repo "juergenhoetzel/pkgbuild-mode"))
 (package! crontab-mode)
 (package! ssh-config-mode)
 (package! x509-mode)

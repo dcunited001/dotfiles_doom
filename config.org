@@ -766,6 +766,7 @@ This is default & I'd rather adjust to it. In the future, I may address this by:
 #+begin_src emacs-lisp :tangle ./packages.el
 ;;** TOOLS
 
+(package! xdg-paths)
 (package! info-colors)
 (package! tldr)
 (package! magit-tbdiff)
@@ -773,9 +774,6 @@ This is default & I'd rather adjust to it. In the future, I may address this by:
 (package! firestarter)
 (package! guix)
 (package! journalctl-mode)
-(package! pkgbuild-mode
-  :recipe (:host github
-           :repo "juergenhoetzel/pkgbuild-mode"))
 (package! crontab-mode)
 (package! ssh-config-mode)
 (package! x509-mode)
@@ -840,7 +838,7 @@ This is default & I'd rather adjust to it. In the future, I may address this by:
   :config (map! :leader "g" #'guix))
 
 ;;*** PKGBUILD (arch)
-(use-package! pkgbuild-mode :mode "\\PKGBUILD")
+;; (use-package! pkgbuild-mode :mode "\\PKGBUILD")
 
 ;;*** CRON
 (use-package! crontab-mode)
