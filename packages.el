@@ -52,6 +52,7 @@
 ;; [[file:config.org::*Tools Packages][Tools Packages:1]]
 ;;** TOOLS
 
+(package! xdg-paths)
 (package! info-colors)
 (package! tldr)
 (package! magit-tbdiff)

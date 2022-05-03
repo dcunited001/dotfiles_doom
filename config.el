@@ -427,7 +427,7 @@
   :config (map! :leader "g" #'guix))
 
 ;;*** PKGBUILD (arch)
-(use-package! pkgbuild-mode :mode "\\PKGBUILD")
+;; (use-package! pkgbuild-mode :mode "\\PKGBUILD")
 
 ;;*** CRON
 (use-package! crontab-mode)
@@ -630,8 +630,6 @@ then toggle to the lsp-ui-menu buffer & activate mode if necessary. "
 (setq org-roam-capture-templates
       (append
        ;; org-roam-capture-templates
-
-         ) org-roam-capture-templates))
       `(
         ("p" "projects" plain "%?" :unnarrowed t
          :target (file+head "projects/${slug}.org"
@@ -670,6 +668,7 @@ then toggle to the lsp-ui-menu buffer & activate mode if necessary. "
                                             "#+CATEGORY: slips"
                                             "#+TAGS: ") "\n")))
 
+         ) org-roam-capture-templates))
 
 (defun dc/org-roam-insert-slug ()
   (interactive)

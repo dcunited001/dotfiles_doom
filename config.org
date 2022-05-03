@@ -1116,41 +1116,59 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
   (setq +org-roam-open-buffer-on-find-file
         (not +org-roam-open-buffer-on-find-file)))
 
+(defconst dc/org-roam-capture-anki
+  (string-join '("#+TITLE: ${title}"
+                 "#+CATEGORY: anki"
+                 "#+TAGS: "
+                 ""
+                 "* About"
+                 ""
+                 "* Cards"
+                 ":PROPERTIES:"
+                 ":ANKI_DECK: %^{DECK}"
+                 ":ANKI_NOTE_TYPE: LaTeX"
+                 ":END:") "\n"))
+
 (setq org-roam-capture-templates
       (append
        ;; org-roam-capture-templates
-       '(
-         ("p" "projects" plain "%?" :unnarrowed t
-          :target (file+head "projects/${slug}.org"
-                             "#+title: ${title}\n\n"))
-         ("t" "topics" plain "%?" :unnarrowed t
-          :target (file+head "topics/${slug}.org"
-                             "#+title: ${title}\n\n"))
-         ("c" "code" plain "%?" :unnarrowed t
-          :target (file+head "code/${slug}.org"
-                             "#+title: ${title}\n\n"))
+      `(
+        ("p" "projects" plain "%?" :unnarrowed t
+         :target (file+head "projects/${slug}.org"
+                            "#+TITLE: ${title}\n\n"))
+        ("t" "topics" plain "%?" :unnarrowed t
+         :target (file+head "topics/${slug}.org"
+                            "#+TITLE: ${title}\n\n"))
+        ("c" "code" plain "%?" :unnarrowed t
+         :target (file+head "code/${slug}.org"
+                            "#+TITLE: ${title}\n\n"))
 
-         ;; for Anki/Editor format examples
-         ;; - see https://github.com/louietan/anki-editor/examples.org
-         ;; only notes that already exist in Anki should have ANKI_NOTE_ID
-         ;; - see https://github.com/louietan/anki-editor/blob/master/anki-editor.el#161
-         ("a" "anki" plain "%?" :unnarrowed t
-          :target (file+head "anki/${slug}.org"
-                             "#+title: ${title}\n\n* About\n\n* Topic, the first :tags:\n:properties:\n:anki_deck: Topic\n:anki_note_type: LaTeX\n:end:\n* Front\n* Back"))
-         ("D" "drills" plain "%?" :unnarrowed t
-          :target (file+head "drills/${slug}.org"
-                             "#+title: ${title}\n\n"))
-         ;; TODO: validate whether this should be changed
-         ;; - for org-roam-bibtex or org-ref
-         ;; NOTE: slug needs to be a DOI in form:
-         ;; - ${indicator}.${registrant}/${suffix}
-         ("n" "noter (DOI)" plain "%?" :unnarrowed t
-          :target (file+head "noter/${slug}.org"
-                             "#+title: ${title}\n\n"))
+        ;; for Anki/Editor format examples
+        ;; - see https://github.com/louietan/anki-editor/examples.org
+        ;; only notes that already exist in Anki should have ANKI_NOTE_ID
+        ;; - see https://github.com/louietan/anki-editor/blob/master/anki-editor.el#161
+        ("a" "anki" plain "%?" :unnarrowed t
+         :target (file+head "anki/${slug}.org"
+                            ,dc/org-roam-capture-anki))
+        ("D" "drills" plain "%?" :unnarrowed t
+         :target (file+head "drills/${slug}.org"
+                            "#+TITLE: ${title}\n\n"))
 
-         ("s" "slips" plain "%?" :unnarrowed t
-          :target (file+head "slips/%<%Y%m%d%H%M%S>-${slug}.org"
-                             "#+title: ${title}"))
+        ;; TODO: validate whether this should be changed
+        ;; - for org-roam-bibtex or org-ref
+        ;; NOTE: slug needs to be a DOI in form:
+        ;; - ${indicator}.${registrant}/${suffix}
+        ("n" "noter (DOI)" plain "%?" :unnarrowed t
+         :target (file+head "noter/${slug}.org"
+                            ,(string-join '("#+TITLE: ${title}"
+                                            "#+CATEGORY: slips"
+                                            "#+TAGS: ") "\n")))
+
+        ("s" "slips" plain "%?" :unnarrowed t
+         :target (file+head "slips/%<%Y%m%d%H%M%S>-${slug}.org"
+                            ,(string-join '("#+TITLE: ${title}"
+                                            "#+CATEGORY: slips"
+                                            "#+TAGS: ") "\n")))
 
          ) org-roam-capture-templates))
 
@@ -1177,7 +1195,9 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
 (defvar dw/org-roam-project-template
   '("p" "project" plain "** TODO %?"
     :if-new (file+head+olp "%<%Y%m%d%H%M%S>-${slug}.org"
-                           "#+title: ${title}\n#+category: ${title}\n$+filetags: Projects\n"
+                           (string-join '("#+title: ${title}"
+                                          "#+category: projects"
+                                          "#+tags: project") "\n")
                            ("Tasks"))))
 
 ;; decide whether these functions are going to work for me (problems with roam subdirectories)
