@@ -663,12 +663,11 @@ These are simply bookmarks and thus can be reached from the doom startup menu.
 ;;*** Snippets
 
 (setq dc/snippets (expand-file-name (concat doom-private-dir "snippets")))
-
-(eval-after-load 'yasnippet
-  (lambda ()
-    (add-to-list 'yas-snippet-dirs 'dc/snippets)
-    (message "loading dc/snippets")
-    (yas-load-directory dc/snippets t)))
+(after! 'yasnippet
+  (map! "C-tab" #'company-yasnippet)
+  (add-to-list 'yas-snippet-dirs 'dc/snippets)
+  (message "loading dc/snippets")
+  (yas-load-directory dc/snippets t))
 #+end_src
 
 *** Auto Insert Mode
@@ -743,6 +742,8 @@ This is default & I'd rather adjust to it. In the future, I may address this by:
 
 #+begin_src emacs-lisp
 ;;** TERM
+;; To install on guix with cmake (cc errors)
+;; (setq vterm-module-cmake-args "-DCC=gcc")
 #+end_src
 
 ** CHECKERS
@@ -987,14 +988,30 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
 
 #+begin_src emacs-lisp :tangle ./packages.el
 ;;** ORG
+
+;; org data
 (package! org-treeusage)
-(package! org-drill)
+
+;; org bibliography
 (package! org-ref)
 
+;; org agenda
 ;; dependencies org-super-agenda => org-ql => org-sidebar
 (package! org-super-agenda)
 (package! org-ql)
 (package! org-sidebar)
+
+;; org roam
+; so roam-ui gets latest roam (breaks doom update on main/ref)
+;; (unpin! org-roam)
+(package! org-roam-ui)
+
+;; org misc
+(package! org-krita
+  :recipe (:host github
+           :repo "lepisma/org-krita"
+           :files ("resources" "resources" "*.el" "*.el")))
+(package! org-drill)
 #+end_src
 
 *** Org Configs
@@ -1179,6 +1196,16 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
 (defun dc/org-roam-get-slug ()
   (interactive)
   (org-roam-node-slug (org-roam-node-at-point)))
+
+(use-package! org-roam-ui
+  :after org-roam
+  ;; :hook (...) ;; dont hook
+  )
+
+(setq org-roam-ui-sync-theme t
+      org-roam-ui-follow t
+      org-roam-ui-open-on-start nil
+      org-roam-ui-update-on-save t)
 
 ;; DEFAULTS:
 ;; (setq org-roam-capture-templates '(("d" "default" plain "%?" :unnarrowed t
@@ -1866,18 +1893,21 @@ failing), i'd like to know a little more about what is going on here.
     (apply mode '(+1))))
 
 (use-package! prism
+  :after modus-vivendi-theme
   :config (map! :leader :desc "Toggle Prism" "tP"
-                (lambda () (interactive) (prism-mode 'toggle))))
+                (lambda () (interactive) (prism-mode 'toggle)))
 
-(add-hook! (emacs-lisp-mode clojure-mode clojurescript-mode common-lisp-mode scheme-mode)
-           #'(lambda () (dc/unless-org-src-fontification-activate 'prism-mode)))
+  (add-hook! (emacs-lisp-mode clojure-mode clojurescript-mode common-lisp-mode scheme-mode)
+             #'(lambda () (dc/unless-org-src-fontification-activate 'prism-mode))))
 
-(add-hook! 'doom-init-ui-hook
+(add-hook! 'modus-themes-after-load-theme-hook
            :append
-           #'(lambda () (prism-set-colors
-              :lightens '(0 5 10)
-              :desaturations '(-2.5 0 2.5)
-              :colors (dc/prism-get-modus-colors))))
+           #'(lambda ()
+
+               (prism-set-colors
+                 :lightens '(0 5 10)
+                 :desaturations '(-2.5 0 2.5)
+                 :colors (dc/prism-get-modus-colors))))
 
 ;; (dc/prism-get-modus-colors)
 ;; ("#ff8059"

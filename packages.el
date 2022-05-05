@@ -78,14 +78,30 @@
 
 ;; [[file:config.org::*Org Packages][Org Packages:1]]
 ;;** ORG
+
+;; org data
 (package! org-treeusage)
-(package! org-drill)
+
+;; org bibliography
 (package! org-ref)
 
+;; org agenda
 ;; dependencies org-super-agenda => org-ql => org-sidebar
 (package! org-super-agenda)
 (package! org-ql)
 (package! org-sidebar)
+
+;; org roam
+; so roam-ui gets latest roam (breaks doom update on main/ref)
+;; (unpin! org-roam)
+(package! org-roam-ui)
+
+;; org misc
+(package! org-krita
+  :recipe (:host github
+           :repo "lepisma/org-krita"
+           :files ("resources" "resources" "*.el" "*.el")))
+(package! org-drill)
 ;; Org Packages:1 ends here
 
 ;; [[file:config.org::*Lang Packages][Lang Packages:1]]

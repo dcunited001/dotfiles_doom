@@ -336,12 +336,11 @@
 ;;*** Snippets
 
 (setq dc/snippets (expand-file-name (concat doom-private-dir "snippets")))
-
-(eval-after-load 'yasnippet
-  (lambda ()
-    (add-to-list 'yas-snippet-dirs 'dc/snippets)
-    (message "loading dc/snippets")
-    (yas-load-directory dc/snippets t)))
+(after! 'yasnippet
+  (map! "C-tab" #'company-yasnippet)
+  (add-to-list 'yas-snippet-dirs 'dc/snippets)
+  (message "loading dc/snippets")
+  (yas-load-directory dc/snippets t))
 ;; Editor Configs:1 ends here
 
 ;; [[file:config.org::*Emacs Config][Emacs Config:1]]
@@ -367,6 +366,8 @@
 
 ;; [[file:config.org::*Term Configs][Term Configs:1]]
 ;;** TERM
+;; To install on guix with cmake (cc errrors
+;; (setq vterm-module-cmake-args "-DCC=gcc")
 ;; Term Configs:1 ends here
 
 ;; [[file:config.org::*Checkers Configs][Checkers Configs:1]]
@@ -677,6 +678,16 @@ then toggle to the lsp-ui-menu buffer & activate mode if necessary. "
 (defun dc/org-roam-get-slug ()
   (interactive)
   (org-roam-node-slug (org-roam-node-at-point)))
+
+(use-package! org-roam-ui
+  :after org-roam
+  ;; :hook (...) ;; dont hook
+  )
+
+(setq org-roam-ui-sync-theme t
+      org-roam-ui-follow t
+      org-roam-ui-open-on-start nil
+      org-roam-ui-update-on-save t)
 
 ;; DEFAULTS:
 ;; (setq org-roam-capture-templates '(("d" "default" plain "%?" :unnarrowed t
@@ -1017,18 +1028,21 @@ then toggle to the lsp-ui-menu buffer & activate mode if necessary. "
     (apply mode '(+1))))
 
 (use-package! prism
+  :after modus-vivendi-theme
   :config (map! :leader :desc "Toggle Prism" "tP"
-                (lambda () (interactive) (prism-mode 'toggle))))
+                (lambda () (interactive) (prism-mode 'toggle)))
 
-(add-hook! (emacs-lisp-mode clojure-mode clojurescript-mode common-lisp-mode scheme-mode)
-           #'(lambda () (dc/unless-org-src-fontification-activate 'prism-mode)))
+  (add-hook! (emacs-lisp-mode clojure-mode clojurescript-mode common-lisp-mode scheme-mode)
+             #'(lambda () (dc/unless-org-src-fontification-activate 'prism-mode))))
 
-(add-hook! 'doom-init-ui-hook
+(add-hook! 'modus-themes-after-load-theme-hook
            :append
-           #'(lambda () (prism-set-colors
-              :lightens '(0 5 10)
-              :desaturations '(-2.5 0 2.5)
-              :colors (dc/prism-get-modus-colors))))
+           #'(lambda ()
+               
+               (prism-set-colors
+                 :lightens '(0 5 10)
+                 :desaturations '(-2.5 0 2.5)
+                 :colors (dc/prism-get-modus-colors))))
 
 ;; (dc/prism-get-modus-colors)
 ;; ("#ff8059"
