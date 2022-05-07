@@ -404,7 +404,6 @@ Removed =-childframe= for now, as these are actual frames, kinda.
 
 ;;*** Highlighting
 
-
 (use-package! auto-highlight-symbol
   ;; should autoload on bind
   :config (map! (:prefix "M-s h" :desc "auto-highlight-mode"
@@ -1077,8 +1076,7 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
                   (:name "Important"
                    :priority "A")
                   (:priority<= "B"
-                   :order 1)
-                  ))
+                   :order 1)))
   :config (org-super-agenda-mode))
 
 ;;**** org-clock
@@ -1186,7 +1184,6 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
                             ,(string-join '("#+TITLE: ${title}"
                                             "#+CATEGORY: slips"
                                             "#+TAGS: ") "\n")))
-
          ) org-roam-capture-templates))
 
 (defun dc/org-roam-insert-slug ()
@@ -1198,9 +1195,8 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
   (org-roam-node-slug (org-roam-node-at-point)))
 
 (use-package! org-roam-ui
-  :after org-roam
   ;; :hook (...) ;; dont hook
-  )
+  :after org-roam)
 
 (setq org-roam-ui-sync-theme t
       org-roam-ui-follow t
@@ -1239,7 +1235,6 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
         (org-roam-capture-templates (list (append (car org-roam-capture-templates)
                                                   '(:immediate-finish t)))))
     (apply #'org-roam-node-insert args)))
-
 
 ;;**** Roam Capture Task: project captures
 (defun dw/org-roam-capture-task ()
@@ -1281,6 +1276,22 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
 ;; (source: mwfogleman/englehorn)
 
 ;;*** org-mode misc
+;;**** org-krita
+(use-package! org-krita
+  :config
+  (add-hook 'org-mode-hook 'org-krita-mode))
+
+;; org-krita uses (call-process exe nil 0 nil args...)
+(setq org-krita-executable "flatpak run org.kde.krita")
+
+(defun org-krita-edit (path &optional full-mode)
+  "Edit given PATH in krita canvasonly mode.
+If FULL-MODE is not null, run full krita."
+  (let ((kra-path (expand-file-name path)))
+    (when (f-exists-p kra-path)
+      (call-process-shell-command org-krita-executable nil 0 nil "--nosplash" kra-path)
+      (org-krita-add-watcher kra-path))))
+
 ;;**** org-drill
 
 ;; Config and flashcard info can be found at
