@@ -769,6 +769,9 @@ then toggle to the lsp-ui-menu buffer & activate mode if necessary. "
 
 ;; org-krita uses (call-process exe nil 0 nil args...)
 (setq org-krita-executable "flatpak run org.kde.krita")
+;; (defun dc/org-krita-get-flatpak-location ()
+;;   (shell-command-to-string "flatpak info org.kde.krita --show-location"))
+
 
 (defun org-krita-edit (path &optional full-mode)
   "Edit given PATH in krita canvasonly mode.

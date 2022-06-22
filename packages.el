@@ -101,6 +101,7 @@
   :recipe (:host github
            :repo "lepisma/org-krita"
            :files ("resources" "resources" "*.el" "*.el")))
+
 (package! org-drill)
 ;; Org Packages:1 ends here
 
