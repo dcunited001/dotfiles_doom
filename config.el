@@ -153,6 +153,8 @@
 (setq window-divider-default-right-width 1
       window-divider-default-bottom-width 1)
 
+(map! ("M-<f10>" #'doom/window-enlargen))
+
 ;;*** Menu
 (menu-bar-mode +2)
 
@@ -579,7 +581,7 @@ then toggle to the lsp-ui-menu buffer & activate mode if necessary. "
 
 ;; encapsulate org-roam-directory within (file-truename ___) if using links
 (setq org-roam-directory (concat (file-name-as-directory org-directory) "roam")
-      org-roam-db-location (concat (file-name-as-directory org-roam-directory) "org-roam.db")
+      org-roam-db-location (concat (file-name-as-directory (concat (getenv "HOME") "/.local/share/org-roam")) "org-roam.db")
       org-roam-file-extensions '("org")
 
       ;; Doom Defaults
