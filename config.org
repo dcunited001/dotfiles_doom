@@ -134,6 +134,10 @@ bin/doom (upgrade|sync|build)
 
 ;;*** Lispy
 (setq lispy-compat '(cider edebug))
+(setq auto-minor-mode-alist
+      (append
+       '(("/\\.dir-locals\\.el$" . lispy-mode))
+       auto-minor-mode-alist))
 (after! lispy
   (map! (:map lispy-mode-map
          "M-." #'+lookup/definition
@@ -1010,6 +1014,7 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
   :recipe (:host github
            :repo "lepisma/org-krita"
            :files ("resources" "resources" "*.el" "*.el")))
+
 (package! org-drill)
 #+end_src
 
@@ -1283,6 +1288,9 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
 
 ;; org-krita uses (call-process exe nil 0 nil args...)
 (setq org-krita-executable "flatpak run org.kde.krita")
+;; (defun dc/org-krita-get-flatpak-location ()
+;;   (shell-command-to-string "flatpak info org.kde.krita --show-location"))
+
 
 (defun org-krita-edit (path &optional full-mode)
   "Edit given PATH in krita canvasonly mode.
@@ -1291,6 +1299,16 @@ If FULL-MODE is not null, run full krita."
     (when (f-exists-p kra-path)
       (call-process-shell-command org-krita-executable nil 0 nil "--nosplash" kra-path)
       (org-krita-add-watcher kra-path))))
+
+;; alter-f8 ... with art
+(map! "M-<f8>" :desc "Insert Krita Image" #'org-krita-insert-new-image)
+
+;; allow overriding the template with a project-local template
+(defun org-krita-resource (file)
+  "Return full path of a resource FILE."
+  (expand-file-name
+   file (file-name-as-directory (or (and (boundp 'my-org-krita-dir) my-org-krita-dir)
+                                    (concat  org-krita-dir "resources")))))
 
 ;;**** org-drill
 
@@ -1437,6 +1455,9 @@ If FULL-MODE is not null, run full krita."
 ;;*** SCHEME
 
 ;;**** GEISER
+;; see notes below on ipc from scheme to geiser (and v.v.)
+(setq geiser-repl-autodoc-p nil)
+
 
 ;;**** GUILE
 
@@ -1536,6 +1557,16 @@ programming code written by Knuth in Pascal/TeX; via Hsin Haoyu[fn:hsinhaoyu]
 + [[file:~/.emacs.d/modules/lang/clojure/config.el][Doom Defaults]]
 
 *** SCHEME :scheme:
+**** Geiser REPL
+
++ while scheme is running in a geiser REPL, DO NOT evaluate
+  scheme in a buffer connected to that REPL.
+  - it will poison the REPL state (causing it to freeze)
+  - autodoc will reevaluate scheme, "breaking" the REPL
++ avoid geiser autodoc issues
+  - instead use C-c C-d C-a to activate it on a per-repl basis
+
++ see [[https://emacs-guix.gitlab.io/website/manual/latest/emacs-guix.html#Development][emacs-guix docs (development)]] and [[https://www.nongnu.org/geiser/The-REPL.html#Autodoc-and-friends][autodoc and friends]]
 
 *** XML :xml:
 

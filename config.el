@@ -13,6 +13,10 @@
 
 ;;*** Lispy
 (setq lispy-compat '(cider edebug))
+(setq auto-minor-mode-alist
+      (append
+       '(("/\\.dir-locals\\.el$" . lispy-mode))
+       auto-minor-mode-alist))
 (after! lispy
   (map! (:map lispy-mode-map
          "M-." #'+lookup/definition
@@ -153,7 +157,6 @@
 (menu-bar-mode +2)
 
 ;;*** Highlighting
-
 
 (use-package! auto-highlight-symbol
   ;; should autoload on bind
@@ -366,7 +369,7 @@
 
 ;; [[file:config.org::*Term Configs][Term Configs:1]]
 ;;** TERM
-;; To install on guix with cmake (cc errrors
+;; To install on guix with cmake (cc errors)
 ;; (setq vterm-module-cmake-args "-DCC=gcc")
 ;; Term Configs:1 ends here
 
@@ -764,9 +767,6 @@ then toggle to the lsp-ui-menu buffer & activate mode if necessary. "
   :config
   (add-hook 'org-mode-hook 'org-krita-mode))
 
-(defun dc/org-krita-get-flatpak-location ()
-  (shell-command-to-string "flatpak info org.kde.krita --show-location"))
-
 ;; org-krita uses (call-process exe nil 0 nil args...)
 (setq org-krita-executable "flatpak run org.kde.krita")
 
@@ -777,6 +777,16 @@ If FULL-MODE is not null, run full krita."
     (when (f-exists-p kra-path)
       (call-process-shell-command org-krita-executable nil 0 nil "--nosplash" kra-path)
       (org-krita-add-watcher kra-path))))
+
+;; alter-f8 ... with art
+(map! "M-<f8>" :desc "Insert Krita Image" #'org-krita-insert-new-image)
+
+;; allow overriding the template with a project-local template
+(defun org-krita-resource (file)
+  "Return full path of a resource FILE."
+  (expand-file-name
+   file (file-name-as-directory (or (and (boundp 'my-org-krita-dir) my-org-krita-dir)
+                                    (concat  org-krita-dir "resources")))))
 
 ;;**** org-drill
 
@@ -895,6 +905,9 @@ If FULL-MODE is not null, run full krita."
 ;;*** SCHEME
 
 ;;**** GEISER
+;; see notes below on ipc from scheme to geiser (and v.v.)
+(setq geiser-repl-autodoc-p nil)
+
 
 ;;**** GUILE
 
@@ -1053,7 +1066,7 @@ If FULL-MODE is not null, run full krita."
 (add-hook! 'modus-themes-after-load-theme-hook
            :append
            #'(lambda ()
-               
+
                (prism-set-colors
                  :lightens '(0 5 10)
                  :desaturations '(-2.5 0 2.5)
