@@ -1,0 +1,122 @@
+#+TITLE:     SVG Images In Emacs Lisp
+#+AUTHOR:    David Conner
+#+EMAIL:     noreply@te.xel.io
+#+DESCRIPTION: notes
+
+Eventually put this in the doom-dashboard
+
+#+begin_src emacs-lisp :results file :file img/hexagram.svg
+(defconst max-32-int (- (math-pow 2 29) 1))
+
+(defun hexagram-sample ()
+  (let* ((sample-time (time-convert (current-time) 'integer))
+         (random-uniform-int (random (+ (* 2 max-32-int) 1)))
+         (random-uniform-int2 (random (+ (* 2 max-32-int) 1)))
+
+         ;; xor from time+int
+         ;; (sample-xor (logxor sample-time random-uniform-int))
+
+         ;; xor from 2 ints
+         (sample-xor (logxor random-uniform-int random-uniform-int2))
+
+         (hexagram (math-mod sample-xor (math-pow 2 6))))
+
+    hexagram))
+
+(defun test-hexagram-distribution ()
+  (let ((sum-values 0))
+
+    (cl-loop for i from 1 to 10000 do
+             (setq sum-values (+ sum-values (hexagram-sample)))
+
+             )
+    (message (int-to-string (/ sum-values 10000.0)))))
+
+;; (test-hexagram-distribution)
+
+;; TODO changing hexagrams must be sampled line by line
+;; - or by drawing 3 more hexagrams + my tarot-deck algorithm
+
+;; face attribute accessors
+;; (face-id 'doom-dashboard-loaded)
+;; (face-attribute 'doom-dashboard-menu-title :background)
+;; (face-attribute 'doom-dashboard-menu-title :foreground)
+
+(setq fdsa (let* ((height 100)
+                  (width 700)
+                  (w-margin 50)
+                  (h-margin 50)
+                  (line-h 100)
+                  (line-h-offset 50)
+                  (i 0))
+
+             `(,w-margin
+               ,(- width w-margin)
+               ,(- height (* i (+ line-h line-h-offset)) h-margin)
+               ,(- height (* i (+ line-h line-h-offset)) h-margin line-h-offset))))
+
+;; `(+ ,@fdsa)
+
+(defmacro hexagram-rect (svg line-coords &rest args)
+  `(svg-rectangle ,svg ,@line-coords ,@args)
+  )
+
+(let* ((img-file "./img/iching.svg")
+       (header-margin 100)
+       (header-font 21)
+       (w-margin 50)
+       (h-margin 50)
+       (line-h 50)
+       (line-h-offset 50)
+       (line-w-unit 100)
+       (hexagram-background "#FFFFFF")
+       (hexagram-foreground "#000000")
+       (width (+ (* 2 w-margin) (* 5 line-w-unit)))
+       (height (+ (* 2 h-margin) (* 6 line-h) (* 5 line-h-offset) header-margin))
+       (hexagram (hexagram-sample))
+       (svg-hexagram (svg-create 600 1000
+                                 :background hexagram-background
+                                 :foreground hexagram-foreground)))
+
+  (svg-text svg-hexagram
+            (concat (int-to-string (+ hexagram 1)) " ** (not King Wên)")
+            :font-size 21
+            :x w-margin
+            :y (/ (+ header-margin header-font) 2.0))
+
+  (cl-loop for i from 0 to 5
+           do (let* ((line-value (math-pow 2 i))
+                     (line-and (> (logand hexagram line-value) 0))
+                     (line (if line-and 'unbroken 'broken))
+                     (line-coords ))
+                (cl-case line
+                  ('unbroken (let ((rect-coords `(,w-margin
+                                                  ,(- height
+                                                      (* (+ i 1) (+ line-h line-h-offset)) )
+                                                  (* line-w-unit 5)
+                                                  line-h)))
+                               (eval `(svg-rectangle svg-hexagram ,@rect-coords :fill-color ,hexagram-foreground))))
+
+                  ('broken (let ((rect1-coords `(,w-margin
+                                                 ,(- height
+                                                     (* (+ i 1) (+ line-h line-h-offset)) )
+                                                 (* line-w-unit 2)
+                                                 line-h))
+                                 (rect2-coords `(,(+ w-margin (* line-w-unit 3))
+                                                 ,(- height
+                                                     (* (+ i 1) (+ line-h line-h-offset)) )
+                                                 (* line-w-unit 2)
+                                                 line-h)))
+                             (eval `(svg-rectangle svg-hexagram ,@rect1-coords :fill-color ,hexagram-foreground))
+                             (eval `(svg-rectangle svg-hexagram ,@rect2-coords :fill-color ,hexagram-foreground)))
+                           ))))
+  ;; (insert-image-file "./img/hexagram.svg" (svg-ima ge svg-hexagram))
+  ;; (svg-print (svg-image svg-hexagram))
+                                        ;(svg-insert-image svg-hexagram)
+  ;; (svg-print svg-hexagram)
+  ;(plist-get (svg-image svg-hexagram) :data)
+  (image-property (svg-image svg-hexagram) :data))
+#+end_src
+
+#+RESULTS:
+[[file:img/hexagram.svg]]
