@@ -346,6 +346,12 @@
   (add-to-list 'yas-snippet-dirs 'dc/snippets)
   (message "loading dc/snippets")
   (yas-load-directory dc/snippets t))
+
+(defun dc/toggle-objed-mode ()
+  (interactive)
+  (objed-mode 'toggle))
+
+ (map! ("<f10>" #'dc/toggle-objed-mode))
 ;; Editor Configs:1 ends here
 
 ;; [[file:config.org::*Emacs Config][Emacs Config:1]]

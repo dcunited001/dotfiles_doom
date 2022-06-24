@@ -19,97 +19,90 @@
        ;;japanese
        ;;layout            ; auie,ctsrnm is the superior home row
 
-       :completion
-       (company                         ; the ultimate code completion backend
-        +childframe)
+       :completion (company +childframe)
  
-       ;;helm              ; the *other* search engine for love and life
-       ;;ido               ; the other *other* search engine...
-       (ivy                             ; a search engine for love and life
-        +prescient +icons -childframe -fuzzy)
-       ;;vertico           ; the search engine of the future
+       ;; helm              ; the *other* search engine for love and life
+       ;; ido               ; the other *other* search engine...
+       (ivy +prescient +icons -childframe -fuzzy)
+       ;; vertico           ; the search engine of the future
 
-       :ui
-       ;;deft              ; notational velocity for Emacs
-       doom                   ; what makes DOOM look the way it does
-       doom-dashboard         ; a nifty splash screen for Emacs
-       doom-quit              ; DOOM quit-message prompts when you quit Emacs
-       (emoji +unicode)       ; 🙂
-       hl-todo                ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
+       :ui doom doom-dashboard doom-quit
        hydra
+       (emoji +unicode) unicode nav-flash
+       hl-todo
+       ;; vc-gutter
+       ;; deft              ; notational velocity for Emacs
 
        ;; NOTE: ligatures conflicts with prism.el
        ;; ligatures        ; ligatures and symbols to make your code pretty again
-       ;;indent-guides     ; highlighted indent columns
-       ;;minimap           ; show a map of the code on the side
-       (modeline +light)              ; snazzy, Atom-inspired modeline, plus API
-       nav-flash                      ; blink cursor line after big motions
-       ;;neotree           ; a project drawer, like NERDTree for vim
-       ophints                    ; highlight the region an operation acts on
-       (popup +defaults)          ; tame sudden yet inevitable temporary windows
-       ;;tabs              ; a tab bar for Emacs
-       ;;treemacs          ; a project drawer, like neotree but cooler
-       unicode          ; extended unicode support for various languages
-                                        ;vc-gutter        ; vcs diff in the fringe
-       vi-tilde-fringe                  ; fringe tildes to mark beyond EOB
-       window-select                    ; visually switch windows
+       ;; indent-guides     ; highlighted indent columns
+       ;; minimap           ; show a map of the code on the side
+       (modeline +light)
+
+       ;; neotree           ; a project drawer, like NERDTree for vim
+       ophints
+       (popup +defaults)
+       ;; tabs              ; a tab bar for Emacs
+       ;; treemacs          ; a project drawer, like neotree but cooler
+
+
+       ;; vi-tilde-fringe                  fringe tildes to mark beyond EOB
+       window-select
        ;; workspaces       ; tab emulation, persistence & separate workspaces
        ;; zen               ; distraction-free coding or writing
 
        :editor
-       ;;(evil +everywhere); come to the dark side, we have cookies
-       file-templates        ; auto-snippets for empty files
-       ;;fold              ; (nigh) universal code folding
-       (format +onsave)                 ; automated prettiness
-       ;;god               ; run Emacs commands without modifier keys
-       lispy                       ; vim for lisp, for people who don't like vim
-       multiple-cursors            ; editing in many places at once
-       ;;objed             ; text object editing for the innocent
-       ;;parinfer          ; turn lisp into python, sort of
-       ;;rotate-text       ; cycle region at point between text candidates
-       snippets   ; my elves. They type so I don't have to
-       ;;word-wrap         ; soft wrapping with language-aware indent
+       ;; (evil +everywhere); come to the dark side, we have cookies
+       file-templates
+       ;; fold              ; (nigh) universal code folding
+       (format +onsave)
+       ;; god               ; run Emacs commands without modifier keys
+       lispy
+       multiple-cursors
+       (objed +manual)      ; text object editing for the innocent
+       ;; parinfer          ; turn lisp into python, sort of
+       ;; rotate-text       ; cycle region at point between text candidates
+       snippets
+       ;; word-wrap         ; soft wrapping with language-aware indent
 
        :emacs
-       (dired +icons)    ; making dired pretty [functional]
-       electric          ; smarter, keyword-based electric-indent
-       ;;ibuffer         ; interactive buffer management
-       ;; undo              ; persistent, smarter undo for your inevitable mistakes
+       (dired +icons)
+       electric
+       ;; ibuffer
+       ;; undo
        (undo +tree)
-       vc                         ; version-control and Emacs, sitting in a tree
+       vc
 
-       :term
-       eshell            ; the elisp shell that works everywhere
-       ;;shell             ; simple shell REPL for Emacs
-       ;;term              ; basic terminal emulator for Emacs
-       vterm                            ; the best terminal emulation in Emacs
+       :term eshell vterm
+       ;; shell
+       ;; term              ; basic terminal emulator for Emacs
 
        :checkers
        (syntax +childframe)
-       ;;(spell +flyspell) ; tasing you for misspelling mispelling
-       ;;grammar           ; tasing grammar mistake every you make
+       ;; (spell +flyspell) ; tasing you for misspelling mispelling
+       ;; grammar           ; tasing grammar mistake every you make
 
        :tools
        ansible
-       ;;biblio            ; Writes a PhD for you (citation needed)
+       ;; biblio            ; Writes a PhD for you (citation needed)
        (debugger +lsp)
-       ;; TODO direnv
+       direnv
        docker
-       ;;editorconfig      ; let someone else argue about tabs vs spaces
-       ;;ein               ; tame Jupyter notebooks with emacs
+       ;; editorconfig      ; let someone else argue about tabs vs spaces
+       ;; ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)
-       ;;gist              ; interacting with github gists
+       ;; gist              ; interacting with github gists
        (lookup +docsets)
-       (lsp +peek)                      ; M-x vscode
+       (lsp +peek)
        (magit +forge)
-       make                     ; run make tasks from Emacs
-       ;;pass              ; password manager for nerds
-       pdf                              ; pdf enhancements
-       ;;prodigy           ; FIXME managing external services & code builders
+       make
+       ;; pass              ; password manager for nerds
+       pdf                              pdf enhancements
+       prodigy           ; FIXME managing external services & code builders
        rgb                              ; creating color strings
 
        ;; TODO what is taskrunner?
-       ;;taskrunner        ; taskrunner for all your projects
+       taskrunner        ; taskrunner for all your projects
        ;;terraform         ; infrastructure as code
        ;;tmux              ; an API for interacting with tmux
        ;;upload            ; map local to remote projects via ssh/ftp
@@ -122,8 +115,8 @@
        ;;agda              ; types of types of types of types...
        ;;beancount         ; mind the GAAP
        (cc +lsp)                        ; C > C++ == 1
-       (clojure +lsp)                   ; java with a lisp
-       ;;common-lisp       ; if you've seen one lisp, you've seen them all
+       (clojure +lsp)
+       common-lisp       ; if you've seen one lisp, you've seen them all
        ;;coq               ; proofs-as-programs
        ;;crystal           ; ruby at the speed of c
        ;;csharp            ; unity, .NET, and mono shenanigans
@@ -157,8 +150,8 @@
        ;;nim               ; python + lisp at the speed of c
        ;;nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
-
        (org +pomodoro +present +gnuplot +pandoc +dragndrop +noter +roam2)
+
        ;; TODO decide on +jupyter
        ;; TODO try removing +pretty
 

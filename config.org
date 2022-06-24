@@ -673,6 +673,12 @@ These are simply bookmarks and thus can be reached from the doom startup menu.
   (add-to-list 'yas-snippet-dirs 'dc/snippets)
   (message "loading dc/snippets")
   (yas-load-directory dc/snippets t))
+
+(defun dc/toggle-objed-mode ()
+  (interactive)
+  (objed-mode 'toggle))
+
+ (map! ("<f10>" #'dc/toggle-objed-mode))
 #+end_src
 
 *** Auto Insert Mode
@@ -689,7 +695,9 @@ These are simply bookmarks and thus can be reached from the doom startup menu.
   - [[https://joaotavora.github.io/yasnippet/snippet-expansion.html][Explanding Snippets]]
 
 + Use =yas/describe-tables= to list snippets that match a modeset.
+*** Objed
 
+Objed mode is turned on.
 ** EMACS
 
 *** Emacs Packages
