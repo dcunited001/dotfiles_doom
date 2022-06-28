@@ -59,7 +59,8 @@
        ;; god               ; run Emacs commands without modifier keys
        lispy
        multiple-cursors
-       (objed +manual)      ; text object editing for the innocent
+       ;; (objed +manual)
+                                        ; text object editing for the innocent
        ;; parinfer          ; turn lisp into python, sort of
        ;; rotate-text       ; cycle region at point between text candidates
        snippets

@@ -472,6 +472,8 @@
 ;; (use-package! salt-mode)
 
 ;;*** AST
+
+;;*** ELF
 ;; Tools Configs:1 ends here
 
 ;; [[file:config.org::*Lsp Configs][Lsp Configs:1]]
@@ -925,12 +927,15 @@ If FULL-MODE is not null, run full krita."
 ;;*** GUIX
 
 ;;*** JULIA
+
 (let ((julia-depot-path
-       (car (split-string (getenv "JULIA_DEPOT_PATH") path-separator))))
+       (car (split-string (or (getenv "JULIA_DEPOT_PATH")
+                              (concat (getenv "_LANG") "/.julia"))
+                              path-separator))))
   (setq lsp-julia-package-dir nil
         lsp-julia-default-environment
         (concat (file-name-as-directory julia-depot-path)
-                "environments/v1.6")))
+                "environments/v1.7")))
 
 ;;**** LSP (julia)
 

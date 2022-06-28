@@ -66,6 +66,9 @@
 ;; TODO ssh-agency
 ;; TODO ssh-tunnels
 (package! salt-mode)
+
+;; ok apparently there is an elf-mode :)
+(package! elf-mode)
 ;; Tools Packages:1 ends here
 
 ;; [[file:config.org::*Lsp Packages][Lsp Packages:1]]

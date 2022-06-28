@@ -794,6 +794,9 @@ This is default & I'd rather adjust to it. In the future, I may address this by:
 ;; TODO ssh-agency
 ;; TODO ssh-tunnels
 (package! salt-mode)
+
+;; ok apparently there is an elf-mode :)
+(package! elf-mode)
 #+end_src
 
 *** Tools Configs
@@ -885,6 +888,8 @@ This is default & I'd rather adjust to it. In the future, I may address this by:
 ;; (use-package! salt-mode)
 
 ;;*** AST
+
+;;*** ELF
 #+end_src
 
 *** Guix
@@ -1474,12 +1479,15 @@ If FULL-MODE is not null, run full krita."
 ;;*** GUIX
 
 ;;*** JULIA
+
 (let ((julia-depot-path
-       (car (split-string (getenv "JULIA_DEPOT_PATH") path-separator))))
+       (car (split-string (or (getenv "JULIA_DEPOT_PATH")
+                              (concat (getenv "_LANG") "/.julia"))
+                              path-separator))))
   (setq lsp-julia-package-dir nil
         lsp-julia-default-environment
         (concat (file-name-as-directory julia-depot-path)
-                "environments/v1.6")))
+                "environments/v1.7")))
 
 ;;**** LSP (julia)
 

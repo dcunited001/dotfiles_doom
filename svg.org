@@ -5,6 +5,10 @@
 
 Eventually put this in the doom-dashboard
 
++ [[https://lisp-journey.gitlab.io/blog/common-lisp-macros-by-example-tutorial/][CL Macros]]
++ Emacs [[https://gitlab.com/atamariya/emacs/-/blob/dev/lisp/svg.el][svg.el]]
++ SVG [[https://www.gnu.org/software/emacs/manual/html_node/elisp/SVG-Images.htmlhttps://www.gnu.org/software/emacs/manual/html_node/elisp/SVG-Images.html][docs]]
+
 #+begin_src emacs-lisp :results file :file img/hexagram.svg
 (defconst max-32-int (- (math-pow 2 29) 1))
 
@@ -93,20 +97,20 @@ Eventually put this in the doom-dashboard
                   ('unbroken (let ((rect-coords `(,w-margin
                                                   ,(- height
                                                       (* (+ i 1) (+ line-h line-h-offset)) )
-                                                  (* line-w-unit 5)
-                                                  line-h)))
+                                                  ,(* line-w-unit 5)
+                                                  ,line-h)))
                                (eval `(svg-rectangle svg-hexagram ,@rect-coords :fill-color ,hexagram-foreground))))
 
                   ('broken (let ((rect1-coords `(,w-margin
                                                  ,(- height
                                                      (* (+ i 1) (+ line-h line-h-offset)) )
-                                                 (* line-w-unit 2)
-                                                 line-h))
+                                                 ,(* line-w-unit 2)
+                                                 ,line-h))
                                  (rect2-coords `(,(+ w-margin (* line-w-unit 3))
                                                  ,(- height
                                                      (* (+ i 1) (+ line-h line-h-offset)) )
-                                                 (* line-w-unit 2)
-                                                 line-h)))
+                                                 ,(* line-w-unit 2)
+                                                 ,line-h)))
                              (eval `(svg-rectangle svg-hexagram ,@rect1-coords :fill-color ,hexagram-foreground))
                              (eval `(svg-rectangle svg-hexagram ,@rect2-coords :fill-color ,hexagram-foreground)))
                            ))))
