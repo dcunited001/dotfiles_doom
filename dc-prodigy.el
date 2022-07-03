@@ -32,7 +32,7 @@
   "Assemble the args to pass to julia/pluto in a project's context"
   (or (getf args :project) ".")
   `("--threads=auto"
-    "-p" ,(or (getf args :project) ".")
+    "--project=" ,(or (getf args :project) ".")
     "-e" ,(format (or (getf args :e) "using Pluto; Pluto.run(port=%s)")
                  (or (getf args :port) "4321"))))
 
