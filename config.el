@@ -335,8 +335,7 @@
 
 ;; TODO try global-centered-cursor-mode by default
 ;; (mostly to remind myself that it exists
-(add-hook 'doom-init-ui-hook
-          #'global-centered-cursor-mode)
+;; (add-hook 'doom-init-ui-hook #'global-centered-cursor-mode)
 
 ;;*** Snippets
 
@@ -364,6 +363,8 @@
 
 ;;*** DIRED
 (setq dired-omit-files "^.DS_Store\\'\\|^.project\\(?:ile\\)?\\'\\|^.\\(svn\\)\\'\\|^.ccls-cache\\'\\|\\(?:\\.js\\)?\\.meta\\'\\|\\.\\(?:elc\\|o\\|pyo\\|swp\\|class\\)\\'")
+
+(setq dired-dwim-target 'dired-dwim-target-recent)
 
 ;; Remove `.` and `..` from list of omitted file patterns
 ;; (so i can always run commands on the directory)
@@ -474,6 +475,10 @@
 ;;*** AST
 
 ;;*** ELF
+
+;;*** RPM
+;; (use-package! rpm-spec-mode) ; apparently broken
+(use-package! archive-rpm)
 ;; Tools Configs:1 ends here
 
 ;; [[file:config.org::*Lsp Configs][Lsp Configs:1]]

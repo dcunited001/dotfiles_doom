@@ -662,8 +662,7 @@ These are simply bookmarks and thus can be reached from the doom startup menu.
 
 ;; TODO try global-centered-cursor-mode by default
 ;; (mostly to remind myself that it exists
-(add-hook 'doom-init-ui-hook
-          #'global-centered-cursor-mode)
+;; (add-hook 'doom-init-ui-hook #'global-centered-cursor-mode)
 
 ;;*** Snippets
 
@@ -718,6 +717,8 @@ Objed mode is turned on.
 
 ;;*** DIRED
 (setq dired-omit-files "^.DS_Store\\'\\|^.project\\(?:ile\\)?\\'\\|^.\\(svn\\)\\'\\|^.ccls-cache\\'\\|\\(?:\\.js\\)?\\.meta\\'\\|\\.\\(?:elc\\|o\\|pyo\\|swp\\|class\\)\\'")
+
+(setq dired-dwim-target 'dired-dwim-target-recent)
 
 ;; Remove `.` and `..` from list of omitted file patterns
 ;; (so i can always run commands on the directory)
@@ -797,7 +798,11 @@ This is default & I'd rather adjust to it. In the future, I may address this by:
 
 ;; ok apparently there is an elf-mode :)
 (package! elf-mode)
+
+;; (package! rpm-spec-mode) ; apparently broken
+(package! archive-rpm)
 #+end_src
+
 
 *** Tools Configs
 
@@ -890,6 +895,11 @@ This is default & I'd rather adjust to it. In the future, I may address this by:
 ;;*** AST
 
 ;;*** ELF
+
+;;*** RPM
+;; (use-package! rpm-spec-mode) ; apparently broken
+(use-package! archive-rpm)
+
 #+end_src
 
 *** Guix

@@ -69,6 +69,9 @@
 
 ;; ok apparently there is an elf-mode :)
 (package! elf-mode)
+
+;; (package! rpm-spec-mode) ; apparently broken
+(package! archive-rpm)
 ;; Tools Packages:1 ends here
 
 ;; [[file:config.org::*Lsp Packages][Lsp Packages:1]]
