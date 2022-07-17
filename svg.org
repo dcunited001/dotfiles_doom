@@ -65,7 +65,7 @@ Eventually put this in the doom-dashboard
   `(svg-rectangle ,svg ,@line-coords ,@args)
   )
 
-(let* ((img-file "./img/iching.svg")
+(let* ((img-file "/data/org/roam/img/slips/iching-2022-07-03a.svg")
        (header-margin 100)
        (header-font 21)
        (w-margin 50)
