@@ -397,6 +397,14 @@ Removed =-childframe= for now, as these are actual frames, kinda.
 (setq tooltip-delay 2
       tooltip-short-delay 0.5)
 
+
+;;*** Copy/Paste
+;; no, nope, NO, NOO, NO!
+;; HELL NO! What in the hell smatter with y0ou?
+(setq x-select-enable-primary nil)
+
+;; when did that change?
+
 ;;*** Window Dividers
 ;; Dividers are too thin to grab if only 1px
 ;; ... but what the hell. why not?
