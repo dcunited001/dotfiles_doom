@@ -147,7 +147,6 @@
 (setq tooltip-delay 2
       tooltip-short-delay 0.5)
 
-
 ;;*** Copy/Paste
 ;; no, nope, NO, NOO, NO!
 ;; HELL NO! What in the hell smatter with y0ou?
@@ -396,6 +395,10 @@
 
 ;; [[file:config.org::*Tools Configs][Tools Configs:1]]
 ;;** TOOLS
+
+;;*** FIND/GREP
+(setq counsel-grep-base-command "rg --color never %s %s")
+;; (setq counsel-grep-base-command "grep -E -n -e %s %s")
 
 ;;*** INFO
 (use-package! info-colors)
