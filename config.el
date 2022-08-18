@@ -363,6 +363,36 @@
 ;; [[file:config.org::*Emacs Config][Emacs Config:1]]
 ;;** EMACS
 
+;;*** CONFIG 
+
+;; https://labs.phundrak.com/phundrak/dotfiles/src/branch/master/org/config/emacs.org#Basic-Configuration-A-better-custom-variable-setter-56z4ni61lhj0
+(defmacro csetq (&rest forms)
+  "Bind each custom variable FORM to the value of its VAL.
+
+FORMS is a list of pairs of values [FORM VAL].
+`customize-set-variable' is called sequentially on each pairs
+contained in FORMS. This means `csetq' has a similar behaviour as
+`setq': each VAL expression are evaluated sequentially, i.e. the
+first VAL is evaluated before the second, and so on. This means
+the value of the first FORM can be used to set the second FORM.
+
+The return value of `csetq' is the value of the last VAL.
+
+\(fn [FORM VAL]...)"
+  (declare (debug (&rest sexp form))
+           (indent 1))
+  ;; Check if we have an even number of arguments
+  (when (= (mod (length forms) 2) 1)
+    (signal 'wrong-number-of-arguments (list 'csetq (1+ (length forms)))))
+  ;; Transform FORMS into a list of pairs (FORM . VALUE)
+  (let (sexps)
+    (while forms
+      (let ((form  (pop forms))
+            (value (pop forms)))
+        (push `(customize-set-variable ',form ,value)
+              sexps)))
+    `(progn ,@(nreverse sexps))))
+
 ;;*** GPG
 
 ;; (setq auth-sources '("~/.authinfo" "~/.authinfo.gpg" "~/.netrc"))
@@ -603,6 +633,14 @@ then toggle to the lsp-ui-menu buffer & activate mode if necessary. "
 
 ;;*** org-roam
 
+(defun dc/org-roam-read-template-from-file (file)
+  (if (file-exists-p file) (org-file-contents file)
+    (format "* Template file %S not found" file)))
+
+(setq dc/org-roam-dailies-template
+      (concat (file-name-as-directory doom-private-dir)
+              "captures/roam/daily-default.org"))
+
 ;; encapsulate org-roam-directory within (file-truename ___) if using links
 (setq org-roam-directory (concat (file-name-as-directory org-directory) "roam")
       org-roam-db-location (concat (file-name-as-directory (concat (getenv "HOME") "/.local/share/org-roam")) "org-roam.db")
@@ -616,9 +654,9 @@ then toggle to the lsp-ui-menu buffer & activate mode if necessary. "
       ;; and the completing-read functionality is adjusted for ~80 chars
       ;;
       org-roam-node-display-template
-       (format "${doom-hierarchy:36} %s %s"
-               (propertize "${doom-type:*}" 'face 'font-lock-keyword-face)
-               (propertize "${doom-tags:18}" 'face 'org-tag))
+      (format "${doom-hierarchy:36} %s %s"
+              (propertize "${doom-type:*}" 'face 'font-lock-keyword-face)
+              (propertize "${doom-tags:18}" 'face 'org-tag))
 
       org-roam-completion-everywhere nil
 
@@ -626,10 +664,18 @@ then toggle to the lsp-ui-menu buffer & activate mode if necessary. "
       org-roam-extract-new-file-path "${slug}-%<%Y%m%d%H%M%S>-.org"
       org-roam-dailies-directory "dailies/"
       org-roam-dailies-capture-templates
-      '(("d" "default" entry
-         "* %?"
-         :if-new (file+head "%<%Y-%m-%d>.org"
-                            "#+title: %<%Y-%m-%d>\n\n* Tasks \n\n* Notes")))
+      `(("d" "default" entry
+         ;; this should work, but seems unimplemented in org-roam
+         ;; (file "./relative/path/from/roam/template.org")
+         "%?"
+         :target
+         (file+head "%<%Y-%m-%d>.org"
+                    ,(dc/org-roam-read-template-from-file dc/org-roam-dailies-template)
+                    ;; ,(dc/org-roam-read-template-from-file
+                    ;;   (concat (file-name-as-directory doom-private-dir)
+                    ;;           "captures/roam/daily-default.org"))
+
+                    )))
 
       org-roam-mode-section-functions #'(org-roam-backlinks-section
                                          org-roam-reflinks-section))
@@ -655,6 +701,12 @@ then toggle to the lsp-ui-menu buffer & activate mode if necessary. "
                  ":ANKI_DECK: %^{DECK}"
                  ":ANKI_NOTE_TYPE: LaTeX"
                  ":END:") "\n"))
+
+;; example file+head+olp
+;; ("E" "example" plain "%?" :unnarrowed t
+;;  :target (file+head+olp "${slug}.org"
+;;                         "#+TITLE: ${title}\n\n"
+;;                         ("h1" ("h2" "h2a") ("h3") "h4")))
 
 (setq org-roam-capture-templates
       (append
@@ -695,8 +747,7 @@ then toggle to the lsp-ui-menu buffer & activate mode if necessary. "
          :target (file+head "slips/%<%Y%m%d%H%M%S>-${slug}.org"
                             ,(string-join '("#+TITLE: ${title}"
                                             "#+CATEGORY: slips"
-                                            "#+TAGS: ") "\n")))
-         ) org-roam-capture-templates))
+                                            "#+TAGS: ") "\n")))) org-roam-capture-templates))
 
 (defun dc/org-roam-insert-slug ()
   (interactive)
@@ -729,7 +780,7 @@ then toggle to the lsp-ui-menu buffer & activate mode if necessary. "
 ;;****  Project Templates
 (defvar dw/org-roam-project-template
   '("p" "project" plain "** TODO %?"
-    :if-new (file+head+olp "%<%Y%m%d%H%M%S>-${slug}.org"
+    :target (file+head+olp "%<%Y%m%d%H%M%S>-${slug}.org"
                            (string-join '("#+title: ${title}"
                                           "#+category: projects"
                                           "#+tags: project") "\n")
