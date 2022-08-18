@@ -1,0 +1,52 @@
+#+TITLE:     %<%Y-%m-%d>
+#+AUTHOR:    David Conner
+#+EMAIL:     noreply@te.xel.io
+#+DESCRIPTION: Roam Daily %<%Y-%m-%d>
+
+* Tasks
+** When
+*** Deadline :dl:
+*** Schedule :sch:
+
+** Why
+*** Visibility :vis:
+*** Issues :is:
+*** Goals :go:
+*** Finance :fin:
+
+** How
+*** Automation :auto:
+*** Network :net:
+*** Files :fs:
+*** Devops :do:
+*** Auth :au:
+*** Identity :id:
+*** Dotfiles :df:
+
+** What
+*** Code Index :codex:
+*** 3D :3d:
+*** Design :cad:
+*** Workshop :ws:
+*** Art :art:
+*** Music :mus:
+*** Learn :learn:
+*** Edu :edu:
+
+** Who
+*** Meetups :meet:
+*** Msg :msg:
+*** Events :ev:
+*** Contacts :con:
+To contact
+
+* Notes
+
+** Which
+
+** Wherefore
+*** Existential
+*** Philosophy
+*** Deep Thoughts
+
+** Whence
