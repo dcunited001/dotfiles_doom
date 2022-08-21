@@ -6,6 +6,14 @@
 ;; [[file:config.org::*Input Configs][Input Configs:1]]
 ;;** INPUT
 
+;;** IDO
+(when (featurep 'ido)
+  (message "Disabling ido-mode")
+  (ido-mode nil))
+
+;; (map! "C-c f d" #'dired
+;;       "C-x d" #'dired)
+
 ;; Fixes problems with dead keys
 (require 'iso-transl)
 
@@ -17,10 +25,6 @@
       (append
        '(("/\\.dir-locals\\.el$" . lispy-mode))
        auto-minor-mode-alist))
-(after! lispy
-  (map! (:map lispy-mode-map
-         "M-." #'+lookup/definition
-         "M-," #'better-jumper-jump-backward)))
 
 ;;*** Mouse
 
@@ -79,8 +83,13 @@
 ;;** COMPLETION
 (setq tab-always-indent 'complete)
 
-;;*** Ivy
+;;*** Company
 
+(map! "C-:" #'company-box-doc-manually
+      "C-<tab>" #'company-yasnippet
+      "C-M-;" #'company-yasnippet)
+
+;;*** Ivy
 
 ;;*** Counsel
 ;; hopefully mindfuck myself into actually remembering 'counsel-imenu and 'counsel-swiper
@@ -150,9 +159,13 @@
 ;;*** Copy/Paste
 ;; no, nope, NO, NOO, NO!
 ;; HELL NO! What in the hell smatter with y0ou?
-(setq x-select-enable-primary nil)
+(setq x-select-enable-primary nil
+      ;; select-enable-primary nil
+      ;; x-select-enable-clipboard t
+      ;; select-enable clipboard t
+      )
 
-;; when did that change?
+;; when did that change?...
 
 ;;*** Window Dividers
 ;; Dividers are too thin to grab if only 1px
@@ -341,14 +354,13 @@
   (global-centered-cursor-mode 'toggle))
 
 ;; TODO try global-centered-cursor-mode by default
-;; (mostly to remind myself that it exists
+;; mostly to remind myself that it exists
 ;; (add-hook 'doom-init-ui-hook #'global-centered-cursor-mode)
 
 ;;*** Snippets
 
 (setq dc/snippets (expand-file-name (concat doom-private-dir "snippets")))
 (after! 'yasnippet
-  (map! "C-tab" #'company-yasnippet)
   (add-to-list 'yas-snippet-dirs 'dc/snippets)
   (message "loading dc/snippets")
   (yas-load-directory dc/snippets t))
@@ -357,7 +369,7 @@
   (interactive)
   (objed-mode 'toggle))
 
- (map! ("<f10>" #'dc/toggle-objed-mode))
+;; (map! ("<f10>" #'dc/toggle-objed-mode))
 ;; Editor Configs:1 ends here
 
 ;; [[file:config.org::*Emacs Config][Emacs Config:1]]

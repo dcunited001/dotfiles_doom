@@ -127,6 +127,14 @@ bin/doom (upgrade|sync|build)
 #+begin_src emacs-lisp
 ;;** INPUT
 
+;;** IDO
+(when (featurep 'ido)
+  (message "Disabling ido-mode")
+  (ido-mode nil))
+
+;; (map! "C-c f d" #'dired
+;;       "C-x d" #'dired)
+
 ;; Fixes problems with dead keys
 (require 'iso-transl)
 
@@ -138,10 +146,6 @@ bin/doom (upgrade|sync|build)
       (append
        '(("/\\.dir-locals\\.el$" . lispy-mode))
        auto-minor-mode-alist))
-(after! lispy
-  (map! (:map lispy-mode-map
-         "M-." #'+lookup/definition
-         "M-," #'better-jumper-jump-backward)))
 
 ;;*** Mouse
 
@@ -291,8 +295,13 @@ Mouse 14 is intended to give hints for keybindings.
 ;;** COMPLETION
 (setq tab-always-indent 'complete)
 
-;;*** Ivy
+;;*** Company
 
+(map! "C-:" #'company-box-doc-manually
+      "C-<tab>" #'company-yasnippet
+      "C-M-;" #'company-yasnippet)
+
+;;*** Ivy
 
 ;;*** Counsel
 ;; hopefully mindfuck myself into actually remembering 'counsel-imenu and 'counsel-swiper
@@ -400,9 +409,13 @@ Removed =-childframe= for now, as these are actual frames, kinda.
 ;;*** Copy/Paste
 ;; no, nope, NO, NOO, NO!
 ;; HELL NO! What in the hell smatter with y0ou?
-(setq x-select-enable-primary nil)
+(setq x-select-enable-primary nil
+      ;; select-enable-primary nil
+      ;; x-select-enable-clipboard t
+      ;; select-enable clipboard t
+      )
 
-;; when did that change?
+;; when did that change?...
 
 ;;*** Window Dividers
 ;; Dividers are too thin to grab if only 1px
@@ -668,14 +681,13 @@ These are simply bookmarks and thus can be reached from the doom startup menu.
   (global-centered-cursor-mode 'toggle))
 
 ;; TODO try global-centered-cursor-mode by default
-;; (mostly to remind myself that it exists
+;; mostly to remind myself that it exists
 ;; (add-hook 'doom-init-ui-hook #'global-centered-cursor-mode)
 
 ;;*** Snippets
 
 (setq dc/snippets (expand-file-name (concat doom-private-dir "snippets")))
 (after! 'yasnippet
-  (map! "C-tab" #'company-yasnippet)
   (add-to-list 'yas-snippet-dirs 'dc/snippets)
   (message "loading dc/snippets")
   (yas-load-directory dc/snippets t))
@@ -684,7 +696,7 @@ These are simply bookmarks and thus can be reached from the doom startup menu.
   (interactive)
   (objed-mode 'toggle))
 
- (map! ("<f10>" #'dc/toggle-objed-mode))
+;; (map! ("<f10>" #'dc/toggle-objed-mode))
 #+end_src
 
 *** Auto Insert Mode
@@ -771,8 +783,7 @@ The return value of `csetq' is the value of the last VAL.
 
 *** DIRED
 
- Also `M-!` will run commands on the dir without
-parameterizing a subdir.
+Also `M-!` will run commands on the dir without parameterizing a subdir.
 
 This is default & I'd rather adjust to it. In the future, I may address this by:
 
@@ -943,7 +954,7 @@ This is default & I'd rather adjust to it. In the future, I may address this by:
 
 #+end_src
 
-*** Guix
+*** SSH
 
 + [[https://github.com/jhgorrell/ssh-config-mode-el][ssh-config-mode]]
 + [[https://github.com/jobbflykt/x509-mode][x509-mode]]
