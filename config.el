@@ -420,9 +420,12 @@ The return value of `csetq' is the value of the last VAL.
 (map! (:map dired-mode-map
        ;; godammit don't close all the fucking dired buffers
        "q" #'find-name-dired
-
-       ;; ... but potentially a good idea with TRAMP ... maybe?)
        :leader :desc "Close all direds" "Q" #'+dired/quit-all))
+
+(defun +dired/quit-all ()
+  "remap"
+  (interactive)
+  (message "don't close the buffers"))
 ;; Emacs Config:1 ends here
 
 ;; [[file:config.org::*Term Configs][Term Configs:1]]
@@ -509,6 +512,12 @@ The return value of `csetq' is the value of the last VAL.
 
 ;;*** X.509 certs
 (use-package! x509-mode)
+(appendq! auto-mode-alist
+          '(("\\.pem$" . x509-mode)
+            ("\\.cer$" . x509-mode)
+            ("\\.der$" . x509-mode)
+            ("\\.crt$" . x509-mode)
+            ("\\.crl$" . x509-mode)))
 
 ;;*** DOCKER
 (use-package! docker
@@ -1034,8 +1043,7 @@ If FULL-MODE is not null, run full krita."
                                 ("\\.inl$" . c++-mode)
                                 ("\\.H$" . c++-mode)
                                 ("\\.hh$" . c++-mode)
-                                ("\\.hpp$" . c++-mode)
-                                )
+                                ("\\.hpp$" . c++-mode))
                               auto-mode-alist))
 
 ;;*** ARDUINO
