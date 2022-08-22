@@ -795,7 +795,8 @@ This is default & I'd rather adjust to it. In the future, I may address this by:
   calls =map!=
 + simply confirm the =+dired/quit-all= invocation.
 
-***** TODO ensure that the Q hotkey above ALWAYS STAYS IN PLACE.
+***** TODO ensure that the Q hotkey above stays in place.
++ or advise the dired function
 
 ** TERM
 
