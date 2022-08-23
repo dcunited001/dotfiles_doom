@@ -11,6 +11,7 @@
 
 ;; [[file:config.org::*UI Packages][UI Packages:1]]
 ;;** UI
+(package! ef-themes)
 
 (package! diminish)
 (package! auto-highlight-symbol)

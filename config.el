@@ -98,6 +98,7 @@
 
 ;; [[file:config.org::*UI Configs][UI Configs:1]]
 ;;** UI
+(use-package! ef-themes)
 
 ;;*** Diminish
 ;; should probably be loaded before :diminish directives
@@ -105,12 +106,13 @@
 
 ;;*** Doom Theme
 ;; Pick a random theme from the ones I like.
-(let* ((themes-ilike '(doom-one doom-dark+ doom-acario-dark doom-molokai modus-vivendi))
-       (random-theme (nth (random (length themes-ilike)) themes-ilike)))
-  (setq doom-theme random-theme))
+(setq dc/doom-themes-like '(doom-one doom-dark+ doom-acario-dark doom-molokai modus-vivendi))
+(let* ((random-theme (nth (random (length ef-themes-collection)) ef-themes-collection)))
+  ;; (setq doom-theme random-theme)
+  (setq doom-theme nil))
 
-;; NOTE just set modus-vivendi for now
-(setq doom-theme 'modus-vivendi)
+(ef-themes-load-random)
+;; (setq doom-theme 'modus-vivendi)
 
 ;; (setq doom-theme 'doom-acario-dark
 ;;   doom-acario-dark-brighter-comments nil
@@ -1204,9 +1206,8 @@ If FULL-MODE is not null, run full krita."
                         green-intense  blue-refine-bg yellow-intense)))
 
 (defun dc/prism-get-doom-colors ()
-  "get doom colors which will return nil and result in the 'emacs config from hell',
-   which prevents lispy-mode (and many moooore) and ALSO deletes the results of the
-   C-c ' blocks"
+  "get doom colors which will return nil ... which will thoroughly problematize
+   your emacs config"
   (-map #'doom-color '(red teal green magenta cyan blue orange
                            dark-cyan violet yellow)))
 
@@ -1225,14 +1226,14 @@ If FULL-MODE is not null, run full krita."
   (add-hook! (emacs-lisp-mode clojure-mode clojurescript-mode common-lisp-mode scheme-mode)
              #'(lambda () (dc/unless-org-src-fontification-activate 'prism-mode))))
 
-(add-hook! 'modus-themes-after-load-theme-hook
-           :append
-           #'(lambda ()
+;; (add-hook! 'modus-themes-after-load-theme-hook
+;;            :append
+;;            #'(lambda ()
 
-               (prism-set-colors
-                 :lightens '(0 5 10)
-                 :desaturations '(-2.5 0 2.5)
-                 :colors (dc/prism-get-modus-colors))))
+;;                (prism-set-colors
+;;                  :lightens '(0 5 10)
+;;                  :desaturations '(-2.5 0 2.5)
+;;                  :colors (dc/prism-get-modus-colors))))
 
 ;; (dc/prism-get-modus-colors)
 ;; ("#ff8059"
