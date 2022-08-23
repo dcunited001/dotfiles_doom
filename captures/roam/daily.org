@@ -35,6 +35,7 @@
 *** Learn :LEARN:
 *** Edu :EDU:
 *** Home :HOME:
+*** Fablab :FAB:
 
 ** Who
 *** Meetups :MEET:

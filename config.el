@@ -654,13 +654,13 @@ then toggle to the lsp-ui-menu buffer & activate mode if necessary. "
 
 ;;*** org-roam
 
-(defun dc/org-roam-read-template-from-file (file)
+(defun dc/org-read-template-from-file (file)
   (if (file-exists-p file) (org-file-contents file)
     (format "* Template file %S not found" file)))
 
-(setq dc/org-roam-dailies-template
-      (concat (file-name-as-directory doom-private-dir)
-              "captures/roam/daily-default.org"))
+(setq dc/org-roam-templates-path
+      (concat (file-name-as-directory doom-private-dir) "captures/roam/")
+      dc/org-roam-dailies-template (concat dc/org-roam-templates-path "daily-default.org"))
 
 ;; encapsulate org-roam-directory within (file-truename ___) if using links
 (setq org-roam-directory (concat (file-name-as-directory org-directory) "roam")
@@ -691,7 +691,8 @@ then toggle to the lsp-ui-menu buffer & activate mode if necessary. "
          "%?"
          :target
          (file+head "%<%Y-%m-%d>.org"
-                    ,(dc/org-roam-read-template-from-file dc/org-roam-dailies-template)
+                    ,(dc/org-read-template-from-file
+                      dc/org-roam-dailies-template)
                     ;; ,(dc/org-roam-read-template-from-file
                     ;;   (concat (file-name-as-directory doom-private-dir)
                     ;;           "captures/roam/daily-default.org"))
@@ -729,46 +730,104 @@ then toggle to the lsp-ui-menu buffer & activate mode if necessary. "
 ;;                         "#+TITLE: ${title}\n\n"
 ;;                         ("h1" ("h2" "h2a") ("h3") "h4")))
 
+;; TODO: setting tags: https://orgmode.org/manual/Setting-Tags.html
+(setq org-tag-persistent-alist
+      '((:startgroup . nil)
+        ("VIS" . ?v)
+        ("ISH" . ?!)
+        ("GO" . ?G)
+        ("FIN" . ?$) (:newline . nil)
+        (:endgroup . nil) (:startgroup . nil)
+        ("AUTO" . ?a)
+        ("NET" . ?n)
+        ("FS" . ?f)
+        ("DO" . ?d)
+        ("AU" . ?@)
+        ("ID" . ?#)
+        ("DF" . ?.) (:newline . nil)
+        (:endgroup . nil) (:startgroup . nil)
+        ("CODEX" . ?%)
+        ("3D" . ?3)
+        ("CAD" . ?C)
+        ("WS" . ?w)
+        ("ART" . ?A)
+        ("MUS" . ?M)
+        ("LEARN" . ?L)
+        ("EDU" . ?E)
+        ("HOME" . ?H)
+        ("FAB" . ?F) (:newline . nil)
+        (:endgroup . nil) (:startgroup . nil)
+        ("MEET" . ?M)
+        ("MSG" . ?m)
+        ("EV" . ?V)
+        ("CON" . ?c) (:newline . nil)
+        (:endgroup . nil)))
+
+;; TODO: create multiple templates for capturing to various outline paths
+;; - =+olp= seems to only specify linear paths deeper into a tree
+;; - this helps in avoiding creating in structure/length in files
+;;   where it is not needed.
+;; - it seems that a template is needed to generate files with consistent
+;;   schema. though overusing such would be "doing it wrong".
+
+;; TODO: setup header to prompt for inclusion of roam backlinks
+
+;; TODO: context tags
+
 (setq org-roam-capture-templates
-      (append
-       ;; org-roam-capture-templates
-      `(
-        ("p" "projects" plain "%?" :unnarrowed t
-         :target (file+head "projects/${slug}.org"
-                            "#+TITLE: ${title}\n\n"))
-        ("t" "topics" plain "%?" :unnarrowed t
-         :target (file+head "topics/${slug}.org"
-                            "#+TITLE: ${title}\n\n"))
-        ("c" "code" plain "%?" :unnarrowed t
-         :target (file+head "code/${slug}.org"
-                            "#+TITLE: ${title}\n\n"))
+      (cons '("d" "default" plain "%?" :unnarrowed t
+             :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n"))
 
-        ;; for Anki/Editor format examples
-        ;; - see https://github.com/louietan/anki-editor/examples.org
-        ;; only notes that already exist in Anki should have ANKI_NOTE_ID
-        ;; - see https://github.com/louietan/anki-editor/blob/master/anki-editor.el#161
-        ("a" "anki" plain "%?" :unnarrowed t
-         :target (file+head "anki/${slug}.org"
-                            ,dc/org-roam-capture-anki))
-        ("D" "drills" plain "%?" :unnarrowed t
-         :target (file+head "drills/${slug}.org"
-                            "#+TITLE: ${title}\n\n"))
+            `(("p" "projects" plain "%?" :unnarrowed t
+               :target (file+head "projects/${slug}.org"
+                                  "#+TITLE: ${title}\n#+DESCRIPTION: ${description}\n"))
+              ("t" "topics" plain "%?" :unnarrowed t
+               :target (file+head+olp "topics/${slug}.org"
+                                      "#+TITLE: ${title}\n#+DESCRIPTION: ${description}\n#+TAGS:\n\n"
+                                      ("Roam" "Docs" "Resources" "Issues")))
 
-        ;; TODO: validate whether this should be changed
-        ;; - for org-roam-bibtex or org-ref
-        ;; NOTE: slug needs to be a DOI in form:
-        ;; - ${indicator}.${registrant}/${suffix}
-        ("n" "noter (DOI)" plain "%?" :unnarrowed t
-         :target (file+head "noter/${slug}.org"
-                            ,(string-join '("#+TITLE: ${title}"
-                                            "#+CATEGORY: slips"
-                                            "#+TAGS: ") "\n")))
+              ;; TODO: include metadata for linking to /data/ecto/.../abc.org
+              ("c" "code" plain "%?" :unnarrowed t
+               :target (file+head+olp "code/${slug}.org"
+                                      "#+TITLE: ${title}\n#+DESCRIPTION: ${description}\n#+TAGS:\n\n"
+                                      ("Roam" "Docs" "Resources" "Issues" "Projects")))
 
-        ("s" "slips" plain "%?" :unnarrowed t
-         :target (file+head "slips/%<%Y%m%d%H%M%S>-${slug}.org"
-                            ,(string-join '("#+TITLE: ${title}"
-                                            "#+CATEGORY: slips"
-                                            "#+TAGS: ") "\n")))) org-roam-capture-templates))
+              ;; TODO: setup org-export for the cheatsheet
+              ;; TODO: setup capture template (Ck) for adding a new keymap.
+              ;;   olp: ("Keymaps" "${keymap name}")
+              ("C" "cheatsheets" plain "%?" :unnarrowed t
+               :target (file+head+olp "cheatsheets/${slug}.org"
+                                      ,(dc/org-read-template-from-file
+                                        (concat dc/org-roam-templates-path
+                                                "cheatsheet.org"))))
+
+              ;; for Anki/Editor format examples
+              ;; - see https://github.com/louietan/anki-editor/examples.org
+              ;; only notes that already exist in Anki should have ANKI_NOTE_ID
+              ;; - see https://github.com/louietan/anki-editor/blob/master/anki-editor.el#161
+              ("a" "anki" plain "%?" :unnarrowed t
+               :target (file+head "anki/${slug}.org"
+                                  ,dc/org-roam-capture-anki))
+              ("D" "drills" plain "%?" :unnarrowed t
+               :target (file+head "drills/${slug}.org"
+                                  "#+TITLE: ${title}\n#+DESCRIPTION: ${description}\n#+TAGS:\n\n"))
+
+              ;; TODO: validate whether this should be changed
+              ;; - for org-roam-bibtex or org-ref
+              ;; NOTE: slug needs to be a DOI in form:
+              ;; - ${indicator}.${registrant}/${suffix}
+              ("n" "noter (DOI)" plain "%?" :unnarrowed t
+               :target (file+head "noter/${slug}.org"
+                                  ,(string-join '("#+TITLE: ${title}"
+                                                  "#+CATEGORY: slips"
+                                                  "#+TAGS: ") "\n")))
+
+              ("s" "slips" plain "%?" :unnarrowed t
+               :target (file+head+olp "slips/%<%Y%m%d%H%M%S>-${slug}.org"
+                                      ,(string-join '("#+TITLE: ${title}"
+                                                      "#+CATEGORY: slips"
+                                                      "#+TAGS: ") "\n")
+                                      ("Roam" "Docs" "Resources" "Issues" "Projects"))))))
 
 (defun dc/org-roam-insert-slug ()
   (interactive)
