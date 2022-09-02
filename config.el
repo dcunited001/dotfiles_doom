@@ -299,6 +299,14 @@
 ;; [[file:config.org::*Editor Configs][Editor Configs:1]]
 ;;** EDITOR
 
+;;*** Visual Line 
+;; disable logical word wrap in text-mode (tecosaur)
+(remove-hook 'text-mode-hook #'visual-line-mode)
+
+;;*** Auto Fill
+;; enable in text-mode (tecosaur)
+(add-hook 'text-mode-hook #'auto-fill-mode)
+
 ;;*** Auto Insert
 
 ;(auto-insert-mode)
@@ -978,6 +986,17 @@ If FULL-MODE is not null, run full krita."
 
 ;;*** org-mode keys
 
+;; doom-specific: toggle narrow to subtree
+(map! :map org-mode-map :leader
+      :prefix ("t" . "toggle")
+      :desc "Toggle Org Narrow" "T" #'org-toggle-narrow-to-subtree
+      :desc "Toggle Org Treeusage" "U" #'org-treeusage-mode)
+
+(map! :map org-mode-map :localleader
+      :desc "View exported file" "v" #'org-view-output-file)
+
+;;**** org-roam keys
+
 ;; doom-specific: add keys to doom defaults
 (map! (:map org-mode-map
        :leader
@@ -1033,14 +1052,42 @@ If FULL-MODE is not null, run full krita."
         "T" #'org-roam-tag-remove
         "r" #'org-roam-ref-add
         "R" #'org-roam-ref-remove)))
-
-;; doom-specific: toggle narrow to subtree
-(map! :map org-mode-map
-      :leader
-      :prefix ("t" . "toggle")
-      :desc "Toggle Org Narrow" "T" #'org-toggle-narrow-to-subtree
-      :desc "Toggle Org Treeusage" "U" #'org-treeusage-mode)
 ;; Org Configs:1 ends here
+
+;; [[file:config.org::*Exports Config][Exports Config:1]]
+;;*** org-export
+;; https://github.com/tecosaur/emacs-config/blob/master/config.org#exporting
+(setq org-export-headline-levels 5)
+
+;; **** ox-extra: enable :ignore: headlines (in addition to :noexport:)
+(require 'ox-extra)
+(ox-extras-activate '(ignore-headlines))
+
+;; org-view-output-file: from tecosaur
+(defun org-view-output-file (&optional org-file-path)
+  "Visit buffer open on the first output file (if any) found, using `org-view-output-file-extensions'"
+  (interactive)
+  (let* ((org-file-path (or org-file-path (buffer-file-name) ""))
+         (dir (file-name-directory org-file-path))
+         (basename (file-name-base org-file-path))
+         (output-file nil))
+    (dolist (ext org-view-output-file-extensions)
+      (unless output-file
+        (when (file-exists-p
+               (concat dir basename "." ext))
+          (setq output-file (concat dir basename "." ext)))))
+    (if output-file
+        (if (member (file-name-extension output-file) org-view-external-file-extensions)
+            (browse-url-xdg-open output-file)
+          (pop-to-buffer (or (find-buffer-visiting output-file)
+                             (find-file-noselect output-file))))
+      (message "No exported file found"))))
+
+(defvar org-view-output-file-extensions '("pdf" "md" "rst" "txt" "tex" "html")
+  "Search for output files with these extensions, in order, viewing the first that matches")
+(defvar org-view-external-file-extensions '("html")
+  "File formats that should be opened externally.")
+;; Exports Config:1 ends here
 
 ;; [[file:config.org::*Lang Configs][Lang Configs:1]]
 ;;** LANG
