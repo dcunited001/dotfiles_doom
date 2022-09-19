@@ -463,7 +463,10 @@ Removed =-childframe= for now, as these are actual frames, kinda.
   '(("^\\*lsp-ui-imenu" :side left :width 60
      :vslot -5 :slot 3
      :modeline nil :select t :quit t)
-    ("^\\*Bufler" :side bottom :width 60
+    ("^\\*Help" :side left :width 60
+     :vslot -5 :slot 1
+     :modeline nil :select t :quit t)
+    ("^\\*Bufler" :side right :width 80
      :vslot -5 :slot -5
      :modeline nil :select t :quit t)))
 
