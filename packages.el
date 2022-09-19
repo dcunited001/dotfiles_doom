@@ -64,6 +64,10 @@
 (package! crontab-mode)
 (package! ssh-config-mode)
 (package! x509-mode)
+
+(package! pcap-mode
+  :recipe (:host github
+           :repo "orgcandman/pcap-mode"))
 ;; TODO ssh-agency
 ;; TODO ssh-tunnels
 (package! salt-mode)

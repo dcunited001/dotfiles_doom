@@ -522,7 +522,7 @@ The return value of `csetq' is the value of the last VAL.
 
 ;; TODO ssh-agency
 ;; TODO ssh-tunnels
-
+(use-package! pcap-mode)
 ;;*** X.509 certs
 (use-package! x509-mode)
 (appendq! auto-mode-alist

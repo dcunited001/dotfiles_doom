@@ -861,6 +861,10 @@ This is default & I'd rather adjust to it. In the future, I may address this by:
 (package! crontab-mode)
 (package! ssh-config-mode)
 (package! x509-mode)
+
+(package! pcap-mode
+  :recipe (:host github
+           :repo "orgcandman/pcap-mode"))
 ;; TODO ssh-agency
 ;; TODO ssh-tunnels
 (package! salt-mode)
@@ -946,7 +950,7 @@ This is default & I'd rather adjust to it. In the future, I may address this by:
 
 ;; TODO ssh-agency
 ;; TODO ssh-tunnels
-
+(use-package! pcap-mode)
 ;;*** X.509 certs
 (use-package! x509-mode)
 (appendq! auto-mode-alist
