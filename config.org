@@ -1968,6 +1968,8 @@ gnuplot img/spice/spice-example v(in) v(out) v(inn)
 This consists of =smiles-mode= and =ob-smiles= for rendering [[https://kitchingroup.cheme.cmu.edu/blog/2016/03/26/A-molecule-link-for-org-mode/][inline images of
 chemical structures]]. Guide for [[https://www.polymergenome.org/guide/index.php?m=3][entering polymer subunits]].
 
+It works much better if you =pacman -Syu openbabel=
+
 #+BEGIN_SRC smiles :tangle no :file img/smiles/lsd.svg :results file
 CCN(CC)C(=O)[C@H]1CN(C)[C@@H]2Cc3c[nH]c4cccc(C2=C1)c34
 #+END_SRC
