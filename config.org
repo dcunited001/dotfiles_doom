@@ -1124,6 +1124,9 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
            :files ("resources" "resources" "*.el" "*.el")))
 
 (package! org-drill)
+
+(package! org-lms
+  :defer t)
 #+end_src
 
 *** Org Configs
@@ -1596,6 +1599,12 @@ If FULL-MODE is not null, run full krita."
 
 #+RESULTS:
 : org-treeusage-mode
+
+
+#+begin_src emacs-lisp
+;;**** ORG-LMS
+
+#+end_src
 
 ** EXPORT
 *** Exports Packages
