@@ -1139,6 +1139,16 @@ If FULL-MODE is not null, run full krita."
 ;;**** LSP (julia)
 
 ;;*** XML
+;; nxml started running format on save, which it did not formerly do (2022 1121)
+(setq +format-on-save-enabled-modes (append +format-on-save-enabled-modes '(nxml-mode)))
+
+;; emmet wants to reformat quite a bit of content after inserting in nxml-mode (2022 1121)
+(defun dc/emmet-hook-no-indent-nxml-mode ()
+  (setq-local emmet-indent-after-insert nil))
+(add-hook 'emmet-mode #'dc/emmet-hook-no-indent-nxml-mode)
+
+;; emmet also blows up if the XML tags are split across multiple lines (2022 1121)
+
 
 ;;*** C++
 
