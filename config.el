@@ -1057,6 +1057,22 @@ If FULL-MODE is not null, run full krita."
         "R" #'org-roam-ref-remove)))
 ;; Org Configs:1 ends here
 
+;; [[file:config.org::*Org Configs][Org Configs:2]]
+;;**** ORG-LMS
+(use-package! org-lms
+  :defer t)
+
+(defun dc/org-lms-setup-course ()
+
+  )
+
+;; if you can get it
+(if (and (getenv "ORG_LMS_TOKEN") (getenv "ORG_LMS_BASEURL"))
+    (message "TODO: org lms")
+    ;; (dc/org-lms-setup-course)
+    )
+;; Org Configs:2 ends here
+
 ;; [[file:config.org::*Exports Config][Exports Config:1]]
 ;;*** org-export
 ;; https://github.com/tecosaur/emacs-config/blob/master/config.org#exporting

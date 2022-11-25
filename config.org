@@ -624,6 +624,9 @@ These are simply bookmarks and thus can be reached from the doom startup menu.
 
 (package! origami)
 (package! centered-cursor-mode)
+
+;; requires helm (-公-;)
+;; (package! kaomoji)
 #+end_src
 
 *** Editor Configs
@@ -712,6 +715,7 @@ These are simply bookmarks and thus can be reached from the doom startup menu.
   (objed-mode 'toggle))
 
 ;; (map! ("<f10>" #'dc/toggle-objed-mode))
+
 #+end_src
 
 *** Auto Insert Mode
@@ -1126,7 +1130,7 @@ Doom =tty= module is active, so =tty-setup-hook= should take care of enabling
 (package! org-drill)
 
 (package! org-lms
-  :defer t)
+  :recipe (:host github :repo "titaniumbones/org-lms"))
 #+end_src
 
 *** Org Configs
@@ -1603,7 +1607,18 @@ If FULL-MODE is not null, run full krita."
 
 #+begin_src emacs-lisp
 ;;**** ORG-LMS
+(use-package! org-lms
+  :defer t)
 
+(defun dc/org-lms-setup-course ()
+
+  )
+
+;; if you can get it
+(if (and (getenv "ORG_LMS_TOKEN") (getenv "ORG_LMS_BASEURL"))
+    (message "TODO: org lms")
+    ;; (dc/org-lms-setup-course)
+    )
 #+end_src
 
 ** EXPORT

@@ -36,6 +36,9 @@
 
 (package! origami)
 (package! centered-cursor-mode)
+
+;; requires helm (-公-;)
+;; (package! kaomoji)
 ;; Editor Packages:1 ends here
 
 ;; [[file:config.org::*Emacs Packages][Emacs Packages:1]]
@@ -114,6 +117,9 @@
            :files ("resources" "resources" "*.el" "*.el")))
 
 (package! org-drill)
+
+(package! org-lms
+  :recipe (:host github :repo "titaniumbones/org-lms"))
 ;; Org Packages:1 ends here
 
 ;; [[file:config.org::*Exports Packages][Exports Packages:1]]
