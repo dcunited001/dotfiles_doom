@@ -372,7 +372,7 @@
 
 ;;*** Snippets
 
-(setq dc/snippets (expand-file-name (concat doom-private-dir "snippets")))
+(setq dc/snippets (expand-file-name (concat doom-user-dir "snippets")))
 (after! 'yasnippet
   (add-to-list 'yas-snippet-dirs 'dc/snippets)
   (message "loading dc/snippets")
@@ -682,7 +682,7 @@ then toggle to the lsp-ui-menu buffer & activate mode if necessary. "
     (format "* Template file %S not found" file)))
 
 (setq dc/org-roam-templates-path
-      (concat (file-name-as-directory doom-private-dir) "captures/roam/")
+      (concat (file-name-as-directory doom-user-dir) "captures/roam/")
       dc/org-roam-dailies-template (concat dc/org-roam-templates-path "daily-default.org"))
 
 ;; encapsulate org-roam-directory within (file-truename ___) if using links
@@ -717,7 +717,7 @@ then toggle to the lsp-ui-menu buffer & activate mode if necessary. "
                     ,(dc/org-read-template-from-file
                       dc/org-roam-dailies-template)
                     ;; ,(dc/org-roam-read-template-from-file
-                    ;;   (concat (file-name-as-directory doom-private-dir)
+                    ;;   (concat (file-name-as-directory doom-user-dir)
                     ;;           "captures/roam/daily-default.org"))
 
                     )))
