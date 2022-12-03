@@ -637,6 +637,16 @@ then toggle to the lsp-ui-menu buffer & activate mode if necessary. "
 
 ;;*** org-agenda config
 
+(use-package! org-ql)
+
+(setq dc/org-roam-dailies-dir (concat (file-name-as-directory org-roam-directory)
+                                      org-roam-dailies-directory)
+      dc/most-recent-roam-dailies-take-last 5
+      dc/most-recent-roam-dailies
+      (-> (directory-files dc/org-roam-dailies-dir nil ".org$")
+          (sort #'string<)
+          (last 5)))
+
 (use-package! org-super-agenda
   :init (setq org-super-agenda-groups
                 '((:name "Today"
