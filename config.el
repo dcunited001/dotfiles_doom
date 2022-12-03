@@ -639,7 +639,8 @@ then toggle to the lsp-ui-menu buffer & activate mode if necessary. "
 
 (use-package! org-ql)
 
-(setq dc/org-roam-dailies-dir (concat (file-name-as-directory org-roam-directory)
+(setq org-roam-dailies-directory "dailies/"
+      dc/org-roam-dailies-dir (concat (file-name-as-directory org-roam-directory)
                                       org-roam-dailies-directory)
       dc/most-recent-roam-dailies-take-last 5
       dc/most-recent-roam-dailies
@@ -706,7 +707,6 @@ then toggle to the lsp-ui-menu buffer & activate mode if necessary. "
 
       ;; org-roam-extract-new-file-path doesn't work with a "slips/" path prepended to it
       org-roam-extract-new-file-path "${slug}-%<%Y%m%d%H%M%S>-.org"
-      org-roam-dailies-directory "dailies/"
       org-roam-dailies-capture-templates
       `(("d" "default" entry
          ;; this should work, but seems unimplemented in org-roam
