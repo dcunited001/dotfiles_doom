@@ -62,7 +62,7 @@
 (package! magit-tbdiff)
 (package! repo)
 (package! firestarter)
-;; (package! guix)
+(package! guix)
 (package! journalctl-mode)
 (package! crontab-mode)
 (package! ssh-config-mode)
