@@ -860,7 +860,7 @@ This is default & I'd rather adjust to it. In the future, I may address this by:
 (package! magit-tbdiff)
 (package! repo)
 (package! firestarter)
-(package! guix)
+;; (package! guix)
 (package! journalctl-mode)
 (package! crontab-mode)
 (package! ssh-config-mode)
