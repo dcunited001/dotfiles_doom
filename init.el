@@ -170,7 +170,7 @@
        ;;scala             ; java, but good
 
        ;; NOTE: depend on emacs-geiser/guile and emacs-guix instead
-       (scheme +guile)
+       ;; (scheme +guile)
                                         ; a fully conniving family of lisps
        sh     ; she sells {ba,z,fi}sh shells on the C xor
        ;;sml
