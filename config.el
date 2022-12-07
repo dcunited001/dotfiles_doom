@@ -302,7 +302,7 @@
 ;; [[file:config.org::*Editor Configs][Editor Configs:1]]
 ;;** EDITOR
 
-;;*** Visual Line 
+;;*** Visual Line
 ;; disable logical word wrap in text-mode (tecosaur)
 (remove-hook 'text-mode-hook #'visual-line-mode)
 
@@ -346,8 +346,14 @@
 
         )
 
-(add-hook 'doom-init-ui-hook
-          #'global-origami-mode)
+(defun dc/ensure-yas-global-mode-off ()
+  "yas-global-mode loads itself into ivy-mode and bringing
+emmet-mode to the party. ensure this is off after
+doom-init-ui-hook runs. may be a doom/guix conflict"
+  (yas-global-mode nil))
+
+(add-hook 'doom-init-ui-hook #'global-origami-mode)
+(add-hook 'doom-init-ui-hook #'dc/ensure-yas-global-mode-off)
 
 ;;*** centered-cursor-mode
 
@@ -376,7 +382,8 @@
 (after! 'yasnippet
   (add-to-list 'yas-snippet-dirs 'dc/snippets)
   (message "loading dc/snippets")
-  (yas-load-directory dc/snippets t))
+  (yas-load-directory dc/snippets t)
+  (yas-global-mode nil))
 
 (defun dc/toggle-objed-mode ()
   (interactive)
