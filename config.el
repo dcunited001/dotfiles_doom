@@ -1219,7 +1219,8 @@ If FULL-MODE is not null, run full krita."
                                 ("\\.inl$" . c++-mode)
                                 ("\\.H$" . c++-mode)
                                 ("\\.hh$" . c++-mode)
-                                ("\\.hpp$" . c++-mode))
+                                ("\\.hpp$" . c++-mode)
+                                ("\\.FCMacro$" . python-mode))
                               auto-mode-alist))
 
 ;;*** ARDUINO
