@@ -722,7 +722,6 @@ doom-init-ui-hook runs. may be a doom/guix conflict"
   (objed-mode 'toggle))
 
 ;; (map! ("<f10>" #'dc/toggle-objed-mode))
-
 #+end_src
 
 *** Auto Insert Mode
@@ -755,7 +754,7 @@ Objed mode is turned on.
 #+begin_src emacs-lisp
 ;;** EMACS
 
-;;*** CONFIG 
+;;*** CONFIG
 
 ;; https://labs.phundrak.com/phundrak/dotfiles/src/branch/master/org/config/emacs.org#Basic-Configuration-A-better-custom-variable-setter-56z4ni61lhj0
 (defmacro csetq (&rest forms)
@@ -1015,7 +1014,6 @@ This is default & I'd rather adjust to it. In the future, I may address this by:
 ;;*** RPM
 ;; (use-package! rpm-spec-mode) ; apparently broken
 (use-package! archive-rpm)
-
 #+end_src
 
 *** SSH
@@ -1672,7 +1670,6 @@ If FULL-MODE is not null, run full krita."
 
 
 #+begin_src emacs-lisp
-
 ;;*** org-export
 ;; https://github.com/tecosaur/emacs-config/blob/master/config.org#exporting
 (setq org-export-headline-levels 5)
@@ -1705,7 +1702,6 @@ If FULL-MODE is not null, run full krita."
   "Search for output files with these extensions, in order, viewing the first that matches")
 (defvar org-view-external-file-extensions '("html")
   "File formats that should be opened externally.")
-
 #+end_src
 
 ** LANG

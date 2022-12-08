@@ -32,6 +32,10 @@
       mouse-wheel-scroll-amount '(8)
       mouse-drag-and-drop-region t)
 
+;; forward/backward (on Razer mouse)
+(map! "<mouse-8>" 'better-jumper-jump-backward)
+(map! "<mouse-9> " 'better-jumper-jump-forward)
+
 ;;*** Experimental Mouse
 
 ;;**** Razor (previous/next)
@@ -40,8 +44,10 @@
 (map! "S-<mouse-8>" 'previous-buffer)
 ;; TODO something else: (map! "S-<mouse-9>" 'next-buffer)
 
-(map! "<mouse-8>" '+fold/toggle)
-(map! "<mouse-9> " 'er/expand-region)
+;;****
+
+
+
 (map! "S-<mouse-9> " 'er/contract-region)
 
 ;; (map! "<mouse-8>" 'counsel-grep-or-swiper)
