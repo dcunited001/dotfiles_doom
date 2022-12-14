@@ -159,7 +159,8 @@
        ;;php               ; perl's insecure younger brother
        plantuml
        ;;purescript        ; javascript, but functional
-       (python +poetry)
+       ;; (python +poetry)
+       python
        qt               ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        ;;raku              ; the artist formerly known as perl6
