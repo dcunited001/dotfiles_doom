@@ -716,12 +716,40 @@ doom-init-ui-hook runs. may be a doom/guix conflict"
 
 ;;*** Snippets
 
+
 (setq dc/snippets (expand-file-name (concat doom-user-dir "snippets")))
 (after! 'yasnippet
   (add-to-list 'yas-snippet-dirs 'dc/snippets)
   (message "loading dc/snippets")
-  (yas-load-directory dc/snippets t)
-  (yas-global-mode nil))
+  (yas-load-directory dc/snippets t))
+
+(use-package! auto-yasnippet
+  ;; :defer t
+  :config
+  (setq aya-persist-snippets-dir +snippets-dir)
+  (defadvice! +snippets--inhibit-yas-global-mode-a (fn &rest args)
+    "auto-yasnippet enables `yas-global-mode'. This is obnoxious for folks like
+us who use yas-minor-mode and enable yasnippet more selectively. This advice
+swaps `yas-global-mode' with `yas-minor-mode'."
+    :around '(aya-expand aya-open-line)
+    (letf! ((#'yas-global-mode #'yas-minor-mode)
+            (yas-global-mode yas-minor-mode))
+      (apply fn args))))
+
+;; 2023-0130: doom's web/yasnippets module cause emmet to be active everywhere
+;; - this is supposed to happen when loading auto-yasnippet, but it is deferred
+;; - the bug seems inconsistent, but it essentially redefines <tab> everywhere to
+;;   expand emmet code on ... <fucking>everything</fucking>
+;; - at some point, the state in emacs goes bad and yas-global-mode triggers
+;;   emmet-mode everywhere (as far as i can see)
+;;   - because the effect is global, it poisons the state in all buffers and they all
+;;     now have these hooks.
+;;   - this may not be correct though. but i have to desktop-save and reload the
+;;     session when the state is poisoned.
+;; - i finally dug into advice-add. i knew this would be more helpful than I
+;;   realized, but never seemed to have enough time to do so. It helps to
+;;   talk to someone who uses emacs. the defadvice, advice.el and defadvice!
+;;   source is esp. helpful for macro-writing.
 
 (defun dc/toggle-objed-mode ()
   (interactive)
