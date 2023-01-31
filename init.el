@@ -63,7 +63,7 @@
                                         ; text object editing for the innocent
        ;; parinfer          ; turn lisp into python, sort of
        ;; rotate-text       ; cycle region at point between text candidates
-       snippets
+       ;; snippets
        ;; word-wrap         ; soft wrapping with language-aware indent
 
        :emacs
@@ -98,12 +98,12 @@
        (magit +forge)
        make
        ;; pass              ; password manager for nerds
-       pdf                              ;; pdf enhancements
-       prodigy           ; FIXME managing external services & code builders
-       rgb                              ; creating color strings
+       pdf     ;; pdf enhancements
+       prodigy ; FIXME managing external services & code builders
+       rgb     ; creating color strings
 
        ;; TODO what is taskrunner?
-       taskrunner        ; taskrunner for all your projects
+       taskrunner ; taskrunner for all your projects
        ;;terraform         ; infrastructure as code
        ;;tmux              ; an API for interacting with tmux
        ;;upload            ; map local to remote projects via ssh/ftp
@@ -178,7 +178,7 @@
        ;;solidity          ; do you need a blockchain? No.
        ;;swift             ; who asked for emoji variables?
        ;;terra             ; Earth and Moon in alignment for performance.
-       web                              ; the tubes
+       ;;web                              ; the tubes
        yaml                             ; JSON, but readable
        ;;zig               ; C, but simpler
 
@@ -192,7 +192,7 @@
        ;;emms
        ;;everywhere        ; *leave* Emacs!? You must be joking
        ;;irc               ; how neckbeards socialize
-       (rss +org)        ; emacs as an RSS reader
+       (rss +org)                       ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
 
        :config
